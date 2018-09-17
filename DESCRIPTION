@@ -1,0 +1,28 @@
+Package: StructureIt
+Type: Package
+Date: 2018-10-10
+Title: Create elegant plots from STRUCTURE results
+Version: 0.1.0
+Authors@R: c(
+    person("Nicola", "Criscuolo", role = c("aut", "cre"), 
+            email = "nico.criscuolo981@gmail.com"))
+Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
+Description: The main purpose of StructureIt
+License: GPL-2 | file LICENSE
+Encoding: UTF-8
+LazyData: TRUE
+Imports:
+  ggplot2 (>= 3.0.0.9),
+Depends: 
+  R (>= 3.5),
+  colourpicker (>= 1.0),
+  plotly (>= 4.8.0.9),
+  randomcoloR (>= 1.1.0),
+  RColorBrewer (>= 1.1),
+  reshape2 (>= 1.4.3),
+  scales (>= 1.0.0),
+  shiny (>= 1.1.0),
+  shinyjs (>= 0.7.0)
+Suggests:
+Repository: GitHub
+RoxygenNote: 6.1.0
