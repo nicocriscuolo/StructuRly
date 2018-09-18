@@ -1,7 +1,7 @@
 Package: StructureIt
 Type: Package
 Date: 2018-10-10
-Title: Tables and elegant detailed plots of the software STRUCTURE
+Title: Tables and elegant detailed plots of the STRUCTURE software
 Version: 0.1.0
 Authors@R: c(
     person("Nicola", "Criscuolo", role = c("aut", "cre"), 

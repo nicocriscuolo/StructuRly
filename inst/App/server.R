@@ -3,18 +3,6 @@ server <- function(input, output, session) {
 
 
 
-### Link for STRUCTURE homepage
-url <- a("STRUCTURE",
-         href = "https://web.stanford.edu/group/pritchardlab/structure.html")
-
-output$link <- renderUI({
-
-  tagList(url)
-
-})
-
-
-
 ### Commands for conditional Panel - Display Action Button of Start
 output$fileUploaded_PER <- reactive({
 

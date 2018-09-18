@@ -2,14 +2,15 @@
 ui <- fluidPage(
   useShinyjs(), # Recall every function of Shinyjs in the UI
     fluidRow(
-        column(width = 8,
+        column(width = 12,
                p(h3(strong(em("StructureIt")),
                     strong("0.1.0"), "-",
-                    "Tables and elegant detailed plots of the software",
-                    align = "right"))
-        ),
-        column(width = 4,
-               h3(uiOutput("link"), align = "left")
+                    "Tables and elegant detailed plots of the",
+                    a("STRUCTURE",
+          href = "https://web.stanford.edu/group/pritchardlab/structure.html"),
+                      "software",
+                    align = "center")
+               )
         )
     ),
 br(),
