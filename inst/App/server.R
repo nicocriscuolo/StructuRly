@@ -5,7 +5,7 @@ server <- function(input, output, session) {
 
 ### Link for STRUCTURE homepage
 url <- a("STRUCTURE",
-           href = "https://web.stanford.edu/group/pritchardlab/structure.html")
+         href = "https://web.stanford.edu/group/pritchardlab/structure.html")
 
 output$link <- renderUI({
 
@@ -863,14 +863,17 @@ Structure_Plot <- reactive({
                input$colour_20
                )
 
-  # X Labels colors # ALPHABETIC NON FUNZIONA VEDI!!!!
-  numColors <- length(levels(Dataset_m$Pop_ID)) # quanti colori mi servono
+  # number of colours needed
+  numColors <- length(levels(Dataset_m$Pop_ID))
 
   Pop_Col <- distinctColorPalette(k = numColors) # genero un numero di colori uguale al numero che mi serve (potrebbe non funzionare per k > 40)
   names(Pop_Col) <- levels(Dataset_m$Pop_ID)
 
-  Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE) # ogni variabile del dataframe è trasformata in "character"
-  Palette_Match$Pop_ID <- rownames(Palette_Match) # dataframe con la codifica "Poplazione - Colori"
+  # every variable of the dataset has ben changed in "character"
+  Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE)
+
+  # Dataframe with the enconding "populations - colors"
+  Palette_Match$Pop_ID <- rownames(Palette_Match)
 
   y <- split(Dataset_m, f = Dataset_m$Cluster)
   Pop_ID <- data.frame(Pop_ID = y$`1`$Pop_ID) # presa la colonna Pop_ID dal dataset ordinato (considerando solo quella per un cluster)
@@ -883,8 +886,9 @@ Structure_Plot <- reactive({
           geom_bar(stat = "identity",
                    colour = "black",
                    size = 0.2,
-                   position = input$barpos) + # aggiungere "position = dodge" se si vuole mettere le barre una all'altra e non una sopra all'altra
-            scale_y_continuous(limits = c(0, 1.05), # certe volte la somma dei q non fa proprio 1 ma "1.001" quindi meglio abbondare
+                   position = input$barpos) +
+  # sometimes the sum of Q is not 1 ma "1.001", so better to abound
+            scale_y_continuous(limits = c(0, 1.05),
                                breaks = c(seq(from = 0,
                                               to = 1,
                                               by = 0.1))) +
@@ -946,38 +950,38 @@ output$download_plot <- downloadHandler(
   if (input$format == ".bmp") {
 
     device <- function(..., width, height) grDevices::bmp(...,
-                                                          width = input$width*2.5,
-                                                          height = 1500,
-                                                          res = 300,
-                                                          # quality = 100,
-                                                          units = "px")
+                                                        width = input$width*2.5,
+                                                        height = 1500,
+                                                        res = 300,
+                                                        # quality = 100,
+                                                        units = "px")
 
   } else if (input$format == ".jpeg") {
 
     device <- function(..., width, height) grDevices::jpeg(...,
-                                                          width = input$width*2.5,
-                                                          height = 1500,
-                                                          res = 300,
-                                                          quality = 100,
-                                                          units = "px")
+                                                        width = input$width*2.5,
+                                                        height = 1500,
+                                                        res = 300,
+                                                        quality = 100,
+                                                        units = "px")
 
   } else if (input$format == ".png") {
 
     device <- function(..., width, height) grDevices::png(...,
-                                                          width = input$width*2.5,
-                                                          height = 1500,
-                                                          res = 300,
-                                                          # quality = 100,
-                                                          units = "px")
+                                                        width = input$width*2.5,
+                                                        height = 1500,
+                                                        res = 300,
+                                                        # quality = 100,
+                                                        units = "px")
 
   } else if (input$format == ".tiff") {
 
     device <- function(..., width, height) grDevices::tiff(...,
-                                                          width = input$width*2.5,
-                                                          height = 1500,
-                                                          res = 300,
-                                                          # quality = 100,
-                                                          units = "px")
+                                                        width = input$width*2.5,
+                                                        height = 1500,
+                                                        res = 300,
+                                                        # quality = 100,
+                                                        units = "px")
 
   }
 
@@ -989,4 +993,4 @@ output$download_plot <- downloadHandler(
 
 
 
-} ### Closes SERVER
+} # Closes SERVER

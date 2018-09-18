@@ -2,12 +2,13 @@
 ui <- fluidPage(
   useShinyjs(), # Recall every function of Shinyjs in the UI
     fluidRow(
-        column(width = 5,
+        column(width = 8,
                p(h3(strong(em("StructureIt")),
-                    strong("0.1.0"), "-", "software",
+                    strong("0.1.0"), "-",
+                    "Tables and elegant detailed plots of the software",
                     align = "right"))
         ),
-        column(width = 2,
+        column(width = 4,
                h3(uiOutput("link"), align = "left")
         )
     ),
@@ -90,19 +91,19 @@ br(),
 
 ######################### UI DATA FOR STRUCUTRE ####
         column(width = 10,
-    mainPanel(id = "instructions", "Il file da importare deve avere i locus divisi dal punto, l'header è obbligatorio,
-              l'id della popolazione deve essere un numero intero (altrimenti non viene letto da Structure,
-              non ci sono problemi se in alcuni casi l'anteprima del plot non è perfetta, il plot scaricato non è renderizzato con plotly e avrà tutto a suo posto,
-              MA SOPRATTUTTO LE COLONNE CON INFO DEVONO ESSERE IN ORDINE. PRIMA SAMPLE_ID, POI POP_ID E POI LOC_ID, altrimenti
-              STRUCTURE non le legge.
-              L'applicazione automaticamente sostituisce i MISSING VALUES, da indicare con NA, con -9, come comunicato nella
-              guida di Structure (magari citare anche l'altra).
-              I nomi dei Sample_ID possono contenere il trattino alto, Structure li legge (ma anche il basso)"),
+    mainPanel(id = "instructions",
+              img(src = "Wallpaper_StructureIt.png",
+                  height = "650px",
+                  width = "1150px")),
   conditionalPanel(condition = "input.analysis_type == 1",
-  shinyjs::hidden(mainPanel(id = "instructions_2", "hhahahsdjsdhshdoshsdohdsoihidhsohohdhosdssdhshdahahaahhhhahahahhah")
+  shinyjs::hidden(mainPanel(id = "instructions_2",
+                            "hhahahsdjsdhshdoshsdohdsoihidhso
+                            hohdhosdssdhshdahahaahhhhahahahhah")
   )),
   conditionalPanel(condition = "input.analysis_type == 2",
-  shinyjs::hidden(mainPanel(id = "instructions_3", "hhahahsdjsdhshdoshsdohdsoihidhsohohdhosdssdhshdahahaahhhhahahahhah")
+  shinyjs::hidden(mainPanel(id = "instructions_3",
+                            "hhahahsdjsdhshdoshsdohdsoihidhsohohdhos
+                            dssdhshdahahaahhhhahahahhah")
   )),
   conditionalPanel(condition = "input.analysis_type == 1",
   shinyjs::hidden(mainPanel(id = "table_panel",
