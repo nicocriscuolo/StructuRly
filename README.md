@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-StructureIt 0.1.0
-=================
+StructuRly 0.1.0
+================
 
 OliveR is a R package containing a [shiny](https://shiny.rstudio.com) application that provides a wide series of statistical tools for exploring and analyzing both quantitative (such as morphometric or biochemical) and genetic data that can be associated to geographical coordinates. Through the use of shapefiles, the application allows to visualize both data and results of a statistical analysis directly on a geographical basis.
 
