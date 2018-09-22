@@ -675,12 +675,24 @@ Data_DA_Str <- reactive({
 
   File <- input$Data_DA_Str
 
-  df <- read.csv(File$datapath,
-                 header = TRUE,
-                 sep = input$separator2,
-                 quote = input$quote2)
+  df2 <- read.csv(File$datapath,
+                  header = TRUE,
+                  sep = input$separator2,
+                  quote = input$quote2)
 
-  return(df)
+  updateSelectInput(session,
+                    inputId = "bottom_left",
+                    choices = names(df2)[-c(1, 2)],
+                    selected = names(df2)[3])
+
+  updateSelectInput(session,
+                    inputId = "bottom_right",
+                    choices = names(df2)[-c(1, 2)],
+                    selected = names(df2)[4])
+
+
+
+  return(df2)
 
 })
 
@@ -823,7 +835,7 @@ z <- length(intersect(x, y))
 
 
 
-### STRUCTURE ggplot
+### STRUCTURE Barplot ggplot
 Structure_Plot <- reactive({
 
   Dataset_m <- Data_plot()
@@ -870,7 +882,7 @@ Structure_Plot <- reactive({
 
   # ggplot
   p <-  ggplot(data = Dataset_m,
-               aes(x = Sample_ID, y = Q, fill = Cluster)) +
+               aes(x = Sample_ID, name = Pop_ID, y = Q, fill = Cluster)) +
           geom_bar(stat = "identity",
                    colour = "black",
                    size = 0.2,
@@ -882,7 +894,8 @@ Structure_Plot <- reactive({
                                               by = 0.1))) +
             scale_fill_manual("Cluster",
                               values = Colours) +
-            labs(y = "Admixture index [q]") +
+            labs(y = "Admixture index [q]",
+                 title = input$barplot_title) +
               theme(
                 axis.title = element_text(size = input$axis_title_size*2),
                 axis.text.y = element_text(size = input$y_label_size),
@@ -890,6 +903,8 @@ Structure_Plot <- reactive({
                                            angle = input$x_label_angle,
                                            hjust = 1,
                                            colour = vec),
+                plot.title = element_text(size = input$axis_title_size*2,
+                                          hjust = 0.5),
                 legend.title = element_text(size = input$axis_title_size*2)
               )
 
@@ -899,11 +914,12 @@ Structure_Plot <- reactive({
 
 
 
-### STRUCTURE plotly
+### STRUCTURE Barplot plotly
 output$structure_plot <- renderPlotly({
 
   ggplotly(Structure_Plot(),
-           width = input$width)
+           width = input$barplot_width,
+           height = input$barplot_height)
 
 })
 
@@ -938,38 +954,38 @@ output$download_plot <- downloadHandler(
   if (input$format == ".bmp") {
 
     device <- function(..., width, height) grDevices::bmp(...,
-                                                        width = input$width*2.5,
-                                                        height = 1500,
-                                                        res = 300,
-                                                        # quality = 100,
-                                                        units = "px")
+                                              width = input$barplot_width*2.5,
+                                              height = input$barplot_height*2.5,
+                                              res = input$barplot_resolution,
+                                              # quality = 100,
+                                              units = "px")
 
   } else if (input$format == ".jpeg") {
 
     device <- function(..., width, height) grDevices::jpeg(...,
-                                                        width = input$width*2.5,
-                                                        height = 1500,
-                                                        res = 300,
-                                                        quality = 100,
-                                                        units = "px")
+                                              width = input$barplot_width*2.5,
+                                              height = input$barplot_height*2.5,
+                                              res = input$barplot_resolution,
+                                              quality = 100,
+                                              units = "px")
 
   } else if (input$format == ".png") {
 
     device <- function(..., width, height) grDevices::png(...,
-                                                        width = input$width*2.5,
-                                                        height = 1500,
-                                                        res = 300,
-                                                        # quality = 100,
-                                                        units = "px")
+                                              width = input$barplot_width*2.5,
+                                              height = input$barplot_height*2.5,
+                                              res = input$barplot_resolution,
+                                              # quality = 100,
+                                              units = "px")
 
   } else if (input$format == ".tiff") {
 
     device <- function(..., width, height) grDevices::tiff(...,
-                                                        width = input$width*2.5,
-                                                        height = 1500,
-                                                        res = 300,
-                                                        # quality = 100,
-                                                        units = "px")
+                                              width = input$barplot_width*2.5,
+                                              height = input$barplot_height*2.5,
+                                              res = input$barplot_resolution,
+                                              # quality = 100,
+                                              units = "px")
 
   }
 
@@ -978,6 +994,82 @@ output$download_plot <- downloadHandler(
   }
 
 )
+
+
+
+### STRUCTURE Triangle plot
+output$triangle_plot <- renderPlotly({
+
+  a <- rowSums(Data_DA_Str()[, -c(1, 2)]) -
+    (Data_DA_Str()[, input$bottom_left] + Data_DA_Str()[, input$bottom_right])
+
+  b <- Data_DA_Str()[, input$bottom_left]
+
+  c <- Data_DA_Str()[, input$bottom_right]
+
+  axis <- function(title) {
+    list(
+      title = title,
+      titlefont = list(
+        size = 16
+      ),
+      tickfont = list(
+        size = 12
+      ),
+      tickcolor = 'rgba(0,0,0,0)',
+      ticklen = 5
+    )
+  }
+
+  margin <- list(
+    l = 40,
+    r = 40,
+    b = 40,
+    t = 70,
+    pad = 4
+  )
+
+  plot_ly(data = Data_DA_Str()) %>%
+    add_trace(
+      type = "scatterternary",
+      mode = "markers",
+      a = ~a,
+      b = ~b,
+      c = ~c,
+      text = ~Sample_ID,
+      name = ~Pop_ID,
+      colors = ~Pop_ID,
+      marker = list(
+        # symbol = ,
+        size = input$triangleplot_symbol_size
+      )
+    ) %>%
+    layout(
+      title = input$triangleplot_title,
+      width = input$triangleplot_width,
+      height = input$triangleplot_height,
+      margin = margin,
+      showlegend = TRUE,
+      annotations = list(yref = "paper",
+                         xref = "paper",
+                         y = 1.05,
+                         x = 1.1,
+                         text = "Populations",
+                         showarrow = F),
+      ternary = list(
+        sum = 1,
+        aaxis = axis("All others"),
+        baxis = axis(input$bottom_left),
+        caxis = axis(input$bottom_right)
+      )
+    )
+
+})
+
+
+
+### STRUCTURE Phylo plot
+
 
 
 

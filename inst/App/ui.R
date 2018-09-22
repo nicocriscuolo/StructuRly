@@ -3,7 +3,7 @@ ui <- fluidPage(
   useShinyjs(), # Recall every function of Shinyjs in the UI
     fluidRow(
         column(width = 12,
-               p(h3(strong(em("StructureIt")),
+               p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",
                     "Tables and elegant detailed plots of the",
                     a("STRUCTURE",
@@ -28,7 +28,7 @@ br(),
                          label = h5(icon(name = "book"), "Choose an action"),
                          choices = list("Download the formatted table ready
                                         for STRUCTURE" = 1,
-                                        "Customize the plot of the results
+                                        "Customize the plots of the results
                                         obtained from STRUCTURE" = 2),
                          selected = 1),
   conditionalPanel(condition = "input.analysis_type == 1",
@@ -278,13 +278,9 @@ br(),
              )
       ),
       column(width = 3,
-             h5("Plot width"),
-             sliderInput(inputId = "width",
-                         label = NULL,
-                         value = 1000,
-                         min = 500,
-                         max = 5000
-             )
+             textInput(inputId = "barplot_title",
+                       label = h5("Plot title"),
+                       value = "")
       ),
       column(width = 2,
              h5("Image format"),
@@ -295,11 +291,39 @@ br(),
                                         ".png" = ".png",
                                         ".tiff" = ".tiff"),
                          selected = ".jpeg")
-             ),
+      ),
       column(width = 2,
              h5("Plot"),
              downloadButton(outputId = "download_plot",
                             label = "Download")
+      )
+    ),
+    fluidRow(
+      column(width = 4,
+             h5("Plot width"),
+             sliderInput(inputId = "barplot_width",
+                         label = NULL,
+                         value = 1000,
+                         min = 500,
+                         max = 5000
+             )
+      ),
+      column(width = 4,
+             h5("Plot height"),
+             sliderInput(inputId = "barplot_height",
+                         label = NULL,
+                         value = 570,
+                         min = 200,
+                         max = 900
+             )
+      ),
+      column(width = 4,
+             h5("Plot resolution"),
+             sliderInput(inputId = "barplot_resolution",
+                         label = NULL,
+                         value = 300,
+                         min = 100,
+                         max = 400)
       )
     ),
     fluidRow(
@@ -335,7 +359,7 @@ br(),
     fluidRow(
       column(width = 12,
              plotlyOutput(outputId = "structure_plot",
-                          height = "560px"
+                          height = "600px"
              )
       )
     ),
@@ -522,6 +546,64 @@ br(),
                                              showColour = "background",
                                              allowTransparent = TRUE)
   )
+      )
+    )
+  ),
+  tabPanel(title = h4("Triangle plot"),
+br(),
+    fluidRow(
+      column(width = 2,
+             selectInput(inputId = "bottom_left",
+                         label = h5("Bottom left"),
+                         choices = "")
+      ),
+      column(width = 2,
+             selectInput(inputId = "bottom_right",
+                         label = h5("Bottom right"),
+                         choices = "")
+      ),
+      column(width = 3,
+             textInput(inputId = "triangleplot_title",
+                       label = h5("Plot title"),
+                       value = "")
+      )
+    ),
+    fluidRow(
+      column(width = 4,
+             h5("Plot width"),
+             sliderInput(inputId = "triangleplot_width",
+                         label = NULL,
+                         value = 600,
+                         min = 250,
+                         max = 1000
+             )
+      ),
+      column(width = 4,
+             h5("Plot height"),
+             sliderInput(inputId = "triangleplot_height",
+                         label = NULL,
+                         value = 600,
+                         min = 250,
+                         max = 1000
+             )
+      ),
+      column(width = 4,
+             h5("Symbol size"),
+             sliderInput(inputId = "triangleplot_symbol_size",
+                         label = NULL,
+                         value = 8,
+                         min = 1,
+                         max = 20
+             )
+      )
+    ),
+br(),
+    fluidRow(
+      column(width = 12, align = "center",
+             plotlyOutput(outputId = "triangle_plot",
+                          height = "550px"
+
+             )
       )
     )
   )

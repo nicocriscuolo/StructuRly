@@ -1,4 +1,4 @@
-#' @title Launches the web shiny App "StructureIt"
+#' @title Launches the web shiny App "StructurRly"
 #'
 #' @description Simple function to connect UI and Server of the shiny App and
 #'   launch it inside the default browser.
@@ -22,7 +22,7 @@
 #' runStructureIt()
 #' }
 
-runStructureIt <- function() {
+runStructurRly <- function() {
 
   app_Directory <- system.file("App", package = "StructureIt")
 

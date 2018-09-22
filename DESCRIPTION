@@ -1,4 +1,4 @@
-Package: StructureIt
+Package: StructuRly
 Type: Package
 Date: 2018-10-10
 Title: Tables and elegant detailed plots of the STRUCTURE software
@@ -12,7 +12,7 @@ License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
 Imports:
-  ggplot2 (>= 3.0.0.9),
+  ggplot2 (>= 3.0.0),
 Depends: 
   R (>= 3.5),
   colourpicker (>= 1.0),
