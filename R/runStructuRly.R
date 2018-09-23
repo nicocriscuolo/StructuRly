@@ -1,4 +1,4 @@
-#' @title Launches the web shiny App "StructurRly"
+#' @title Launches the web shiny App "StructuRly"
 #'
 #' @description Simple function to connect UI and Server of the shiny App and
 #'   launch it inside the default browser.
@@ -11,7 +11,7 @@
 #'
 #' @import shiny
 #'
-#' @return The function loads the web application StructureIt in your default browser
+#' @return The function loads the web application StructuRly in your default browser
 #' through the \code{\link{shinyApp}} function, which requires a script with the
 #' User Interface of the software and a script of the Server.
 #'
@@ -22,13 +22,13 @@
 #' runStructureIt()
 #' }
 
-runStructurRly <- function() {
+runStructuRly <- function() {
 
-  app_Directory <- system.file("App", package = "StructureIt")
+  app_Directory <- system.file("App", package = "StructuRly")
 
   if (app_Directory == "") {
 
-    stop("Could not find the application directory. Try re-installing `StructureIt`.", call. = FALSE)
+    stop("Could not find the application directory. Try re-installing `StructuRly`.", call. = FALSE)
 
   }
 

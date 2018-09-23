@@ -1,11 +1,13 @@
 Package: StructuRly
 Type: Package
 Date: 2018-10-10
-Title: Tables and elegant detailed plots of the STRUCTURE software
+Title: Tables and elegant detailed and interactive plots of the STRUCTURE software
 Version: 0.1.0
 Authors@R: c(
     person("Nicola", "Criscuolo", role = c("aut", "cre"), 
-            email = "nico.criscuolo981@gmail.com"))
+            email = "nico.criscuolo981@gmail.com"),
+    person("Claudia", "Angelini", role = "aut", 
+    email = "c.angelini@na.iac.cnr.it"))
 Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
 Description: The main purpose of StructuRly
 License: GPL-2 | file LICENSE

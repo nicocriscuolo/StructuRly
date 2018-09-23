@@ -93,7 +93,7 @@ br(),
 ######################### UI DATA FOR STRUCUTRE ####
         column(width = 10,
     mainPanel(id = "instructions",
-              img(src = "Wallpaper_StructureIt.png",
+              img(src = "Wallpaper_StructuRly.png",
                   height = "650px",
                   width = "1150px")),
   conditionalPanel(condition = "input.analysis_type == 1",
