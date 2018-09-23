@@ -1029,7 +1029,9 @@ output$triangle_plot <- renderPlotly({
     pad = 4
   )
 
-  plot_ly(data = Data_DA_Str()) %>%
+  plot_ly(data = Data_DA_Str(),
+          width = input$triangleplot_width,
+          height = input$triangleplot_height) %>%
     add_trace(
       type = "scatterternary",
       mode = "markers",
@@ -1046,8 +1048,6 @@ output$triangle_plot <- renderPlotly({
     ) %>%
     layout(
       title = input$triangleplot_title,
-      width = input$triangleplot_width,
-      height = input$triangleplot_height,
       margin = margin,
       showlegend = TRUE,
       annotations = list(yref = "paper",
