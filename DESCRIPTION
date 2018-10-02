@@ -9,7 +9,8 @@ Authors@R: c(
     person("Claudia", "Angelini", role = "aut", 
     email = "c.angelini@na.iac.cnr.it"))
 Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
-Description: The main purpose of StructuRly fino a 20 CLUSTERS!!!!!
+Description: The main purpose of StructuRly fino a 20 CLUSTERS!!!!! Ciao
+ dsdsdsdsds
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
