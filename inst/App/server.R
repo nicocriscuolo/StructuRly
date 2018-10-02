@@ -22,67 +22,52 @@ outputOptions(output, name = "fileUploaded_DA", suspendWhenHidden = FALSE)
 
 
 
-### Commands shinyjs to display and hide panel with actionButtons
+# Commands shinyjs to display and hide panel with actionButtons
 
-# analysis panel and instructions_1
-observeEvent(input$check_table, {
-  shinyjs::showElement(id = "table_panel")
-  shinyjs::hideElement(id = "instructions")
+### Show and hide instructions and results buttons
+observeEvent(input$back_instructions, {
+  shinyjs::showElement(id = "back_results")
+  shinyjs::hideElement(id = "back_instructions")
 })
 
+observeEvent(input$back_results, {
+  shinyjs::showElement(id = "back_instructions")
+  shinyjs::hideElement(id = "back_results")
+})
+
+
+
+#### Show and hide instructions and results panels
+observeEvent(input$back_instructions, {
+  shinyjs::showElement(id = "instructions")
+  shinyjs::hideElement(id = "wallpaper")
+  shinyjs::hideElement(id = "table_panel")
+  shinyjs::hideElement(id = "plot_panel")
+})
+
+observeEvent(input$back_results, {
+  shinyjs::hideElement(id = "instructions")
+  shinyjs::showElement(id = "wallpaper")
+  shinyjs::showElement(id = "table_panel")
+  shinyjs::showElement(id = "plot_panel")
+})
+
+
+
+### Show and hide check_table and customize_plot buttons
 observeEvent(input$check_table, {
   shinyjs::hideElement(id = "check_table")
-})
-
-observeEvent(input$customize_plot, {
-  shinyjs::showElement(id = "plot_panel")
-  shinyjs::hideElement(id = "instructions")
 })
 
 observeEvent(input$customize_plot, {
   shinyjs::hideElement(id = "customize_plot")
 })
 
-### analyzes panel with istructions_2 and istructions_3
-observeEvent(input$back_instructions_1, {
-  shinyjs::showElement(id = "instructions_2")
-  shinyjs::hideElement(id = "table_panel")
-})
 
-observeEvent(input$back_instructions_2, {
-  shinyjs::showElement(id = "instructions_3")
-  shinyjs::hideElement(id = "plot_panel")
-})
 
-observeEvent(input$back_results_1, {
-  shinyjs::showElement(id = "table_panel")
-  shinyjs::hideElement(id = "instructions_2")
-})
-
-observeEvent(input$back_results_2, {
-  shinyjs::showElement(id = "plot_panel")
-  shinyjs::hideElement(id = "instructions_3")
-})
-
-### analyzes panel with bottons 1 and 2
-observeEvent(input$back_instructions_1, {
-  shinyjs::showElement(id = "back_results_1")
-  shinyjs::hideElement(id = "back_instructions_1")
-})
-
-observeEvent(input$back_results_1, {
-  shinyjs::showElement(id = "back_instructions_1")
-  shinyjs::hideElement(id = "back_results_1")
-})
-
-observeEvent(input$back_instructions_2, {
-  shinyjs::showElement(id = "back_results_2")
-  shinyjs::hideElement(id = "back_instructions_2")
-})
-
-observeEvent(input$back_results_2, {
-  shinyjs::showElement(id = "back_instructions_2")
-  shinyjs::hideElement(id = "back_results_2")
+### Open STRUCTURE
+observeEvent(input$open_structure, {
+  system("open -a structure")
 })
 
 
@@ -109,6 +94,16 @@ Data_PER_Str <- reactive({
   return(df)
 
 })
+
+
+
+### Output table imported
+output$table_import <- renderDataTable({
+
+  Data_PER_Str()
+
+}, options = list(pageLength = 10))
+
 
 
 ### Download subset
@@ -151,8 +146,8 @@ Data_export <- reactive({
                                # drop = c("UDO6.1", "UDO6.2", "UDO6.3"), # con drop specificare quali variabili lasciare indietro
                                # times = c("UDO36"),
                                idvar = "Sample_ID"
-                               #new.row.names = seq(from = 1, to = nrow(Dataset)*length(COLNAMES)/input$ploidy, by = 1) # 2 è il numero di loci DIOCANEEE, il tutto è la ploidia
-    )
+                               # new.row.names = seq(from = 1, to = nrow(Dataset)*length(COLNAMES)/input$ploidy, by = 1) # 2 è il numero di loci, il tutto è la ploidia
+                       )
 
     Dataset_reshape$Sample_ID <- factor(Dataset_reshape$Sample_ID,
                                         levels = Dataset$Sample_ID)
@@ -436,15 +431,6 @@ Data_export <- reactive({
 
 
 
-### Output table imported
-output$table_import <- renderDataTable({
-
-  Data_PER_Str()
-
-}, options = list(pageLength = 10))
-
-
-
 ### Output table exported
 output$table_export <- renderDataTable({
 
@@ -515,7 +501,9 @@ output$individuals_number <- renderText({
 
 
 ### Number of loci
-output$loci_number <- renderText({
+loci <- reactive({
+
+  req(c(Data_export(), Data_PER_Str()))
 
   x <- c(colnames(Data_export())[seq(from = 1,
                                      to = ncol(Data_export()),
@@ -523,14 +511,26 @@ output$loci_number <- renderText({
 
   y <- c("Sample_ID", "Pop_ID", "Loc_ID")
 
-  length(x) - length(intersect(x, y))
+  loci <- length(x) - length(intersect(x, y))
+
+  return(loci)
 
 })
 
 
 
+# loci output
+output$loci_number <- renderText({
+
+  loci()
+
+})
+
+
 ### Ploidy
-output$ploidy <- renderText({
+ploidy <- reactive({
+
+  req(c(Data_export(), Data_PER_Str()))
 
   x <- c(colnames(Data_export())[seq(from = 1,
                                      to = ncol(Data_export()),
@@ -542,7 +542,19 @@ output$ploidy <- renderText({
                                       to = ncol(Data_PER_Str()),
                                       by = 1)])
 
-  (length(z) - length(intersect(z, y)))/(length(x) - length(intersect(x, y)))
+  ploidy <- (length(z) - length(intersect(z, y)))/
+    (length(x) - length(intersect(x, y)))
+
+  return(ploidy)
+
+})
+
+
+
+# ploidy output
+output$ploidy <- renderText({
+
+  ploidy()
 
 })
 
@@ -666,7 +678,212 @@ output$download <- downloadHandler(
 
 
 
-############################### PLOT SECTION ####
+### Cluster analysis
+output$tree <- renderPlot({
+
+  # COLNAMES of loci splitted
+  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
+      "Pop_ID" %in% colnames(Data_PER_Str()) |
+      "Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
+                                                loci()*ploidy()))]))
+
+  } else {
+
+    COLNAMES_loci <- colnames(Data_PER_Str())
+
+  }
+
+  # Dataset just with the loci splitted
+  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
+
+  # Combining columns based on ploidy
+  Dataset_grouped <- as.data.frame(sapply(seq(from = 1,
+                                              to = length(COLNAMES_loci),
+                                              by = ploidy()),
+                                          FUN = function(i)
+                                      unite(Dataset_s[, i:(i + (ploidy() - 1))],
+                                                  sep = "/")))
+
+  colnames(Dataset_grouped) <- colnames(Data_export())[-c(1:(length(colnames(Data_export())) -
+                                                               loci()))]
+
+  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+
+    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
+                              Dataset_grouped)
+
+    rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
+
+    Dataset_adegenet$Sample_ID <- NULL
+
+  }
+
+  else {
+
+    rownames(Dataset_grouped) <- seq(from = 1,
+                                     to = nrow(Data_PER_Str()),
+                                     by = 1)
+
+    Dataset_adegenet <- Dataset_grouped
+
+  }
+
+  Dataset_adegenet[Dataset_adegenet == "NA/NA"] <- NA
+
+  Dataset_AD <- df2genind(X = Dataset_adegenet,
+                          ploidy = ploidy(),
+                          sep = "/",
+                          loc.names = c(colnames(Dataset_adegenet))
+                          )
+
+  # Added popolutation to genind object if present in the main dataset
+  if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+
+    pop(Dataset_AD) <- Data_PER_Str()$Pop_ID
+
+  }
+
+  tab_AD <- tab(Dataset_AD, NA.method = input$na_value)
+
+  tab_AD
+
+  if (input$distance == "binary") {
+
+    DIST <- dist.binary(df = tab_AD,
+                        method = input$similarity_coefficient)
+
+  } else if (input$distance == "geometric") {
+
+    DIST <- dist(tab_AD, method = input$geometric_distance)
+
+  }
+
+  # Dendrogram
+  dend <- hclust(DIST, method = input$hierarchical_method) %>%
+    as.dendrogram %>%
+    set("labels_cex", 0.4) %>% set("labels_col", "black") %>%
+    set("branches_k_color",
+        value = c("black",
+                  "lightcoral",
+                  "deepskyblue2",
+                  "limegreen",
+                  "orange",
+                  "lightblue",
+                  "yellow1",
+                  "burlywood4",
+                  "royalblue4",
+                  "darkorange",
+                  "magenta3",
+                  "palegreen4",
+                  "darkyellow",
+                  "red",
+                  "green",
+                  "blue",
+                  "brown",
+                  "pink",
+                  "deepskyblue3",
+                  "magenta2"),
+        k = input$cluster_count) %>%
+    set("leaves_pch", 19) %>%
+    set("leaves_cex", 0.2)
+
+  dend_gg <- as.ggdend(dend)
+
+  dend_gg_segments <- data.frame(dend_gg$segments)
+
+  dend_gg_segments$col[is.na(dend_gg_segments$col)] = "black"
+
+  dend_gg_data <- data.frame(dend_gg$labels)
+
+  colnames(dend_gg_data)[3] = "Sample_ID"
+
+  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+
+    dend_gg_labels <- merge(dend_gg_data,
+                            Data_PER_Str(),
+                            by = "Sample_ID",
+                            sort = FALSE)
+
+    DENDROGRAM <- ggplot() +
+      geom_segment(data = dend_gg_segments,
+                   aes(x = x,
+                       y = y,
+                       xend = xend,
+                       yend = yend),
+                   colour = dend_gg_segments$col, size = 0.6) +
+      geom_text(data = dend_gg_labels,
+                aes(x = x,
+                    y = y,
+                    label = Sample_ID,
+                    angle = 90,
+                    hjust = 1,
+                    colour = dend_gg_labels$Pop_ID
+                ),
+                size = 2.5) +
+      labs(x = "Sample_ID", y = NULL) +
+      lims(y = c(-0.08, NA)) +
+      theme(
+        axis.title.x = element_text(size = 15),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        # legend.title = element_text(size = 15),
+        # legend.text = element_text(size = 15),
+        legend.position = "none"
+      )
+
+    DENDROGRAM
+
+  } else {
+
+    dend_gg_labels <- dend_gg_data
+
+    DENDROGRAM <- ggplot() +
+      geom_segment(data = dend_gg_segments,
+                   aes(x = x,
+                       y = y,
+                       xend = xend,
+                       yend = yend),
+                   colour = dend_gg_segments$col, size = 0.6) +
+      geom_text(data = dend_gg_labels,
+                aes(x = x,
+                    y = y,
+                    label = Sample_ID,
+                    angle = 90,
+                    hjust = 1
+                ),
+                size = 2.5) +
+      labs(x = "Sample_ID", y = NULL) +
+      lims(y = c(-0.08, NA)) +
+      theme(
+        axis.title.x = element_text(size = 15),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        # legend.title = element_text(size = 15),
+        # legend.text = element_text(size = 15),
+        legend.position = "none"
+      )
+
+    DENDROGRAM
+
+  }
+
+})
+
+
+
+# output$ari <- renderText({
+#
+#   print("")
+#
+# })
+
+
+
+############################### PLOT FROM STRUCTURE SECTION ####
 
 ### Reactive dataset FROM STRUCTURE - input
 Data_DA_Str <- reactive({
@@ -707,7 +924,7 @@ output$table_import2 <- renderDataTable({
 
 
 
-### Number of Cluster
+### Number of Cluster barplot
 output$cluster_number <- renderText({
 
   x <- c(colnames(Data_DA_Str())[seq(from = 1,
@@ -925,33 +1142,18 @@ output$structure_plot <- renderPlotly({
 
 
 
-### Download ggplot
-output$download_plot <- downloadHandler(
+### Download barplot
+output$download_barplot <- downloadHandler(
 
-  filename = function() {
+  filename <- function() {
 
-    x <- c(colnames(Data_DA_Str())[seq(from = 1,
-                                       to = ncol(Data_DA_Str()),
-                                       by = 1)])
-
-    y <- c("Sample_ID", "Pop_ID")
-
-    K <- length(x) - length(intersect(x, y))
-
-    paste0(substr(input$Data_DA_Str,
-                  start = 1,
-                  stop = nchar(input$Data_DA_Str)-4),
-           "_Plot_K",
-           K,
-           "_Sort_",
-           input$sort,
-           input$format)
+    input$barplot_title
 
     },
 
-  content = function(file) {
+  content <- function(file) {
 
-  if (input$format == ".bmp") {
+  if (input$barplot_format == ".bmp") {
 
     device <- function(..., width, height) grDevices::bmp(...,
                                               width = input$barplot_width*2.5,
@@ -960,7 +1162,7 @@ output$download_plot <- downloadHandler(
                                               # quality = 100,
                                               units = "px")
 
-  } else if (input$format == ".jpeg") {
+  } else if (input$barplot_format == ".jpeg") {
 
     device <- function(..., width, height) grDevices::jpeg(...,
                                               width = input$barplot_width*2.5,
@@ -969,7 +1171,7 @@ output$download_plot <- downloadHandler(
                                               quality = 100,
                                               units = "px")
 
-  } else if (input$format == ".png") {
+  } else if (input$barplot_format == ".png") {
 
     device <- function(..., width, height) grDevices::png(...,
                                               width = input$barplot_width*2.5,
@@ -978,7 +1180,7 @@ output$download_plot <- downloadHandler(
                                               # quality = 100,
                                               units = "px")
 
-  } else if (input$format == ".tiff") {
+  } else if (input$barplot_format == ".tiff") {
 
     device <- function(..., width, height) grDevices::tiff(...,
                                               width = input$barplot_width*2.5,
@@ -994,6 +1196,21 @@ output$download_plot <- downloadHandler(
   }
 
 )
+
+
+
+### Cluster number triangle plot
+output$cluster_number_2 <- renderText({
+
+  x <- c(colnames(Data_DA_Str())[seq(from = 1,
+                                     to = ncol(Data_DA_Str()),
+                                     by = 1)])
+
+  y <- c("Sample_ID", "Pop_ID")
+
+  length(x) - length(intersect(x, y))
+
+})
 
 
 
@@ -1067,6 +1284,104 @@ output$triangle_plot <- renderPlotly({
 })
 
 
+
+### Download triangle plot
+output$download_triangleplot <- downloadHandler(
+
+  filename <- function() {
+
+    input$triangleplot_title
+
+  },
+
+  content <- function(file) {
+
+    a <- rowSums(Data_DA_Str()[, -c(1, 2)]) -
+      (Data_DA_Str()[, input$bottom_left] + Data_DA_Str()[, input$bottom_right])
+
+    b <- Data_DA_Str()[, input$bottom_left]
+
+    c <- Data_DA_Str()[, input$bottom_right]
+
+    axis <- function(title) {
+      list(
+        title = title,
+        titlefont = list(
+          size = 16
+        ),
+        tickfont = list(
+          size = 12
+        ),
+        tickcolor = 'rgba(0,0,0,0)',
+        ticklen = 5
+      )
+    }
+
+    margin <- list(
+      l = 40,
+      r = 40,
+      b = 40,
+      t = 70,
+      pad = 4
+    )
+
+    triangleplot <- plot_ly(data = Data_DA_Str(),
+            width = input$triangleplot_width,
+            height = input$triangleplot_height) %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        text = ~Sample_ID,
+        name = ~Pop_ID,
+        colors = ~Pop_ID,
+        marker = list(
+          # symbol = ,
+          size = input$triangleplot_symbol_size
+        )
+      ) %>%
+      layout(
+        title = input$triangleplot_title,
+        margin = margin,
+        showlegend = TRUE,
+        annotations = list(yref = "paper",
+                           xref = "paper",
+                           y = 1.05,
+                           x = 1.1,
+                           text = "Populations",
+                           showarrow = F),
+        ternary = list(
+          sum = 1,
+          aaxis = axis("All others"),
+          baxis = axis(input$bottom_left),
+          caxis = axis(input$bottom_right)
+        )
+      )
+
+    if(input$triangleplot_title != "") {
+
+      orca(p = triangleplot,
+           file = paste0(input$triangleplot_title, input$triangleplot_format),
+           width = input$triangleplot_width*1.5,
+           height = input$triangleplot_height*1.5)
+
+    }
+
+    else {
+
+      orca(p = triangleplot,
+           file = paste0("download_triangleplot", input$triangleplot_format),
+           width = input$triangleplot_width*1.5,
+           height = input$triangleplot_height*1.5)
+
+
+    }
+
+  }
+
+)
 
 ### STRUCTURE Phylo plot
 

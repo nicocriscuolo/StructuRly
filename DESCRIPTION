@@ -1,7 +1,7 @@
 Package: StructuRly
 Type: Package
 Date: 2018-10-10
-Title: Tables and elegant detailed and interactive plots of the STRUCTURE software
+Title: Elegant, detailed and interactive plots for STRUCTURE outputs
 Version: 0.1.0
 Authors@R: c(
     person("Nicola", "Criscuolo", role = c("aut", "cre"), 
@@ -9,7 +9,7 @@ Authors@R: c(
     person("Claudia", "Angelini", role = "aut", 
     email = "c.angelini@na.iac.cnr.it"))
 Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
-Description: The main purpose of StructuRly
+Description: The main purpose of StructuRly fino a 20 CLUSTERS!!!!!
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
@@ -17,14 +17,19 @@ Imports:
   ggplot2 (>= 3.0.0),
 Depends: 
   R (>= 3.5),
+  ade4 (>= 1.7),
+  adegenet (>= 2.1.1),
   colourpicker (>= 1.0),
-  plotly (>= 4.8.0.9),
+  dendextend (>= 1.8),
+  plotly (>= 4.8.0),
+  processx (>= 3.2.0),
   randomcoloR (>= 1.1.0),
   RColorBrewer (>= 1.1),
   reshape2 (>= 1.4.3),
   scales (>= 1.0.0),
   shiny (>= 1.1.0),
-  shinyjs (>= 0.7.0)
+  shinyjs (>= 0.7.0),
+  tidyr (>= 0.8.1)
 Suggests:
 Repository: GitHub
 RoxygenNote: 6.1.0

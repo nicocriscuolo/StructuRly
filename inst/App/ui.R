@@ -5,7 +5,7 @@ ui <- fluidPage(
         column(width = 12,
                p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",
-                    "Tables and elegant detailed plots of the",
+                    "Tables and elegant detailed and interactive plots of the",
                     a("STRUCTURE",
           href = "https://web.stanford.edu/group/pritchardlab/structure.html"),
                       "software",
@@ -26,10 +26,8 @@ br(),
   conditionalPanel(conditio = "input.import_data > 0",
             radioButtons(inputId = "analysis_type",
                          label = h5(icon(name = "book"), "Choose an action"),
-                         choices = list("Download the formatted table ready
-                                        for STRUCTURE" = 1,
-                                        "Customize the plots of the results
-                                        obtained from STRUCTURE" = 2),
+                         choices = list("Data for STRUCTURE" = 1,
+                                        "Results from STRUCTURE" = 2),
                          selected = 1),
   conditionalPanel(condition = "input.analysis_type == 1",
             fileInput(inputId = "Data_PER_Str",
@@ -54,8 +52,8 @@ br(),
                                  "text/comma-separated-values,text/plain",
                                  ".csv")
                       ),
-    conditionalPanel(condition = "output.fileUploaded_DA",
-              actionButton(inputId = "customize_plot",
+  conditionalPanel(condition = "output.fileUploaded_DA",
+             actionButton(inputId = "customize_plot",
                            label = h4(icon(name = "check"),
                                       "Customize the plot"),
                            width = "100%")
@@ -65,51 +63,44 @@ br(),
 br(),
 br(),
 br(),
-  conditionalPanel(condition = "input.check_table > 0 &
-                                input.analysis_type == 1",
-            actionButton(inputId = "back_instructions_1",
-                         label = h6(icon(name = "book"),
-                                    "Back to instructions")
-                         ),
-            shinyjs::hidden(actionButton(inputId = "back_results_1",
-                                         label = h6(icon(name = "book"),
-                                                    "Back to results")
-                                         )
-                            )
-  ),
-  conditionalPanel(condition = "input.customize_plot > 0 &
-                                input.analysis_type == 2",
-                   actionButton(inputId = "back_instructions_2",
-                                label = h6(icon(name = "book"),
-                                           "Back to instructions")),
-                   shinyjs::hidden(actionButton(inputId = "back_results_2",
-                                                label = h6(icon(name = "book"),
-                                                           "Back to results")
-                                                )
-                                   )
-  )
+           actionButton(inputId = "back_instructions",
+                        label = h5(icon(name = "book"),
+                                   "Instructions")
+           ),
+           shinyjs::hidden(actionButton(inputId = "back_results",
+                                        label = h5(icon(name = "book"),
+                                                   "Back to StructuRly")
+                                        )
+                           ),
+br(),
+br(),
+br(),
+br(),
+br(),
+          actionButton(inputId = "open_structure",
+                       label = h5(icon(name = "bar-chart"),
+                                  "STRUCTURE")
+          )
         ), # Closes input column
 
 ######################### UI DATA FOR STRUCUTRE ####
         column(width = 10,
-    mainPanel(id = "instructions",
-              img(src = "Wallpaper_StructuRly.png",
-                  height = "650px",
-                  width = "1150px")),
-  conditionalPanel(condition = "input.analysis_type == 1",
-  shinyjs::hidden(mainPanel(id = "instructions_2",
-                            "hhahahsdjsdhshdoshsdohdsoihidhso
-                            hohdhosdssdhshdahahaahhhhahahahhah")
-  )),
-  conditionalPanel(condition = "input.analysis_type == 2",
-  shinyjs::hidden(mainPanel(id = "instructions_3",
-                            "hhahahsdjsdhshdoshsdohdsoihidhsohohdhos
-                            dssdhshdahahaahhhhahahahhah")
-  )),
-  conditionalPanel(condition = "input.analysis_type == 1",
-  shinyjs::hidden(mainPanel(id = "table_panel",
+  shinyjs::hidden(mainPanel(id = "instructions",
+                            img(src = "Pipeline_Structurly.png"))
+  ),
+  conditionalPanel(condition = "input.check_table == 0 &
+                   input.customize_plot == 0",
+            mainPanel(id = "wallpaper",
+                      img(src = "Wallpaper_StructuRly.png",
+                          height = "650px",
+                          width = "1150px")
+            )
+  ),
+  conditionalPanel(condition = "input.analysis_type == 1 &
+                   input.check_table > 0",
+                   mainPanel(id = "table_panel",
   tabsetPanel(type = "pills",
-    tabPanel(title = h4("User's table"),
+    tabPanel(title = h4("Input table"),
 br(),
     fluidRow(
       column(width = 2,
@@ -218,15 +209,116 @@ br(),
              dataTableOutput(outputId = "table_export")
        )
     )
+  ),
+  tabPanel(title = h4("Cluster analysis"),
+br(),
+    fluidRow(
+      column(width = 2,
+             radioButtons(inputId = "na_value",
+                          label = h5("NA value"),
+                          choices = list("Zero" = "zero",
+                                         "Mean" = "mean")
+             )
+
+      ),
+      column(width = 2,
+             radioButtons(inputId = "distance",
+                          label = h5("Distance"),
+                          choices = list("Binary" = "binary",
+                                         "Geometric" = "geometric")
+             )
+      ),
+  conditionalPanel(condition = "input.distance == 'binary'",
+      column(width = 3,
+             selectInput(inputId = "similarity_coefficient",
+                         label = h5("Similarity coefficient"),
+                         choices = list("Jaccard Index" = 1,
+                                        "Sokal & Michener" = 2,
+                                        "Sokal & Sneath" = 3,
+                                        "Rogers & Tanimoto" = 4,
+                                        "Dice & Sorensen" = 5,
+                                        "Hamann coefficient" = 6,
+                                        "Ochiai" = 7,
+                                        "Sokal & Sneath 2" = 8,
+                                        "Phi of Pearson" = 9,
+                                        "S2 Coefficent" = 10),
+                         selected = 1)
+      )
+  ),
+  conditionalPanel(condition = "input.distance == 'geometric'",
+      column(width = 3,
+             selectInput(inputId = "geometric_distance",
+                         label = h5("Geometric distance"),
+                         choices = list("Euclidean" = "euclidean",
+                                        "Maximum" = "maximum",
+                                        "Manhattan" = "manhattan",
+                                        "Canberra" = "canberra",
+                                        "Minkowski" = "minkowski")
+             )
+      )
+  ),
+      column(width = 3,
+             selectInput(inputId = "hierarchical_method",
+                         label = h5("Method"),
+                         choices = list("Complete" = "complete",
+                                        "Single" = "single",
+                                        "Ward" = "ward.D",
+                                        "Ward - 2" = "ward.D2",
+                                        "UPGMA" = "average",
+                                        "WPGMA" = "mcquitty",
+                                        "Median" = "median",
+                                        "UPGMC" = "centroid"))
+      ),
+      column(width = 2,
+             numericInput(inputId = "cluster_count",
+                          label = h5("Cluster count"),
+                          value = 1,
+                          min = 1, max = 20)
+      )
+    ),
+br(),
+    # fluidRow(
+    #   column(width = 4,
+    #          h5("Plot width"),
+    #          sliderInput(inputId = "tree_width",
+    #                      label = NULL,
+    #                      value = 1100,
+    #                      min = 400,
+    #                      max = 4000
+    #          )
+    #   ),
+    #   column(width = 4,
+    #          h5("Plot height"),
+    #          sliderInput(inputId = "tree_height",
+    #                      label = NULL,
+    #                      value = 550,
+    #                      min = 100,
+    #                      max = 1000
+    #          )
+    #   ),
+    #   column(width = 2,
+    #          h5("ARI"),
+    #          verbatimTextOutput(outputId = "ari")
+    #   )
+    # ),
+    fluidRow(
+      column(width = 12,
+             plotOutput(outputId = "tree",
+                        width = "1100px",
+                        height = "550px")
+            )
+      ),
+br()
   )
     )
-  ))),
+  )),
 
 ####################### UI DATA FROM STRUCUTRE ####
-  conditionalPanel(condition = "input.analysis_type == 2",
-  shinyjs::hidden(mainPanel(id = "plot_panel",
+  conditionalPanel(condition = "input.analysis_type == 2 &
+                   input.customize_plot > 0",
+                   mainPanel(id = "plot_panel",
   tabsetPanel(type = "pills",
-    tabPanel(title = h4("User's table"),
+    tabPanel(title = h4("Input table"),
  br(),
      fluidRow(
        column(width = 2,
@@ -278,13 +370,14 @@ br(),
              )
       ),
       column(width = 3,
+             h5("Plot title"),
              textInput(inputId = "barplot_title",
-                       label = h5("Plot title"),
+                       label = NULL,
                        value = "")
       ),
       column(width = 2,
              h5("Image format"),
-             selectInput(inputId = "format",
+             selectInput(inputId = "barplot_format",
                          label = NULL,
                          choices = list(".bmp" = ".bmp",
                                         ".jpeg" = ".jpeg",
@@ -294,7 +387,7 @@ br(),
       ),
       column(width = 2,
              h5("Plot"),
-             downloadButton(outputId = "download_plot",
+             downloadButton(outputId = "download_barplot",
                             label = "Download")
       )
     ),
@@ -552,20 +645,42 @@ br(),
   tabPanel(title = h4("Triangle plot"),
 br(),
     fluidRow(
+      column(width = 1,
+             h5("K"),
+             verbatimTextOutput(outputId = "cluster_number_2")
+      ),
       column(width = 2,
+             h5("Bottom left"),
              selectInput(inputId = "bottom_left",
-                         label = h5("Bottom left"),
+                         label = NULL,
                          choices = "")
       ),
       column(width = 2,
+             h5("Bottom right"),
              selectInput(inputId = "bottom_right",
-                         label = h5("Bottom right"),
+                         label = NULL,
                          choices = "")
       ),
       column(width = 3,
+             h5("Plot title"),
              textInput(inputId = "triangleplot_title",
-                       label = h5("Plot title"),
+                       label = NULL,
                        value = "")
+      ),
+      column(width = 2,
+             h5("Image format"),
+             selectInput(inputId = "triangleplot_format",
+                         label = NULL,
+                         choices = list(".pdf" = ".pdf",
+                                        ".jpeg" = ".jpeg",
+                                        ".png" = ".png",
+                                        ".svg" = ".svg"),
+                         selected = ".jpeg")
+      ),
+      column(width = 2,
+             h5("Plot"),
+             downloadButton(outputId = "download_triangleplot",
+                            label = "Download")
       )
     ),
     fluidRow(
@@ -611,7 +726,7 @@ br(),
 br(),
 br(),
 br()
-  )))
+  ))
 
         ) # Closes output column
     )

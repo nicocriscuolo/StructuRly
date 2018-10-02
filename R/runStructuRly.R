@@ -1,25 +1,23 @@
-#' @title Launches the web shiny App "StructuRly"
+#' @title Launches the web shiny app StructuRly
 #'
-#' @description Simple function to connect UI and Server of the shiny App and
+#' @description Simple function to connect UI and Server of the shiny app and
 #'   launch it inside the default browser.
 #'
-#' @param host Optional parameter where to execute the application, default is 127.0.0.1.
-#'
-#' @param ui R script containing the code of the user interface of the shiny app.
-#'
-#' @param server R script containing the code of the server of the shiny app.
+#' @param host Optional parameter to specify where to execute the application,
+#'   default is http://127.0.0.1:4753.
 #'
 #' @import shiny
 #'
 #' @return The function loads the web application StructuRly in your default browser
-#' through the \code{\link{shinyApp}} function, which requires a script with the
-#' User Interface of the software and a script of the Server.
+#'   through the \code{\link{shinyApp}} function, which requires a script with the
+#'   User Interface of the software and a script of the Server.
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' runStructureIt()
+#'
+#'   runStructureIt()
 #' }
 
 runStructuRly <- function() {

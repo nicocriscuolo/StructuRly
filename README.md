@@ -3,6 +3,8 @@
 StructuRly 0.1.0
 ================
 
+-   inserire istruzioni, a questo indirizzo, [orca](https://github.com/plotly/orca#installation) per installare "orca" per scaricare le immagini prodotte con plotly (triangle plot)
+
 OliveR is a R package containing a [shiny](https://shiny.rstudio.com) application that provides a wide series of statistical tools for exploring and analyzing both quantitative (such as morphometric or biochemical) and genetic data that can be associated to geographical coordinates. Through the use of shapefiles, the application allows to visualize both data and results of a statistical analysis directly on a geographical basis.
 
 It is a general-purpose interactive application that make available several functions for explorative data analysis as well as several standard methods for multivariate statistics (such as Linear models, Principal Component Analysis, Cluster analysis, etc.) and therefore guides the user in visualizing, exploring and analyzing the data by a simple point-and-click approach.

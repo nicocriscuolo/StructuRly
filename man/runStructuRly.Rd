@@ -2,28 +2,26 @@
 % Please edit documentation in R/runStructuRly.R
 \name{runStructuRly}
 \alias{runStructuRly}
-\title{Launches the web shiny App "StructuRly"}
+\title{Launches the web shiny app StructuRly}
 \usage{
 runStructuRly()
 }
 \arguments{
-\item{host}{Optional parameter where to execute the application, default is 127.0.0.1.}
-
-\item{ui}{R script containing the code of the user interface of the shiny app.}
-
-\item{server}{R script containing the code of the server of the shiny app.}
+\item{host}{Optional parameter to specify where to execute the application,
+default is http://127.0.0.1:4753.}
 }
 \value{
 The function loads the web application StructuRly in your default browser
-through the \code{\link{shinyApp}} function, which requires a script with the
-User Interface of the software and a script of the Server.
+  through the \code{\link{shinyApp}} function, which requires a script with the
+  User Interface of the software and a script of the Server.
 }
 \description{
-Simple function to connect UI and Server of the shiny App and
+Simple function to connect UI and Server of the shiny app and
   launch it inside the default browser.
 }
 \examples{
 \dontrun{
-runStructureIt()
+
+  runStructureIt()
 }
 }
