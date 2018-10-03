@@ -22,6 +22,6 @@ Simple function to connect UI and Server of the shiny app and
 \examples{
 \dontrun{
 
-  runStructureIt()
+  runStructuRly()
 }
 }

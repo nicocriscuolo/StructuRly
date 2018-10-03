@@ -17,7 +17,7 @@
 #' @examples
 #' \dontrun{
 #'
-#'   runStructureIt()
+#'   runStructuRly()
 #' }
 
 runStructuRly <- function() {
