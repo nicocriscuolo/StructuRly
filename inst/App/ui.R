@@ -5,10 +5,10 @@ ui <- fluidPage(
         column(width = 12,
                p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",
-                    "Tables and elegant detailed and interactive plots of the",
+                    "Elegant, detailed and interactive plots for",
                     a("STRUCTURE",
           href = "https://web.stanford.edu/group/pritchardlab/structure.html"),
-                      "software",
+                      "outputs",
                     align = "center")
                )
         )
@@ -17,17 +17,18 @@ br(),
 br(),
     fluidRow(
         column(width = 2,
-            actionButton(inputId = "import_data",
-                         label = h4(icon(name = "upload"),
-                                    "Import the data"),
-                         width = "100%"),
+               actionButton(inputId = "import_data",
+                            label = h4(icon(name = "upload"),
+                                       "Import the data"),
+                            width = "100%"),
 br(),
 br(),
   conditionalPanel(conditio = "input.import_data > 0",
             radioButtons(inputId = "analysis_type",
                          label = h5(icon(name = "book"), "Choose an action"),
-                         choices = list("Data for STRUCTURE" = 1,
-                                        "Results from STRUCTURE" = 2),
+                         choices = list("Import genetic data" = 1,
+                                        "Import STRUCTURE results" = 2,
+                                        "Compare partitions" = 3),
                          selected = 1),
   conditionalPanel(condition = "input.analysis_type == 1",
             fileInput(inputId = "Data_PER_Str",
@@ -40,7 +41,7 @@ br(),
     conditionalPanel(condition = "output.fileUploaded_PER",
               actionButton(inputId = "check_table",
                            label = h4(icon(name = "check"),
-                                      "Check the table"),
+                                      "Start the analysis!"),
                            width = "100%")
     )
   ),
@@ -55,7 +56,7 @@ br(),
   conditionalPanel(condition = "output.fileUploaded_DA",
              actionButton(inputId = "customize_plot",
                            label = h4(icon(name = "check"),
-                                      "Customize the plot"),
+                                      "Start the analysis!"),
                            width = "100%")
     )
   )
@@ -63,24 +64,25 @@ br(),
 br(),
 br(),
 br(),
-           actionButton(inputId = "back_instructions",
-                        label = h5(icon(name = "book"),
-                                   "Instructions")
-           ),
-           shinyjs::hidden(actionButton(inputId = "back_results",
-                                        label = h5(icon(name = "book"),
-                                                   "Back to StructuRly")
-                                        )
-                           ),
-br(),
-br(),
-br(),
-br(),
-br(),
-          actionButton(inputId = "open_structure",
-                       label = h5(icon(name = "bar-chart"),
-                                  "STRUCTURE")
-          )
+    fluidRow(
+      column(width = 5,
+             actionButton(inputId = "back_instructions",
+                          label = h6(icon(name = "book"),
+                                     "Instructions")
+             ),
+             shinyjs::hidden(actionButton(inputId = "back_results",
+                                          label = h6(icon(name = "book"),
+                                                     "StructuRly")
+                                          )
+                            )
+      ),
+      column(width = 5,
+             actionButton(inputId = "open_structure",
+                          label = h6(icon(name = "bar-chart"),
+                                     "STRUCTURE")
+             )
+      )
+    )
         ), # Closes input column
 
 ######################### UI DATA FOR STRUCUTRE ####
@@ -89,11 +91,28 @@ br(),
                             img(src = "Pipeline_Structurly.png"))
   ),
   conditionalPanel(condition = "input.check_table == 0 &
-                   input.customize_plot == 0",
+                   input.customize_plot == 0 &
+                   input.analysis_type != 3" ,
             mainPanel(id = "wallpaper",
                       img(src = "Wallpaper_StructuRly.png",
                           height = "650px",
-                          width = "1150px")
+                          width = "1150px"),
+br(),
+            a("Nicola Criscuolo",
+              href = "mailto:nico.criscuolo981@gmail.com"),
+            " - Department of Chemistry and Biology “A. Zambelli”, University of Salerno",
+br(),
+br(),
+            a("Claudia Angelini",
+              href = "mailto:c.angelini@na.iac.cnr.it"),
+            " - Institute for Applications of Calculus “M. Picone”, National Research Council",
+br(),
+br(),
+             "GitHub page:", a("StructuRly",
+              href = "https://github.com/nicocriscuolo/StructuRly"), "  ",
+
+br(),
+br()
             )
   ),
   conditionalPanel(condition = "input.analysis_type == 1 &
@@ -102,15 +121,15 @@ br(),
   tabsetPanel(type = "pills",
     tabPanel(title = h4("Input table"),
 br(),
-    fluidRow(
-      column(width = 2,
-             radioButtons(inputId = "separator", label = h5("Separator"),
+        fluidRow(
+          column(width = 2,
+                 radioButtons(inputId = "separator", label = h5("Separator"),
                           choices = c(Comma = ",",
                                       Semicolon = ";",
                                       Tab = "\t"),
                           selected = ",")
-      ),
-      column(width = 2,
+          ),
+          column(width = 2,
              radioButtons(inputId = "quote", label = h5("Quote"),
                           choices = c(None = "",
                                       Single = "'",
@@ -127,12 +146,161 @@ br(),
     ),
 br(),
     fluidRow(
-        column(width = 12,
-            dataTableOutput(outputId = "table_import")
-        )
+      column(width = 12,
+             dataTableOutput(outputId = "table_import")
+      )
     )
   ),
-  tabPanel(title = h4("Table for STRUCTURE"),
+  tabPanel(title = h4("Cluster analysis"),
+br(),
+    fluidRow(
+      column(width = 2,
+             radioButtons(inputId = "na_value",
+                          label = h5("NA value"),
+                          choices = list("Zero" = "zero",
+                                         "Mean" = "mean")
+             )
+
+      ),
+      column(width = 2,
+             radioButtons(inputId = "distance",
+                          label = h5("Distance"),
+                          choices = list("Binary" = "binary",
+                                         "Geometric" = "geometric")
+            )
+     ),
+  conditionalPanel(condition = "input.distance == 'binary'",
+        column(width = 3,
+               selectInput(inputId = "similarity_coefficient",
+                           label = h5("Similarity coefficient"),
+                           choices = list("Jaccard Index" = 1,
+                                          "Sokal & Michener" = 2,
+                                          "Sokal & Sneath" = 3,
+                                          "Rogers & Tanimoto" = 4,
+                                          "Dice & Sorensen" = 5,
+                                          "Hamann coefficient" = 6,
+                                          "Ochiai" = 7,
+                                          "Sokal & Sneath 2" = 8,
+                                          "Phi of Pearson" = 9,
+                                          "S2 Coefficent" = 10),
+                                         selected = 1)
+                      )
+     ),
+  conditionalPanel(condition = "input.distance == 'geometric'",
+     column(width = 3,
+               selectInput(inputId = "geometric_distance",
+                           label = h5("Geometric distance"),
+                           choices = list("Euclidean" = "euclidean",
+                                          "Maximum" = "maximum",
+                                          "Manhattan" = "manhattan",
+                                          "Canberra" = "canberra",
+                                          "Minkowski" = "minkowski")
+                             )
+      )
+     ),
+     column(width = 3,
+            selectInput(inputId = "hierarchical_method",
+                        label = h5("Method"),
+                        choices = list("Complete" = "complete",
+                                       "Single" = "single",
+                                       "Ward" = "ward.D",
+                                       "Ward - 2" = "ward.D2",
+                                       "UPGMA" = "average",
+                                       "WPGMA" = "mcquitty",
+                                       "Median" = "median",
+                                       "UPGMC" = "centroid"))
+      ),
+        column(width = 2,
+               numericInput(inputId = "cluster_count",
+                            label = h5("Cluster count"),
+                            value = 1,
+                            min = 1, max = 20)
+        )
+      ),
+      fluidRow(
+        column(width = 5
+        ),
+        column(width = 3,
+               h5("Plot title"),
+               textInput(inputId = "dendrogram_title",
+                         label = NULL,
+                         value = "")
+        ),
+        column(width = 2,
+               h5("Image format"),
+               selectInput(inputId = "dendrogram_format",
+                           label = NULL,
+                           choices = list(".bmp" = ".bmp",
+                                          ".jpeg" = ".jpeg",
+                                          ".png" = ".png",
+                                          ".tiff" = ".tiff"),
+                           selected = ".jpeg")
+        ),
+        column(width = 2,
+               h5("Plot"),
+               downloadButton(outputId = "download_dendrogram",
+                              label = "Download")
+        )
+      ),
+      fluidRow(
+        column(width = 4,
+               h5("Plot width"),
+               sliderInput(inputId = "dendrogram_width",
+                           label = NULL,
+                           value = 1000,
+                           min = 500,
+                           max = 5000
+               )
+        ),
+        column(width = 4,
+               h5("Plot height"),
+               sliderInput(inputId = "dendrogram_height",
+                           label = NULL,
+                           value = 570,
+                           min = 200,
+                           max = 900
+               )
+        ),
+        column(width = 4,
+               h5("Plot resolution"),
+               sliderInput(inputId = "dendrogram_resolution",
+                           label = NULL,
+                           value = 300,
+                           min = 100,
+                           max = 400)
+        )
+      ),
+br(),
+   # fluidRow(
+   #   column(width = 4,
+   #          h5("Plot width"),
+   #          sliderInput(inputId = "tree_width",
+   #                      label = NULL,
+   #                      value = 1100,
+   #                      min = 400,
+   #                      max = 4000
+   #          )
+   #   ),
+   #   column(width = 4,
+   #          h5("Plot height"),
+   #          sliderInput(inputId = "tree_height",
+   #                      label = NULL,
+   #                      value = 550,
+   #                      min = 100,
+   #                      max = 1000
+   #          )
+   #   ),
+   # ),
+   fluidRow(
+     column(width = 12,
+            plotOutput(outputId = "tree",
+                       width = "1100px",
+                       height = "550px")
+     )
+   ),
+br()
+  ),
+  tabPanel(title = h4("STRUCTURE table"),
 br(),
     fluidRow(
       column(width = 2,
@@ -209,113 +377,13 @@ br(),
              dataTableOutput(outputId = "table_export")
        )
     )
-  ),
-  tabPanel(title = h4("Cluster analysis"),
-br(),
-    fluidRow(
-      column(width = 2,
-             radioButtons(inputId = "na_value",
-                          label = h5("NA value"),
-                          choices = list("Zero" = "zero",
-                                         "Mean" = "mean")
-             )
-
-      ),
-      column(width = 2,
-             radioButtons(inputId = "distance",
-                          label = h5("Distance"),
-                          choices = list("Binary" = "binary",
-                                         "Geometric" = "geometric")
-             )
-      ),
-  conditionalPanel(condition = "input.distance == 'binary'",
-      column(width = 3,
-             selectInput(inputId = "similarity_coefficient",
-                         label = h5("Similarity coefficient"),
-                         choices = list("Jaccard Index" = 1,
-                                        "Sokal & Michener" = 2,
-                                        "Sokal & Sneath" = 3,
-                                        "Rogers & Tanimoto" = 4,
-                                        "Dice & Sorensen" = 5,
-                                        "Hamann coefficient" = 6,
-                                        "Ochiai" = 7,
-                                        "Sokal & Sneath 2" = 8,
-                                        "Phi of Pearson" = 9,
-                                        "S2 Coefficent" = 10),
-                         selected = 1)
-      )
-  ),
-  conditionalPanel(condition = "input.distance == 'geometric'",
-      column(width = 3,
-             selectInput(inputId = "geometric_distance",
-                         label = h5("Geometric distance"),
-                         choices = list("Euclidean" = "euclidean",
-                                        "Maximum" = "maximum",
-                                        "Manhattan" = "manhattan",
-                                        "Canberra" = "canberra",
-                                        "Minkowski" = "minkowski")
-             )
-      )
-  ),
-      column(width = 3,
-             selectInput(inputId = "hierarchical_method",
-                         label = h5("Method"),
-                         choices = list("Complete" = "complete",
-                                        "Single" = "single",
-                                        "Ward" = "ward.D",
-                                        "Ward - 2" = "ward.D2",
-                                        "UPGMA" = "average",
-                                        "WPGMA" = "mcquitty",
-                                        "Median" = "median",
-                                        "UPGMC" = "centroid"))
-      ),
-      column(width = 2,
-             numericInput(inputId = "cluster_count",
-                          label = h5("Cluster count"),
-                          value = 1,
-                          min = 1, max = 20)
-      )
-    ),
-br(),
-    # fluidRow(
-    #   column(width = 4,
-    #          h5("Plot width"),
-    #          sliderInput(inputId = "tree_width",
-    #                      label = NULL,
-    #                      value = 1100,
-    #                      min = 400,
-    #                      max = 4000
-    #          )
-    #   ),
-    #   column(width = 4,
-    #          h5("Plot height"),
-    #          sliderInput(inputId = "tree_height",
-    #                      label = NULL,
-    #                      value = 550,
-    #                      min = 100,
-    #                      max = 1000
-    #          )
-    #   ),
-    #   column(width = 2,
-    #          h5("ARI"),
-    #          verbatimTextOutput(outputId = "ari")
-    #   )
-    # ),
-    fluidRow(
-      column(width = 12,
-             plotOutput(outputId = "tree",
-                        width = "1100px",
-                        height = "550px")
-            )
-      ),
-br()
   )
     )
   )),
 
 ####################### UI DATA FROM STRUCUTRE ####
   conditionalPanel(condition = "input.analysis_type == 2 &
-                   input.customize_plot > 0",
+                                input.customize_plot > 0",
                    mainPanel(id = "plot_panel",
   tabsetPanel(type = "pills",
     tabPanel(title = h4("Input table"),
@@ -726,8 +794,186 @@ br(),
 br(),
 br(),
 br()
-  ))
+    )
+  ),
+####################### COMPARING PARTITIONS ####
+  conditionalPanel(condition = "input.analysis_type == 3 &
+                                input.check_table == 0 &
+                                input.customize_plot == 0",
+                   mainPanel(id = "comparison_1",
+br(),
+br(),
+                             p("To compare partitions obtained from a
+                                hierarchical cluster analysis and from the
+                                bayesian cluster analysis you need to upload
+                                in StructuRly the dataset you would like to
+                                import in STRUCTURE and the one obtained after
+                                you have computed the STRUCTURE analysis.
+                                Please select the radio buttons 'Import data
+                                for STRUCTURE' and 'Import results from
+                                STRUCTURE' respectivley to upload this two
+                                dataset, customize your hierarchical cluster
+                                analysand
+                                press both the buttons 'Start the
+                                analysis!'."),
+                             align = "center")
+  ),
+# Controllare se funziona quando si importano nuovi dataset dopo i primi importati e
+# non sono più disponibili i bottoni "Start the analysis"
+  conditionalPanel(condition = "input.analysis_type == 3 &
+                                input.check_table > 0 &
+                                input.customize_plot == 0",
+                   mainPanel(id = "comparison_2",
+br(),
+br(),
+                             p("To compare partitions obtained from a
+                                hierarchical cluster analysis and from the
+                                bayesian cluster analysis you need to upload
+                                in StructuRly the dataset you would like to
+                                import in STRUCTURE and the one obtained after
+                                you have computed the STRUCTURE analysis.
+                                Please select the radio buttons 'Import data
+                                for STRUCTURE' and 'Import results from
+                                STRUCTURE' to upload this two dataset and
+                                press both the buttons 'Start the
+                                analysis!'."),
+                             align = "center"
+                   )
+  ),
+  conditionalPanel(condition = "input.analysis_type == 3 &
+                                input.check_table == 0 &
+                                input.customize_plot > 0",
+                   mainPanel(id = "comparison_3",
+br(),
+br(),
+                             p(h4("To compare partitions obtained from a
+                                  hierarchical cluster analysis and from the
+                                  bayesian cluster analysis you need to upload
+                                  in StructuRly the dataset you would like to
+                                  import in STRUCTURE and the one obtained after
+                                  you have computed the STRUCTURE analysis.
+                                  Please select the radio buttons 'Import data
+                                  for STRUCTURE' and 'Import results from
+                                  STRUCTURE' to upload this two dataset and
+                                  press both the buttons 'Start the
+                                  analysis!'.")),
+                             align = "center")
+  ),
+  conditionalPanel(condition = "input.analysis_type == 3 &
+                                input.check_table > 0 &
+                                input.customize_plot > 0",
+                   mainPanel(id = "comparison_true",
+    fluidRow(
+      column(width = 2,
+             h5("Output"),
+             shinyjs::hidden(actionButton(inputId = "show_comparison_plot",
+                          label = h6("Comparison plot")
+                             )
+                      ),
+             actionButton(inputId = "show_comparison_table",
+                                          label = h6("Comparison table")
+             )
+      ),
+      column(width = 2,
+             h5("Hierarchic"),
+             verbatimTextOutput(outputId = "Cluster_hclust")
+      ),
+      column(width = 2,
+             h5("STRUCTURE"),
+             verbatimTextOutput(outputId = "Cluster_STR")
+      ),
+      column(width = 3,
+             h5("Agreement index"),
+             selectInput(inputId = "agreement_index",
+                         label = NULL,
+                         choices = list("Rand Index" = "rand",
+                                        "Adj. Rand Index" = "crand",
+                                        "Nowak Index" = "nowak"))
+      ),
+      column(width = 3,
+             h5("Agreement value"),
+             verbatimTextOutput(outputId = "agreement_value")
+      )
+    ),
+br(),
+      shinyjs::hidden(mainPanel(id = "panel_comparison_table",
+                                dataTableOutput(outputId = "comparison_table")
+                                )
+                     ),
+      mainPanel(id = "panel_comparison_plot",
+                width = 12,
+                fluidRow(
+                  column(width = 3),
+                  column(width = 2,
+                         h5("Bar position"),
+                         radioButtons(inputId = "comparison_plot_barpos",
+                                      label = NULL,
+                                      choices = c("Stack" = "stack",
+                                                  "Dodge" = "dodge"),
+                                      selected = "stack"
 
+                         )
+                  ),
+                  column(width = 3,
+                         h5("Plot title"),
+                         textInput(inputId = "comparison_plot_title",
+                                   label = NULL,
+                                   value = "")
+                  ),
+                  column(width = 2,
+                         h5("Image format"),
+                         selectInput(inputId = "comparison_plot_format",
+                                     label = NULL,
+                                     choices = list(".bmp" = ".bmp",
+                                                    ".jpeg" = ".jpeg",
+                                                    ".png" = ".png",
+                                                    ".tiff" = ".tiff"),
+                                     selected = ".jpeg")
+                  ),
+                  column(width = 2,
+                         h5("Plot"),
+                         downloadButton(outputId = "download_comparison_plot",
+                                        label = "Download")
+                  )
+                ),
+                fluidRow(
+                  column(width = 4,
+                         h5("Plot width"),
+                         sliderInput(inputId = "comparison_plot_width",
+                                     label = NULL,
+                                     value = 1000,
+                                     min = 500,
+                                     max = 5000
+                         )
+                  ),
+                  column(width = 4,
+                         h5("Plot height"),
+                         sliderInput(inputId = "comparison_plot_height",
+                                     label = NULL,
+                                     value = 400,
+                                     min = 200,
+                                     max = 900
+                         )
+                  ),
+                  column(width = 4,
+                         h5("Plot resolution"),
+                         sliderInput(inputId = "comparison_plot_resolution",
+                                     label = NULL,
+                                     value = 300,
+                                     min = 100,
+                                     max = 400)
+                  )
+                ),
+br(),
+                fluidRow(
+                  column(width = 12,
+                         plotlyOutput(outputId = "comparison_plot")
+                  )
+                ),
+br()
+      )
+                   )
+    )
         ) # Closes output column
     )
 

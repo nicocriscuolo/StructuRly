@@ -22,9 +22,9 @@ outputOptions(output, name = "fileUploaded_DA", suspendWhenHidden = FALSE)
 
 
 
-# Commands shinyjs to display and hide panel with actionButtons
+### Commands shinyjs to display and hide panel with actionButtons
 
-### Show and hide instructions and results buttons
+# Show and hide instructions and results buttons
 observeEvent(input$back_instructions, {
   shinyjs::showElement(id = "back_results")
   shinyjs::hideElement(id = "back_instructions")
@@ -37,7 +37,7 @@ observeEvent(input$back_results, {
 
 
 
-#### Show and hide instructions and results panels
+# Show and hide instructions and results panels
 observeEvent(input$back_instructions, {
   shinyjs::showElement(id = "instructions")
   shinyjs::hideElement(id = "wallpaper")
@@ -54,13 +54,39 @@ observeEvent(input$back_results, {
 
 
 
-### Show and hide check_table and customize_plot buttons
+# Show and hide check_table and customize_plot buttons
 observeEvent(input$check_table, {
   shinyjs::hideElement(id = "check_table")
 })
 
 observeEvent(input$customize_plot, {
   shinyjs::hideElement(id = "customize_plot")
+})
+
+
+
+# Show and hide comparison_plot and comparison_table buttons
+observeEvent(input$show_comparison_plot, {
+  shinyjs::showElement(id = "show_comparison_table")
+  shinyjs::hideElement(id = "show_comparison_plot")
+})
+
+observeEvent(input$show_comparison_table, {
+  shinyjs::showElement(id = "show_comparison_plot")
+  shinyjs::hideElement(id = "show_comparison_table")
+})
+
+
+
+# Show and hide comparison plot and comparison table panel
+observeEvent(input$show_comparison_plot, {
+  shinyjs::showElement(id = "panel_comparison_plot")
+  shinyjs::hideElement(id = "panel_comparison_table")
+})
+
+observeEvent(input$show_comparison_table, {
+  shinyjs::showElement(id = "panel_comparison_table")
+  shinyjs::hideElement(id = "panel_comparison_plot")
 })
 
 
@@ -434,7 +460,7 @@ Data_export <- reactive({
 ### Output table exported
 output$table_export <- renderDataTable({
 
-  print(Data_export())
+  Data_export()
 
 }, options = list(pageLength = 10))
 
@@ -678,8 +704,10 @@ output$download <- downloadHandler(
 
 
 
-### Cluster analysis
-output$tree <- renderPlot({
+##### Hierarchical cluster analysis
+
+### Reactive hclust object
+dend <- reactive({
 
   # COLNAMES of loci splitted
   if ("Sample_ID" %in% colnames(Data_PER_Str()) |
@@ -760,7 +788,6 @@ output$tree <- renderPlot({
 
   }
 
-  # Dendrogram
   dend <- hclust(DIST, method = input$hierarchical_method) %>%
     as.dendrogram %>%
     set("labels_cex", 0.4) %>% set("labels_col", "black") %>%
@@ -777,7 +804,7 @@ output$tree <- renderPlot({
                   "darkorange",
                   "magenta3",
                   "palegreen4",
-                  "darkyellow",
+                  "palegreen1",
                   "red",
                   "green",
                   "blue",
@@ -789,7 +816,16 @@ output$tree <- renderPlot({
     set("leaves_pch", 19) %>%
     set("leaves_cex", 0.2)
 
-  dend_gg <- as.ggdend(dend)
+  return(dend)
+
+})
+
+
+
+### Reactive dendrogram plot
+Dendrogram_plot <- reactive({
+
+  dend_gg <- as.ggdend(dend())
 
   dend_gg_segments <- data.frame(dend_gg$segments)
 
@@ -806,7 +842,7 @@ output$tree <- renderPlot({
                             by = "Sample_ID",
                             sort = FALSE)
 
-    DENDROGRAM <- ggplot() +
+    Dendrogram_plot <- ggplot() +
       geom_segment(data = dend_gg_segments,
                    aes(x = x,
                        y = y,
@@ -821,26 +857,27 @@ output$tree <- renderPlot({
                     hjust = 1,
                     colour = dend_gg_labels$Pop_ID
                 ),
-                size = 2.5) +
-      labs(x = "Sample_ID", y = NULL) +
+                size = 3) +
+      labs(x = "Sample_ID",
+           y = NULL,
+           title = input$dendrogram_title) +
       lims(y = c(-0.08, NA)) +
       theme(
         axis.title.x = element_text(size = 15),
         axis.text.y = element_text(size = 12),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
+        plot.title = element_text(hjust = 0.5),
         # legend.title = element_text(size = 15),
         # legend.text = element_text(size = 15),
         legend.position = "none"
       )
 
-    DENDROGRAM
-
   } else {
 
     dend_gg_labels <- dend_gg_data
 
-    DENDROGRAM <- ggplot() +
+    Dendrogram_plot <- ggplot() +
       geom_segment(data = dend_gg_segments,
                    aes(x = x,
                        y = y,
@@ -854,32 +891,90 @@ output$tree <- renderPlot({
                     angle = 90,
                     hjust = 1
                 ),
-                size = 2.5) +
-      labs(x = "Sample_ID", y = NULL) +
+                size = 3) +
+      labs(x = "Sample_ID",
+           y = NULL,
+           input$dendrogram_title) +
       lims(y = c(-0.08, NA)) +
       theme(
         axis.title.x = element_text(size = 15),
         axis.text.y = element_text(size = 12),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
+        plot.title = element_text(hjust = 0.5),
         # legend.title = element_text(size = 15),
         # legend.text = element_text(size = 15),
         legend.position = "none"
       )
 
-    DENDROGRAM
-
   }
+
+  return(Dendrogram_plot)
 
 })
 
 
 
-# output$ari <- renderText({
-#
-#   print("")
-#
-# })
+### Dendrogram plot
+output$tree <- renderPlot({ # To put interactive when the bug is fixed
+
+  Dendrogram_plot()
+
+})
+
+
+
+### Download dendrogram plot
+output$download_dendrogram <- downloadHandler(
+
+  filename <- function() {
+
+    input$dendrogram_title
+
+  },
+
+  content <- function(file) {
+
+    if (input$dendrogram_format == ".bmp") {
+
+      device <- function(..., width, height) grDevices::bmp(...,
+                                                            width = input$dendrogram_width*2.5,
+                                                            height = input$dendrogram_height*2.5,
+                                                            res = input$dendrogram_resolution,
+                                                            units = "px")
+
+    } else if (input$dendrogram_format == ".jpeg") {
+
+      device <- function(..., width, height) grDevices::jpeg(...,
+                                                             width = input$dendrogram_width*2.5,
+                                                             height = input$dendrogram_height*2.5,
+                                                             res = input$dendrogram_resolution,
+                                                             quality = 100,
+                                                             units = "px")
+
+    } else if (input$dendrogram_format == ".png") {
+
+      device <- function(..., width, height) grDevices::png(...,
+                                                            width = input$dendrogram_width*2.5,
+                                                            height = input$dendrogram_height*2.5,
+                                                            res = input$dendrogram_resolution,
+                                                            units = "px")
+
+    } else if (input$dendrogram_format == ".tiff") {
+
+      device <- function(..., width, height) grDevices::tiff(...,
+                                                             width = input$dendrogram_width*2.5,
+                                                             height = input$dendrogram_height*2.5,
+                                                             res = input$dendrogram_resolution,
+                                                             units = "px")
+
+    }
+
+    ggsave(file, plot = Dendrogram_plot(), device = device)
+
+  }
+
+)
 
 
 
@@ -924,8 +1019,8 @@ output$table_import2 <- renderDataTable({
 
 
 
-### Number of Cluster barplot
-output$cluster_number <- renderText({
+### Number of cluster from STRUCTURE
+num_cluster_STR <- reactive({
 
   x <- c(colnames(Data_DA_Str())[seq(from = 1,
                                      to = ncol(Data_DA_Str()),
@@ -933,7 +1028,15 @@ output$cluster_number <- renderText({
 
   y <- c("Sample_ID", "Pop_ID")
 
-  length(x) - length(intersect(x, y))
+  num_cluster_STR <- length(x) - length(intersect(x, y))
+
+  return(num_cluster_STR)
+
+})
+
+output$cluster_number <- renderText({
+
+  num_cluster_STR()
 
 })
 
@@ -1098,8 +1201,8 @@ Structure_Plot <- reactive({
   vec <- c(Palette_Match$Pop_Col[match(Pop_ID$Pop_ID, Palette_Match$Pop_ID)])
 
   # ggplot
-  p <-  ggplot(data = Dataset_m,
-               aes(x = Sample_ID, name = Pop_ID, y = Q, fill = Cluster)) +
+  p <- ggplot(data = Dataset_m,
+              aes(x = Sample_ID, name = Pop_ID, y = Q, fill = Cluster)) +
           geom_bar(stat = "identity",
                    colour = "black",
                    size = 0.2,
@@ -1129,9 +1232,7 @@ Structure_Plot <- reactive({
 
 })
 
-
-
-### STRUCTURE Barplot plotly
+# STRUCTURE Barplot plotly
 output$structure_plot <- renderPlotly({
 
   ggplotly(Structure_Plot(),
@@ -1140,9 +1241,7 @@ output$structure_plot <- renderPlotly({
 
 })
 
-
-
-### Download barplot
+# Download barplot
 output$download_barplot <- downloadHandler(
 
   filename <- function() {
@@ -1198,6 +1297,33 @@ output$download_barplot <- downloadHandler(
 )
 
 
+
+### Membership STRUCTURE cluster
+Members_STR <- reactive({
+
+  Data_cluster_STR <- Data_DA_Str()[, -2]
+
+  Data_cluster_STR$Sample_ID <- factor(Data_cluster_STR$Sample_ID,
+                                       levels = Data_cluster_STR$Sample_ID)
+
+  rownames(Data_cluster_STR) <- Data_cluster_STR$Sample_ID
+
+  Data_cluster_STR$Sample_ID <- NULL
+
+  Data_cluster_STR$Members_STR <- apply(X = Data_cluster_STR,
+                                        MARGIN = 1,
+                                        FUN = which.max)
+
+  Data_cluster_STR <- as.data.frame(cbind("Sample_ID" = rownames(Data_cluster_STR),
+                                          "Members_STR" = Data_cluster_STR$Members_STR))
+
+  return(Data_cluster_STR)
+
+})
+
+
+
+##### Triangle Plot
 
 ### Cluster number triangle plot
 output$cluster_number_2 <- renderText({
@@ -1383,8 +1509,157 @@ output$download_triangleplot <- downloadHandler(
 
 )
 
-### STRUCTURE Phylo plot
 
+
+############################### COMPARING PARTITIONS ####
+
+### Cluster number hclust
+output$Cluster_hclust <- renderText({
+
+  print(input$cluster_count)
+
+})
+
+
+
+### Cluster number STRUCTURE
+output$Cluster_STR <- renderText({
+
+  num_cluster_STR()
+
+})
+
+
+
+### Comparison table
+Comparison_table <- reactive({
+
+  Members_hclust <- data.frame("Members_hclust" = cutree(tree = dend(),
+                                                      k = input$cluster_count))
+
+  Data_partitions <- cbind(rownames(Members_hclust),
+                           Data_DA_Str()[, 2],
+                           Members_hclust,
+                           Members_STR()) # [, -1] aggiungi dopo i controlli che funziona bene
+
+  colnames(Data_partitions) <- c("Sample_ID",
+                                 "Pop_ID",
+                                 "Hierarchic",
+                                 "Sample_ID_2",
+                                 "STRUCTURE")
+
+  Data_partitions <- Data_partitions[, -4]
+
+  return(Data_partitions)
+
+})
+
+
+
+### Partitions indeces
+output$agreement_value <- renderText({
+
+  comparing.Partitions(as.vector(Comparison_table()[, 2]),
+                       as.vector(Comparison_table()[, 3]),
+                       type = input$agreement_index)
+
+})
+
+
+
+### Table to compare partitions
+output$comparison_table <- renderDataTable({
+
+  Comparison_table()
+
+}, options = list(pageLength = 25))
+
+
+
+### Table plot to compare partitions
+Tableplot <- reactive({
+
+  Comparison_table_m <- melt(data = Comparison_table(),
+                             id.vars = "Sample_ID",
+                             measure.vars = c("Hierarchic",
+                                              "STRUCTURE"))
+
+  Tableplot <- ggplot() +
+    geom_bar(data = Comparison_table_m,
+             aes(x = value, fill = variable),
+             position = input$comparison_plot_barpos) +
+    labs(x = "Cluster",
+         y = "Number of observations",
+         fill = "Analysis",
+         title = input$comparison_plot_title) +
+    theme(
+      legend.title = element_blank()
+    )
+
+  return(Tableplot)
+
+})
+
+# ggplotly Tableplot
+output$comparison_plot <- renderPlotly({
+
+  ggplotly(Tableplot(),
+           width = input$comparison_plot_width,
+           height = input$comparison_plot_height)
+
+})
+
+# Download Tableplot
+output$download_comparison_plot <- downloadHandler(
+
+  filename <- function() {
+
+    input$comparison_plot_title
+
+  },
+
+  content <- function(file) {
+
+    if (input$comparison_plot_format == ".bmp") {
+
+      device <- function(..., width, height) grDevices::bmp(...,
+                                                            width = input$comparison_plot_width*2.5,
+                                                            height = input$comparison_plot_height*2.5,
+                                                            res = input$comparison_plot_resolution,
+                                                            units = "px")
+
+    } else if (input$comparison_plot_format == ".jpeg") {
+
+      device <- function(..., width, height) grDevices::jpeg(...,
+                                                             width = input$comparison_plot_width*2.5,
+                                                             height = input$comparison_plot_height*2.5,
+                                                             res = input$comparison_plot_resolution,
+                                                             quality = 100,
+                                                             units = "px")
+
+    } else if (input$comparison_plot_format == ".png") {
+
+      device <- function(..., width, height) grDevices::png(...,
+                                                            width = input$comparison_plot_width*2.5,
+                                                            height = input$comparison_plot_height*2.5,
+                                                            res = input$comparison_plot_resolution,
+                                                            units = "px")
+
+    } else if (input$comparison_plot_format == ".tiff") {
+
+      device <- function(..., width, height) grDevices::tiff(...,
+                                                             width = input$comparison_plot_width*2.5,
+                                                             height = input$comparison_plot_height*2.5,
+                                                             res = input$comparison_plot_resolution,
+                                                             units = "px")
+
+    }
+
+    ggsave(file, plot = Tableplot(), device = device)
+
+  }
+
+)
 
 
 
