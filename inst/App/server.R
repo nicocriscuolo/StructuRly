@@ -1214,7 +1214,7 @@ Structure_Plot <- reactive({
                                               by = 0.1))) +
             scale_fill_manual("Cluster",
                               values = Colours) +
-            labs(y = "Admixture index [q]",
+            labs(y = "Admixture index [%]",
                  title = input$barplot_title) +
               theme(
                 axis.title = element_text(size = input$axis_title_size*2),

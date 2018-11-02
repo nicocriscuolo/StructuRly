@@ -37,7 +37,7 @@ License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
 Imports:
-  ggplot2 (>= 3.0.0),
+  ggplot2 (>= 3.1.0),
 Depends: 
   R (>= 3.5),
   ade4 (>= 1.7),

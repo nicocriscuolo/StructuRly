@@ -475,7 +475,7 @@ br(),
                          label = NULL,
                          value = 570,
                          min = 200,
-                         max = 900
+                         max = 2000
              )
       ),
       column(width = 4,
@@ -518,195 +518,193 @@ br(),
         )
     ),
     fluidRow(
-      column(width = 12,
-             plotlyOutput(outputId = "structure_plot",
-                          height = "600px"
-             )
-      )
-    ),
-br(),
-    fluidRow(
       column(width = 1,
   conditionalPanel(condition = "output.cluster_number >= 1",
-                   colourpicker::colourInput(inputId = "colour_1",
-                                             label = h5("K 1"),
-                                             value = "#FF5733",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
+                          colourpicker::colourInput(inputId = "colour_1",
+                                                    label = h5("K 1"),
+                                                    value = "#FF5733",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 2",
+                          colourpicker::colourInput(inputId = "colour_2",
+                                                    label = h5("K 2"),
+                                                    value = "#A4F771",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 3",
+                          colourpicker::colourInput(inputId = "colour_3",
+                                                    label = h5("K 3"),
+                                                    value = "#71F7EF",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >=4",
+                          colourpicker::colourInput(inputId = "colour_4",
+                                                    label = h5("K 4"),
+                                                    value = "#EEC764",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 5",
+                          colourpicker::colourInput(inputId = "colour_5",
+                                                    label = h5("K 5"),
+                                                    value = "#EDA590",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 6",
+                          colourpicker::colourInput(inputId = "colour_6",
+                                                    label = h5("K 6"),
+                                                    value = "#74AA8A",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 7",
+                          colourpicker::colourInput(inputId = "colour_7",
+                                                    label = h5("K 7"),
+                                                    value = "#337489",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 8",
+                          colourpicker::colourInput(inputId = "colour_8",
+                                                    label = h5("K 8"),
+                                                    value = "#9972A4",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 9",
+                          colourpicker::colourInput(inputId = "colour_9",
+                                                    label = h5("K 9"),
+                                                    value = "#F1F359",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 10",
+                          colourpicker::colourInput(inputId = "colour_10",
+                                                    label = h5("K 10"),
+                                                    value = "#FAB86D",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 11",
+                          colourpicker::colourInput(inputId = "colour_11",
+                                                    label = h5("K 11"),
+                                                    value = "#D6FFD6",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 12",
+                          colourpicker::colourInput(inputId = "colour_12",
+                                                    label = h5("K 12"),
+                                                    value = "#F1CBF1",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
   )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 2",
-                   colourpicker::colourInput(inputId = "colour_2",
-                                             label = h5("K 2"),
-                                             value = "#A4F771",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 3",
-                   colourpicker::colourInput(inputId = "colour_3",
-                                             label = h5("K 3"),
-                                             value = "#71F7EF",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >=4",
-                   colourpicker::colourInput(inputId = "colour_4",
-                                             label = h5("K 4"),
-                                             value = "#EEC764",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 5",
-                   colourpicker::colourInput(inputId = "colour_5",
-                                             label = h5("K 5"),
-                                             value = "#EDA590",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 6",
-                   colourpicker::colourInput(inputId = "colour_6",
-                                             label = h5("K 6"),
-                                             value = "#74AA8A",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 7",
-                   colourpicker::colourInput(inputId = "colour_7",
-                                             label = h5("K 7"),
-                                             value = "#337489",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 8",
-                   colourpicker::colourInput(inputId = "colour_8",
-                                             label = h5("K 8"),
-                                             value = "#9972A4",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 9",
-                   colourpicker::colourInput(inputId = "colour_9",
-                                             label = h5("K 9"),
-                                             value = "#F1F359",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 10",
-                   colourpicker::colourInput(inputId = "colour_10",
-                                             label = h5("K 10"),
-                                             value = "#FAB86D",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 11",
-                   colourpicker::colourInput(inputId = "colour_11",
-                                             label = h5("K 11"),
-                                             value = "#D6FFD6",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 12",
-                   colourpicker::colourInput(inputId = "colour_12",
-                                             label = h5("K 12"),
-                                             value = "#F1CBF1",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      )
-    ),
-    fluidRow(
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 13",
-                   colourpicker::colourInput(inputId = "colour_13",
-                                             label = h5("K 13"),
-                                             value = "#FFF000",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 14",
-                   colourpicker::colourInput(inputId = "colour_14",
-                                             label = h5("K 14"),
-                                             value = "#8CE0F0",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 15",
-                   colourpicker::colourInput(inputId = "colour_15",
-                                             label = h5("K 15"),
-                                             value = "#ACE4BD",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 16",
-                   colourpicker::colourInput(inputId = "colour_16",
-                                             label = h5("K 16"),
-                                             value = "#C6BF47",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 17",
-                   colourpicker::colourInput(inputId = "colour_17",
-                                             label = h5("K 17"),
-                                             value = "#24941C",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 18",
-                   colourpicker::colourInput(inputId = "colour_18",
-                                             label = h5("K 18"),
-                                             value = "#57BFFE",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
-  )
-      ),
+),
+fluidRow(
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 13",
+                          colourpicker::colourInput(inputId = "colour_13",
+                                                    label = h5("K 13"),
+                                                    value = "#FFF000",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 14",
+                          colourpicker::colourInput(inputId = "colour_14",
+                                                    label = h5("K 14"),
+                                                    value = "#8CE0F0",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 15",
+                          colourpicker::colourInput(inputId = "colour_15",
+                                                    label = h5("K 15"),
+                                                    value = "#ACE4BD",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 16",
+                          colourpicker::colourInput(inputId = "colour_16",
+                                                    label = h5("K 16"),
+                                                    value = "#C6BF47",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 17",
+                          colourpicker::colourInput(inputId = "colour_17",
+                                                    label = h5("K 17"),
+                                                    value = "#24941C",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
+  column(width = 1,
+         conditionalPanel(condition = "output.cluster_number >= 18",
+                          colourpicker::colourInput(inputId = "colour_18",
+                                                    label = h5("K 18"),
+                                                    value = "#57BFFE",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
+         )
+  ),
       column(width = 1,
   conditionalPanel(condition = "output.cluster_number >= 19",
-                   colourpicker::colourInput(inputId = "colour_19",
-                                             label = h5("K 19"),
-                                             value = "#D96492",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
+                          colourpicker::colourInput(inputId = "colour_19",
+                                                    label = h5("K 19"),
+                                                    value = "#D96492",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
   )
       ),
       column(width = 1,
   conditionalPanel(condition = "output.cluster_number >= 20",
-                   colourpicker::colourInput(inputId = "colour_20",
-                                             label = h5("K 20"),
-                                             value = "#9E7183",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
+                          colourpicker::colourInput(inputId = "colour_20",
+                                                    label = h5("K 20"),
+                                                    value = "#9E7183",
+                                                    showColour = "background",
+                                                    allowTransparent = TRUE)
   )
+      )
+    ),
+    fluidRow(
+      column(width = 12,
+             plotlyOutput(outputId = "structure_plot",
+                          height = "600px")
       )
     )
   ),
