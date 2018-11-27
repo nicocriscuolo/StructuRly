@@ -16,24 +16,24 @@ knitr::opts_chunk$set(
 
 # StructuRly 0.1.0
 
-StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of Bayesian clustering analysis results from the most common population genetic softwares used to investigate population structure, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to analyze with the most common genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information for each sample (encoded in percentages in a range of 0 to 1).
-The main purpose for which StructuRly was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of software with a user-friendly interface, which can therefore be easily used by those who do not know a programming language. In fact, in a typical StructuRly output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or sub - populations) and the label relative to the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of the outputs produced by StructuRly, which allows the user to extrapolate even more information through a single chart.
+StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of the results of a Bayesian cluster analysis obtained with the most common population genetic softwares used to investigate population structure, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to infer the admixture ancestry of samples starting from the most common genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information of each sample (encoded in percentages in a range from 0 to 1).
+The main purpose for which StructuRly was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of a software with a user-friendly interface, which can therefore be easily used by those who do not know a programming language. In fact, in a typical StructuRly output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or sub - populations) and the label relative to the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of StructuRly outputs, which allows the user to extrapolate even more information through a single chart.
 
-However, the features of StructuRly are not just these, in fact with this application you can:
+However, StructuRly presents more different features in order to:
 
-- upload their raw genetic data datasets to analyze them through hierarchical analysis cluster algorithms and view and download the product dendrogram with linkage methods;
+- upload datasets wit raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
-- produce and customize a table ready to be imported into the STRUCTURE software for Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform the Bayesian analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/))
+- produce and customize a table ready to be imported into the STRUCTURE software for the Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
 
-- import the results of the STRUCTURE analysis into tables pre-formatted by the user, who can insert detailed information about his samples. Likewise, the user can import into StructuRly the results of the population analysis carried out in the ADMIXTURE software (files in .Q and .fam format), without having to re-format the output in another software (such as R);
+- import the results of the STRUCTURE analysis into user's pre-formatted tables, in order to insert detailed information about the samples. Likewise, the user can import into StructuRly the results of the population analysis carried out in the ADMIXTURE software (files in **.Q** and **.fam** format), without having to re-format the output in another software (such as R);
 
-- produce, in addition to the barplot, also the interactive triangle plot, known graphical output of STRUCTURE. Both graphs can show the admixture ancestry of the samples subdivided in a maximum of 20 different clusters;
+- produce, in addition to the barplot, also the interactive triangle plot, well known graphical STRUCTUER graphical output. Both graphs can show the admixture ancestry of the samples subdivided in a maximum of 20 different clusters;
 
-- to compare the partition obtained from the hierarchical analysis cluster and the one with the Bayesian analysis through three different agreements indeces a confusion matrix.
+- to visually compare the partition obtained from the hierarchical cluster analysis and the one with the Bayesian analysis through a confusion matric and estimate an agreement value with three different agreement indeces.
 
 ## Installation
 
-You can install the released version of StructuRly from [GitHub](https://github.com) with:
+You can install the released version of StructuRly from [GitHub](https://github.com) in R with:
 
 ``` r
 library(devtools)
@@ -53,7 +53,7 @@ StructuRly 0.1.0 works on all types of browsers (Internet Explorer, Safari, Chro
 
 ## Data input
 
-StructuRly è divisa in tre differenti sezioni a seconda del input file che si sceglie di immettere e quindi del tipo di analisi da effettuare o dell'output grafico da produrre. Per qualsiasi tipo di file, l'**header di ogni variabile è obbligatorio** e varia a seconda del tipo di variabile che deve essere presente nel dataset di input, in particolare:
+StructuRly is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset, in particular:
 
 1. nella sezione **import raw genetic data** l'utente ha la possibilità di importare il suo file di dati nei formati **.csv** o **.txt**. Questo file può contenere tre variabili opzionali presenti nel seguente ordine e il cui header deve essere esattamente quello indicato di seguito:
 
@@ -69,7 +69,7 @@ Di seguito è riportata un'immagine che rappresenta dei dati conservati in un fi
 
 ![image_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
-2. nella sezione **import the admixture analysis** l'utente può importare un dataset ottenuto direttamente in seguito all'analisi dei suoi dati genetici attraverso software per l'analisi di popolazione come STRUCTURE o ADMIXTURE. Le caratteristiche di questo file non sono molto diverse da quello da importare nella precedente sezione:
+2. Nella sezione **import the admixture analysis** l'utente può importare un dataset ottenuto direttamente in seguito all'analisi dei suoi dati genetici attraverso software per l'analisi di popolazione come STRUCTURE o ADMIXTURE. Le caratteristiche di questo file non sono molto diverse da quello da importare nella precedente sezione:
 
    * le tre variabili facoltative (**Sample_ID**, **Pop_ID** e **Loc_ID**) possono essere nuovamente inserite, in quest'ordine preciso, all'interno del file di importazione, con l'unica differenza che in questo caso le categorie delle variabili **Pop_ID** e **Loc_ID** non devono per forza essere rappresentate da numeri, ma anche da caratteri.
 
@@ -81,11 +81,15 @@ Di seguito è riportata un'immagine che rappresenta dei dati conservati in un fi
 
 Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRly are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/OliveR/tree/master/inst/CSV_data) (the .Q and the .fam files are obtained after an [ADMIXTURE](http://software.genetics.ucla.edu/admixture/) analysis with the sample files downloadable directly from the software website).
 
-3. La terza sezione di StructuRly, denominata come **Compare partitions**, è utilizzabile dopo che il i file per le prime due sezioni sono stati caricati e letti da StructuRly e può essere utilizzata le partizioni ottenute dalla cluster analisi gerarchica e da quella Bayesiana. Ovviamente i dataset importati devono riferirsi a dati di stessa natura e il numero di osservazioni devono essere le stesse per essere comparate.
+3. The third section of StructuRly, **Compare partitions**, must be used after the files for the first two sections have been loaded and read by StructuRly to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
 
 ## Outputs download
 
-Tutti gli output di StructuRly possono essere scaricati sottoforma di immagini in diversi formati in alta qualità direttamente dall'interfaccia utente dell'applicazione. Tuttavia, per scaricare i grafici relativi al Triangle plot, ottenuti attraverso una specifica funzione del pacchetto *plotly* (e non con quelle di *ggplot2*) è necessario scaricare sul tuo computer il software **orca** e seguire le istruzioni che ritrovi al seguente [link](https://github.com/plotly/orca#installation).
+Nella seguente immagine è raffigurato il principale output di StructuRly (il barplot dell'admixture ancestry) scaricato dall'applicazione dopo essere stato personalizzato. Le label dei campioni sull asse X sono colorate secondo la popolazione indicata nel file di input dall'utente, mentre i simboli nella parte superiore del plot indicano il sito di campionamento:
+
+
+
+All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation).
 
 ## Example
 
@@ -97,11 +101,11 @@ Below is a link to the [YouTube]() video of the application showing an example o
 
 - in the interactive barplot the X axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at [link](https://github.com/ropensci/plotly/issues/1328);
 
-- in the comparison plot the separation lines of the heatmap cells are not visible when using the interactive graph for a bug in the resolution phase of the package used to produce this output. Again, download the output to view the complete chart;
+- in the comparison plot the separation lines of the heatmap cells are not visible when using the interactive graph for a bug present in the package used to produce this output. Again, download the output to view the complete chart;
 
-- the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate when using a very large number (> 50) of populations or sites defined a priori by the user. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot.
+- the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate when using a very large number (> 60) of populations or sites defined a priori by the user. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot.
 
-The slight bugs related to some characteristics of the graphs are shown only in the presence of the interactive plot, but the file that will be downloaded later will not present any problem.
+The slight bugs related to some characteristics of the graphs are shown only in the presence of the interactive plot, but the downloaded file won't present any problem.
 
 ## Citation
 
