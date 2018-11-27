@@ -87,7 +87,7 @@ Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRl
 
 Nella seguente immagine è raffigurato il principale output di StructuRly (il barplot dell'admixture ancestry) scaricato dall'applicazione dopo essere stato personalizzato. Le label dei campioni sull asse X sono colorate secondo la popolazione indicata nel file di input dall'utente, mentre i simboli nella parte superiore del plot indicano il sito di campionamento:
 
-
+![image_3]()
 
 All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation).
 
