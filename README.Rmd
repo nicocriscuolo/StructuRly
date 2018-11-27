@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # StructuRly 0.1.0
 
-StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of Bayesian clustering analysis results from the most common population genetic analysis software, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to analyze the most common genetic markers such as SNPs, AFLPs, RADs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information for each sample (encoded in percentages in a range of 0 to 1).
+StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of Bayesian clustering analysis results from the most common population genetic softwares used to investigate population structure, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to analyze with the most common genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information for each sample (encoded in percentages in a range of 0 to 1).
 The main purpose for which StructuRly was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of software with a user-friendly interface, which can therefore be easily used by those who do not know a programming language. In fact, in a typical StructuRly output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or sub - populations) and the label relative to the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of the outputs produced by StructuRly, which allows the user to extrapolate even more information through a single chart.
 
 However, the features of StructuRly are not just these, in fact with this application you can:
@@ -105,7 +105,7 @@ The slight bugs related to some characteristics of the graphs are shown only in 
 
 ## Citation
 
-StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly - A novel shiny app to produce elegant, detailed and interactive plot from STRUCTURE and ADMIXTURE outputs* (submitted). If you use this package results included in your paper, please cite:
+StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly - A novel shiny app to produce elegant, detailed and interactive plot from STRUCTURE and ADMIXTURE outputs* (submitted). If you use this package for results included in your paper please cite:
 
 ```{r, echo = FALSE}
 citation("StructuRly")
