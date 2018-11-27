@@ -55,7 +55,7 @@ Le successive variabili del dataset da importare in questa sezione sono obbligat
 
 Di seguito è riportata un'immagine che rappresenta dei dati conservati in un file di elaborazione dati che, una volta convertito in formato .txt o .csv può essere correttamente letto da StructuRly:
 
-![oliver\_maps\_1](https://user-images.githubusercontent.com/35098432/44960136-3049cc80-aefa-11e8-9bf8-b3641b1d6e04.jpg)
+![image_1](https://user-images.githubusercontent.com/35098432/44960136-3049cc80-aefa-11e8-9bf8-b3641b1d6e04.jpg)
 
 1.  nella sezione **import the admixture analysis** l'utente può importare un dataset ottenuto direttamente in seguito all'analisi dei suoi dati genetici attraverso software per l'analisi di popolazione come STRUCTURE o ADMIXTURE. Le caratteristiche di questo file non sono molto diverse da quello da importare nella precedente sezione:
 
@@ -63,7 +63,7 @@ Di seguito è riportata un'immagine che rappresenta dei dati conservati in un fi
 
 -   le variabili da inserire obbligatoriamente sono quelle dell'admixture proportion calcolate dai software sopra citati, e che saranno in numero uguale al numero di cluster scelti dall'utente prima di eseguire l'analisi Bayesiana. Ognuna di queste variabili deve essere identificata da un header in cui è presente la lettera "K" e il numero del relativo cluster in sequenza (e. g.: "K1", "K2", "K3", ecc.), cioè nell'ordine in cui il dataset è stato esportato dal software.
 
-![oliver\_maps\_1](https://user-images.githubusercontent.com/35098432/44960136-3049cc80-aefa-11e8-9bf8-b3641b1d6e04.jpg)
+![image_2](https://user-images.githubusercontent.com/35098432/49115785-166f1a00-f29c-11e8-9e73-66f601f26359.png)
 
 -   se la tua matrice di dati di admixture è stata ottenuta in seguito al software admixture, ci sono due modi di procedere per preparare il tuo dataset per StructuRly. Dall'analisi di un file in formato .bed o .ped otterrai un file in formato **.Q** che puoi sia importare in R e quindi modificare a tuo piacimento, esportandolo in formato .txt o .csv per poi importarlo in StructuRly (ad esempio dopo aver aggiunto le colonne identificative del nome dei campioni o della popolazione) oppure puoi importare in StructuRly direttamente il file in formato **.Q**. Questo file contiene soltanto le variabili con i valori dell'admixture ancestry in numero uguale a quello dei cluster scelti per dall'utente per l'analisi: se vuoi aggiungere a questo dataset i metadati dovrai importare in StructuRly anche il file in formato **.fam** che è generalmente accompagna i file in formato .bed e .ped. Se vuoi maggiori dettagli riguardo le informazioni codificate in questi tipi di formati, puoi trovarli a questo [link](https://www.cog-genomics.org/plink2/formats#fam). StructuRly utilizzerà automaticamente le prime due variabili del file in formato **.fam**, le quali sono generalmente utilizzate rispettivamente per insirire l'identificativo dei campioni e la popolazione putativa definita dall'utente.
 
