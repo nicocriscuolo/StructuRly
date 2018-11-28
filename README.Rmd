@@ -31,7 +31,7 @@ However, StructuRly presents more different features in order to:
 
 - to visually compare the partition obtained from the hierarchical cluster analysis and the one with the Bayesian analysis through a confusion matric and estimate an agreement value with three different agreement indeces.
 
-## Installation
+### Installation
 
 You can install the released version of StructuRly from [GitHub](https://github.com) in R with:
 
@@ -51,53 +51,62 @@ runStructuRly()
 
 StructuRly 0.1.0 works on all types of browsers (Internet Explorer, Safari, Chrome, etc.) and in its current version it can also work locally and then offline. All you have to do is to install the updated versions of [R](https://www.r-project.org) and [RStudio](https://www.rstudio.com).
 
-## Data input
+### Data input
 
 StructuRly is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset, in particular:
 
-1. nella sezione **import raw genetic data** l'utente ha la possibilità di importare il suo file di dati nei formati **.csv** o **.txt**. Questo file può contenere tre variabili opzionali presenti nel seguente ordine e il cui header deve essere esattamente quello indicato di seguito:
+#### Section 1: Import raw genetic data
 
-   * **Sample_ID**: è la variabile che contiene gli identificativi di ogni campione, quindi ogni nome presente in questa colonna sarà diverso dall'altro (anche se è buona norma usare solo numeri e lettere, i caratteri dei nomi dei campioni possono essere separati dai seguenti simboli "_" e "-");
+In this section, the user has the possibility to import his data file in the **.csv** or **.txt** format. This file can contain three optional variables present in the following order and whose header must be exactly the one shown below:
 
-   * **Pop_ID**: è una variabile categorica identificata da un numero intero che indica la popolazione di appartenenza, definita dall'utente, per ogni campione (e. g.: 1, 2, 3..); 
+   * **Sample_ID**: is the variable that contains the IDs of each sample, so each name in this column will be different from the others (although it is good practice to use only numbers and letters, the IDs characters can be separated also by the following symbols "_" and "-");
 
-   * **Loc_ID**: un'altra variabile categorica identificata nuovamente da un numero intero che indica il sito di origine di ogni campione; tale variabile, se presente nella tabella prodotta grazie a StructuRly e quindi importata in STRUCTURE per l'analisi di popolazione può essere presa in considerazione dall'algoritmo Bayesiano come supporto all'elaborazione dei risultati.
+   * **Pop_ID**: is a categorical variable identified by an integer that indicates the population defined by the user for each sample (e.g .: 1, 2, 3 ..);
 
-Le successive variabili del dataset da importare in questa sezione sono obbligatorie, e devono contenere valori numerici relativi ai tipi di marker utilizzati. A seconda della ploidia dell'organismo analizzato, ci sarà un numero di colonne per ogni locus pari al numero degli alleli. Per uno stesso locus genetico, l'header della colonna deve contenere un unico nome del locus seguito dal simbolo "." e dal numero identificativo dell'allele, partendo da 1 (e. g.: "Locus_1.1," "Locus_1.2", ecc.). Inoltre, in questo tipo di file i missing values devono essere indicati soltanto con la sigla **NA**.
+  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with to StructuRly and then imported into STRUCTURE for population analysis can be used by the Bayesian algorithm as a support to the elaboration of the results.
 
-Di seguito è riportata un'immagine che rappresenta dei dati conservati in un file di elaborazione dati che, una volta convertito in formato .txt o .csv può essere correttamente letto da StructuRly:
+The following variables present in the dataset to import in this section are mandatory, and must contain numerical values relative to the types of markers used. Depending on the ploidy of the organism analyzed, there must be a number of columns for each locus equal to the number of alleles. For the same locus, the column header must contain a single name of the locus followed by the symbol "." and the identification number of the allele, starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", etc.). Furthermore, in this type of file the missing values must be indicated only with the abbreviation **NA**.
+
+Below there is an image that represents data stored in a spreadsheet that, once converted to .txt or .csv format, can be properly read by StructuRly:
 
 ![image_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
-2. Nella sezione **import the admixture analysis** l'utente può importare un dataset ottenuto direttamente in seguito all'analisi dei suoi dati genetici attraverso software per l'analisi di popolazione come STRUCTURE o ADMIXTURE. Le caratteristiche di questo file non sono molto diverse da quello da importare nella precedente sezione:
+#### Section 2: Import the admixture analysis
 
-   * le tre variabili facoltative (**Sample_ID**, **Pop_ID** e **Loc_ID**) possono essere nuovamente inserite, in quest'ordine preciso, all'interno del file di importazione, con l'unica differenza che in questo caso le categorie delle variabili **Pop_ID** e **Loc_ID** non devono per forza essere rappresentate da numeri, ma anche da caratteri.
+Here the user can import a dataset obtained directly following the analysis of his genetic data through a software to investigate population structure. The characteristics of this file are not very different from the one to be imported in the previous section:
 
-   * le variabili da inserire obbligatoriamente sono quelle dell'admixture proportion calcolate dai software sopra citati, e che saranno in numero uguale al numero di cluster scelti dall'utente prima di eseguire l'analisi Bayesiana. Ognuna di queste variabili deve essere identificata da un header in cui è presente la lettera "K" e il numero del relativo cluster in sequenza (e. g.: "K1", "K2", "K3", ecc.), cioè nell'ordine in cui il dataset è stato esportato dal software.
+   * the three optional variables (**Sample_ID**, **Pop_ID** and **Loc_ID**) can be inserted again, in this precise order, within the import file, with the only difference that in this case the categories of the variables **Pop_ID** and **Loc_ID** do not necessarily have to be represented by numbers, but also by characters.
+
+   * the other mandatory variables to be inserted must be those of the admixture proportion calculated by the software mentioned above, and which will be equal in number to the number of clusters chosen by the user before executing the Bayesian analysis. Each of these variables must be identified by a header containing the letter "K" and the number of the relative cluster in sequence (eg: "K1", "K2", "K3", etc.), i. e. in same the order of the dataset exported by the software.
+
+
+An example of the structure of this type of file is shown below:
 
 ![image_2](https://user-images.githubusercontent.com/35098432/49116054-b88f0200-f29c-11e8-9abf-0c050bdb1e45.png)
 
-   * se la tua matrice di dati di admixture è stata ottenuta in seguito al software admixture, ci sono due modi di procedere per preparare il tuo dataset per StructuRly. Dall'analisi di un file in formato .bed o .ped otterrai un file in formato **.Q** che puoi sia importare in R e quindi modificare a tuo piacimento, esportandolo in formato .txt o .csv per poi importarlo in StructuRly (ad esempio dopo aver aggiunto le colonne identificative del nome dei campioni o della popolazione) oppure puoi importare in StructuRly direttamente il file in formato **.Q**. Questo file contiene soltanto le variabili con i valori dell'admixture ancestry in numero uguale a quello dei cluster scelti per dall'utente per l'analisi: se vuoi aggiungere a questo dataset i metadati dovrai importare in StructuRly anche il file in formato **.fam** che è generalmente accompagna i file in formato .bed e .ped. Se vuoi maggiori dettagli riguardo le informazioni codificate in questi tipi di formati, puoi trovarli a questo [link](https://www.cog-genomics.org/plink2/formats#fam). StructuRly utilizzerà automaticamente le prime due variabili del file in formato **.fam**, le quali sono generalmente utilizzate rispettivamente per insirire l'identificativo dei campioni e la popolazione putativa definita dall'utente.
+   * If your admixture data matrix was obtained as a result of the admixture software, there are two ways to proceed to prepare your StructuRly dataset. From the analysis of a file in .bed or .ped format you will get a **.Q** format file that you can either import into R and then modify as you like, exporting it in .txt or .csv format and then import it into StructuRly (for example, after adding the columns identifying the name of the samples or the population) or you can import directly into StructuRly the **.Q** format file. This file only contains the variables with the values of the ancestry admixture: if you want to add metadata to this dataset you will have to import the **.fam** file into StructuRly, which generally accompanies .bed and .ped files. If you want more details about the information encoded in these types of formats, you can find them [here](https://www.cog-genomics.org/plink2/formats#fam). StructuRly will automatically use the first two variables of the **.fam** file, which are generally used to insure the sample identifier and the user-defined putative population respectively.
 
-Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRly are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/OliveR/tree/master/inst/CSV_data) (the .Q and the .fam files are obtained after an [ADMIXTURE](http://software.genetics.ucla.edu/admixture/) analysis with the sample files downloadable directly from the software website).
+Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRly are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an [ADMIXTURE](http://software.genetics.ucla.edu/admixture/) analysis with the sample files are downloadable directly from the software website).
 
-3. The third section of StructuRly, **Compare partitions**, must be used after the files for the first two sections have been loaded and read by StructuRly to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
+#### Section 3: Compare partitions
 
-## Outputs download
+The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
 
-Nella seguente immagine è raffigurato il principale output di StructuRly (il barplot dell'admixture ancestry) scaricato dall'applicazione dopo essere stato personalizzato. Le label dei campioni sull asse X sono colorate secondo la popolazione indicata nel file di input dall'utente, mentre i simboli nella parte superiore del plot indicano il sito di campionamento:
+### Outputs download
 
+The following image shows the main output of StructuRly (the barplot of the ancestry admixture) downloaded from the application after being customized. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site:
 
+![image_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
 
 All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation).
 
-## Example
+### Example
 
 Below is a link to the [YouTube]() video of the application showing an example of using the software:
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
 
-## Known bugs and issues
+### Known bugs and issues
 
 - in the interactive barplot the X axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at [link](https://github.com/ropensci/plotly/issues/1328);
 
@@ -107,7 +116,7 @@ Below is a link to the [YouTube]() video of the application showing an example o
 
 The slight bugs related to some characteristics of the graphs are shown only in the presence of the interactive plot, but the downloaded file won't present any problem.
 
-## Citation
+### Citation
 
 StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly - A novel shiny app to produce elegant, detailed and interactive plot from STRUCTURE and ADMIXTURE outputs* (submitted). If you use this package for results included in your paper please cite:
 
@@ -115,6 +124,6 @@ StructuRly was firstly presented during the [International BBCC meetings](https:
 citation("StructuRly")
 ```
 
-## Contact
+### Contact
 
 For additional information regarding StructuRly, please consult the documentation or [email us](mailto:nico.criscuolo981@gmail.com).

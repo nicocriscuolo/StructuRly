@@ -8,7 +8,10 @@ ui <- fluidPage(
                     "Elegant, detailed and interactive plots for",
                     a("STRUCTURE",
           href = "https://web.stanford.edu/group/pritchardlab/structure.html"),
-                      "outputs",
+                     "and",
+                     a("ADMIXTURE",
+                       href = "http://software.genetics.ucla.edu/admixture/"),
+                     "outputs",
                     align = "center")
                )
         )
@@ -25,9 +28,9 @@ br(),
 br(),
   conditionalPanel(conditio = "input.import_data > 0",
             radioButtons(inputId = "analysis_type",
-                         label = h5(icon(name = "book"), "Choose an action"),
-                         choices = list("Import genetic data" = 1,
-                                        "Import STRUCTURE results" = 2,
+                         label = h5(icon(name = "list-ul"), "Choose an action"),
+                         choices = list("Import raw genetic data" = 1,
+                                        "Import the admixture analysis" = 2,
                                         "Compare partitions" = 3),
                          selected = 1),
   conditionalPanel(condition = "input.analysis_type == 1",
@@ -39,26 +42,34 @@ br(),
                                  ".csv")
                       ),
     conditionalPanel(condition = "output.fileUploaded_PER",
-              actionButton(inputId = "check_table",
-                           label = h4(icon(name = "check"),
-                                      "Start the analysis!"),
-                           width = "100%")
+            actionButton(inputId = "check_table",
+                         label = h4(icon(name = "check"),
+                                    "Start the analysis!"),
+                         width = "100%")
     )
   ),
   conditionalPanel(condition = "input.analysis_type == 2",
             fileInput(inputId = "Data_DA_Str",
                       label = h5(icon(name = "file"),
-                                 "Input file (.csv, .txt)"),
+                                 "Input file (.csv, .txt, .Q)"),
                       accept = c("text/csv",
                                  "text/comma-separated-values,text/plain",
-                                 ".csv")
+                                 ".csv",
+                                 ".Q")
                       ),
+  conditionalPanel(condition = "output.dataFormat == 'Q'",
+            fileInput(inputId = "FAM_file",
+                      label = h5(icon(name = "file-alt"),
+                                 "Input information file (.fam)"),
+                      accept = c(".fam")
+            )
+  ),
   conditionalPanel(condition = "output.fileUploaded_DA",
              actionButton(inputId = "customize_plot",
                            label = h4(icon(name = "check"),
                                       "Start the analysis!"),
                            width = "100%")
-    )
+  )
   )
   ),
 br(),
@@ -88,7 +99,9 @@ br(),
 ######################### UI DATA FOR STRUCUTRE ####
         column(width = 10,
   shinyjs::hidden(mainPanel(id = "instructions",
-                            img(src = "Pipeline_Structurly.png"))
+                            # img(src = "Pipeline_Structurly.png")
+                            h4("Detailed instructions for the usage of", em("StructuRly"), "will be soon available..")
+                 )
   ),
   conditionalPanel(condition = "input.check_table == 0 &
                    input.customize_plot == 0 &
@@ -388,6 +401,7 @@ br(),
   tabsetPanel(type = "pills",
     tabPanel(title = h4("Input table"),
  br(),
+  conditionalPanel(condition = "output.dataFormat != 'Q'",
      fluidRow(
        column(width = 2,
               radioButtons(inputId = "separator2", label = h5("Separator"),
@@ -403,7 +417,8 @@ br(),
                                        Double = '"'),
                            selected = "")
        )
-     ),
+     )
+  ),
 br(),
      fluidRow(
        column(width = 12,
@@ -490,28 +505,28 @@ br(),
     fluidRow(
         column(width = 3,
                sliderInput(inputId = "x_label_size",
-                           label = h5("Size X Labels"),
+                           label = h5("X labels size"),
                            min = 1,
                            max = 10,
                            value = 5)
         ),
         column(width = 3,
                sliderInput(inputId = "y_label_size",
-                           label = h5("Size Y Labels"),
+                           label = h5("Y labels size"),
                            min = 1,
                            max = 10,
                            value = 8)
         ),
         column(width = 3,
                sliderInput(inputId = "x_label_angle",
-                           label = h5("Angle X Labels"),
+                           label = h5("X labels angle"),
                            min = 0,
                            max = 90,
                            value = 90)
         ),
         column(width = 3,
                sliderInput(inputId = "axis_title_size",
-                           label = h5("Size of titles"),
+                           label = h5("Titles size"),
                            min = 1,
                            max = 10,
                            value = 5)
@@ -572,33 +587,43 @@ br(),
                                                     allowTransparent = TRUE)
          )
   ),
-  column(width = 1,
-         conditionalPanel(condition = "output.cluster_number >= 7",
-                          colourpicker::colourInput(inputId = "colour_7",
-                                                    label = h5("K 7"),
-                                                    value = "#337489",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-         )
-  ),
-  column(width = 1,
-         conditionalPanel(condition = "output.cluster_number >= 8",
-                          colourpicker::colourInput(inputId = "colour_8",
-                                                    label = h5("K 8"),
-                                                    value = "#9972A4",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-         )
-  ),
-  column(width = 1,
-         conditionalPanel(condition = "output.cluster_number >= 9",
-                          colourpicker::colourInput(inputId = "colour_9",
-                                                    label = h5("K 9"),
-                                                    value = "#F1F359",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-         )
-  ),
+      column(width = 1,
+  conditionalPanel(condition = "output.cluster_number >= 7",
+                   colourpicker::colourInput(inputId = "colour_7",
+                                             label = h5("K 7"),
+                                             value = "#337489",
+                                             showColour = "background",
+                                             allowTransparent = TRUE)
+  )
+      ),
+      column(width = 2,
+             uiOutput(outputId = "show_location_marks")
+      ),
+      column(width = 3,
+             selectInput(inputId = "group_barplot_by",
+                         label = h5("Group by"),
+                         choices = "")
+      )
+    ),
+  fluidRow(
+    column(width = 1,
+           conditionalPanel(condition = "output.cluster_number >= 8",
+                            colourpicker::colourInput(inputId = "colour_8",
+                                                      label = h5("K 8"),
+                                                      value = "#9972A4",
+                                                      showColour = "background",
+                                                      allowTransparent = TRUE)
+           )
+    ),
+    column(width = 1,
+           conditionalPanel(condition = "output.cluster_number >= 9",
+                            colourpicker::colourInput(inputId = "colour_9",
+                                                      label = h5("K 9"),
+                                                      value = "#F1F359",
+                                                      showColour = "background",
+                                                      allowTransparent = TRUE)
+           )
+    ),
   column(width = 1,
          conditionalPanel(condition = "output.cluster_number >= 10",
                           colourpicker::colourInput(inputId = "colour_10",
@@ -625,9 +650,7 @@ br(),
                                                     showColour = "background",
                                                     allowTransparent = TRUE)
          )
-  )
-),
-fluidRow(
+  ),
   column(width = 1,
          conditionalPanel(condition = "output.cluster_number >= 13",
                           colourpicker::colourInput(inputId = "colour_13",
@@ -691,15 +714,17 @@ fluidRow(
                                                     allowTransparent = TRUE)
   )
       ),
+    fluidRow(
       column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 20",
-                          colourpicker::colourInput(inputId = "colour_20",
-                                                    label = h5("K 20"),
-                                                    value = "#9E7183",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-  )
+             conditionalPanel(condition = "output.cluster_number >= 20",
+                              colourpicker::colourInput(inputId = "colour_20",
+                                                        label = h5("K 20"),
+                                                        value = "#9E7183",
+                                                        showColour = "background",
+                                                        allowTransparent = TRUE)
+             )
       )
+    )
     ),
     fluidRow(
       column(width = 12,
@@ -778,7 +803,6 @@ br(),
              )
       )
     ),
-br(),
     fluidRow(
       column(width = 12, align = "center",
              plotlyOutput(outputId = "triangle_plot",
@@ -799,22 +823,10 @@ br()
                                 input.check_table == 0 &
                                 input.customize_plot == 0",
                    mainPanel(id = "comparison_1",
-br(),
-br(),
-                             p("To compare partitions obtained from a
-                                hierarchical cluster analysis and from the
-                                bayesian cluster analysis you need to upload
-                                in StructuRly the dataset you would like to
-                                import in STRUCTURE and the one obtained after
-                                you have computed the STRUCTURE analysis.
-                                Please select the radio buttons 'Import data
-                                for STRUCTURE' and 'Import results from
-                                STRUCTURE' respectivley to upload this two
-                                dataset, customize your hierarchical cluster
-                                analysand
-                                press both the buttons 'Start the
-                                analysis!'."),
-                             align = "center")
+                             img(src = "Instructions_comparison.png",
+                                 width = "1100px",
+                                 height = "619px")
+                   )
   ),
 # Controllare se funziona quando si importano nuovi dataset dopo i primi importati e
 # non sono più disponibili i bottoni "Start the analysis"
@@ -822,40 +834,19 @@ br(),
                                 input.check_table > 0 &
                                 input.customize_plot == 0",
                    mainPanel(id = "comparison_2",
-br(),
-br(),
-                             p("To compare partitions obtained from a
-                                hierarchical cluster analysis and from the
-                                bayesian cluster analysis you need to upload
-                                in StructuRly the dataset you would like to
-                                import in STRUCTURE and the one obtained after
-                                you have computed the STRUCTURE analysis.
-                                Please select the radio buttons 'Import data
-                                for STRUCTURE' and 'Import results from
-                                STRUCTURE' to upload this two dataset and
-                                press both the buttons 'Start the
-                                analysis!'."),
-                             align = "center"
+                             img(src = "Instructions_comparison.png",
+                                 width = "1100px",
+                                 height = "619px")
                    )
   ),
   conditionalPanel(condition = "input.analysis_type == 3 &
                                 input.check_table == 0 &
                                 input.customize_plot > 0",
                    mainPanel(id = "comparison_3",
-br(),
-br(),
-                             p(h4("To compare partitions obtained from a
-                                  hierarchical cluster analysis and from the
-                                  bayesian cluster analysis you need to upload
-                                  in StructuRly the dataset you would like to
-                                  import in STRUCTURE and the one obtained after
-                                  you have computed the STRUCTURE analysis.
-                                  Please select the radio buttons 'Import data
-                                  for STRUCTURE' and 'Import results from
-                                  STRUCTURE' to upload this two dataset and
-                                  press both the buttons 'Start the
-                                  analysis!'.")),
-                             align = "center")
+                             img(src = "Instructions_comparison.png",
+                                 width = "1100px",
+                                 height = "619px")
+                   )
   ),
   conditionalPanel(condition = "input.analysis_type == 3 &
                                 input.check_table > 0 &
@@ -877,7 +868,7 @@ br(),
              verbatimTextOutput(outputId = "Cluster_hclust")
       ),
       column(width = 2,
-             h5("STRUCTURE"),
+             h5("Admixture"),
              verbatimTextOutput(outputId = "Cluster_STR")
       ),
       column(width = 3,
@@ -901,17 +892,7 @@ br(),
       mainPanel(id = "panel_comparison_plot",
                 width = 12,
                 fluidRow(
-                  column(width = 3),
-                  column(width = 2,
-                         h5("Bar position"),
-                         radioButtons(inputId = "comparison_plot_barpos",
-                                      label = NULL,
-                                      choices = c("Stack" = "stack",
-                                                  "Dodge" = "dodge"),
-                                      selected = "stack"
-
-                         )
-                  ),
+                  column(width = 5),
                   column(width = 3,
                          h5("Plot title"),
                          textInput(inputId = "comparison_plot_title",
@@ -934,40 +915,71 @@ br(),
                                         label = "Download")
                   )
                 ),
-                fluidRow(
-                  column(width = 4,
-                         h5("Plot width"),
-                         sliderInput(inputId = "comparison_plot_width",
-                                     label = NULL,
-                                     value = 1000,
-                                     min = 500,
-                                     max = 5000
-                         )
-                  ),
-                  column(width = 4,
-                         h5("Plot height"),
-                         sliderInput(inputId = "comparison_plot_height",
-                                     label = NULL,
-                                     value = 400,
-                                     min = 200,
-                                     max = 900
-                         )
-                  ),
-                  column(width = 4,
-                         h5("Plot resolution"),
-                         sliderInput(inputId = "comparison_plot_resolution",
-                                     label = NULL,
-                                     value = 300,
-                                     min = 100,
-                                     max = 400)
-                  )
-                ),
+      fluidRow(
+        column(width = 4,
+               h5("Plot width"),
+               sliderInput(inputId = "comparison_plot_width",
+                           label = NULL,
+                           value = 1000,
+                           min = 500,
+                           max = 5000
+               )
+        ),
+        column(width = 4,
+               h5("Plot height"),
+               sliderInput(inputId = "comparison_plot_height",
+                           label = NULL,
+                           value = 570,
+                           min = 200,
+                           max = 900
+               )
+        ),
+        column(width = 4,
+               h5("Plot resolution"),
+               sliderInput(inputId = "comparison_plot_resolution",
+                           label = NULL,
+                           value = 300,
+                           min = 100,
+                           max = 400)
+        )
+      ),
 br(),
-                fluidRow(
-                  column(width = 12,
-                         plotlyOutput(outputId = "comparison_plot")
-                  )
-                ),
+    fluidRow(
+      column(width = 3,
+             sliderInput(inputId = "comp_x_label_size",
+                         label = h5("X labels size"),
+                         min = 1,
+                         max = 10,
+                         value = 8)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "comp_y_label_size",
+                         label = h5("Y labels size"),
+                         min = 1,
+                         max = 10,
+                         value = 8)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "comp_label_angle",
+                         label = h5("Labels angle"),
+                         min = 0,
+                         max = 90,
+                         value = 0)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "comp_axis_title_size",
+                         label = h5("Titles size"),
+                         min = 1,
+                         max = 10,
+                         value = 5)
+      )
+    ),
+br(),
+    fluidRow(
+      column(width = 12,
+             plotlyOutput(outputId = "comparison_plot")
+      )
+    ),
 br()
       )
                    )

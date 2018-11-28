@@ -6,10 +6,6 @@
 \usage{
 runStructuRly()
 }
-\arguments{
-\item{host}{Optional parameter to specify where to execute the application,
-default is http://127.0.0.1:4753.}
-}
 \value{
 The function loads the web application StructuRly in your default browser
   through the \code{\link{shinyApp}} function, which requires a script with the

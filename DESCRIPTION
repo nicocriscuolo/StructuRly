@@ -12,25 +12,24 @@ Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
 Description: Population genetics is essential for the analysis of allele 
   variants and frequencies within a group of individuals. Nowadays, these studies 
   are usually carried out using Bayesian clustering algorithms implemented, for 
-  example, in software such as STRUCTURE or ADMIXTURE, one of the most used for this type of 
-  analysis. However, the graphical outputs of this application are not fully 
-  informative. StructuRly 0.1.0 aims to facilitate the visualization of Bayesian analyses 
-  results in an interactive way. StructuRly has been implemented in R using the Shiny 
-  library and it has a user-friendly interface that is simple and intuitive. The 
-  user can import his genetic data, perform a hierarchical cluster analysis based on 
-  the most used geometric and binary distance measures, and compare its results with the ones 
-  obtained from STRUCTURE or ADMIXTURE. Moreover, the user can also import the tables obtained 
-  after an analysis with these softwares, then visualize and personalize the barplot 
-  that shows the admixture index (q) of each sample to every cluster. In addition 
-  to being able to zoom and edit the graph, display information by passing the 
-  cursor on the samples, the real novelty introduced by StructuRly is the ability 
-  to (i) visualize the labels of each sample and (ii) group every label according 
-  to the user's initial population, thus obtaining an immediate visual feedback 
-  compared to the results obtained from the Bayesian analysis. With StructuRly it 
-  is also possible to produce the triangle plot useful for showing more 
-  specifically the degree of belonging of a sample to a certain cluster. Both 
-  charts are interactive and can be downloaded in different formats. StructuRly 
-  can be downloaded as an R package to be launched in any web browser.
+  example, in software such as STRUCTURE or ADMIXTURE. However, the graphical outputs 
+  of this applications are not fully informative. StructuRly 0.1.0 aims to facilitate 
+  the visualization of Bayesian analyses results in an interactive way. It has been 
+  implemented in R using the Shiny library and it has a user-friendly interface that 
+  is simple and intuitive. The user can import his genetic data, perform a hierarchical 
+  cluster analysis based on the most used geometric and binary distance measures, and compare 
+  its results with the ones obtained from STRUCTURE or ADMIXTURE. In fact, the user 
+  can also import the tables obtained after an analysis with these softwares, 
+  then visualize and personalize the barplot that shows the admixture index (q) 
+  of each sample to every cluster. In addition to being able to zoom and edit 
+  the graph, display information by passing the cursor on the samples, the real 
+  novelty introduced by StructuRly is the ability to (i) visualize the labels of 
+  each sample and (ii) group every label according to the user's initial population, 
+  thus obtaining an immediate visual feedback compared to the results obtained from 
+  the Bayesian analysis. With StructuRly it is also possible to produce the triangle 
+  plot useful for showing more specifically the degree of belonging of a sample to 
+  a certain cluster. Both charts are interactive and can be downloaded in different 
+  formats. 
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
