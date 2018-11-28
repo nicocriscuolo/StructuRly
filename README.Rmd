@@ -36,6 +36,8 @@ However, StructuRly presents more different features in order to:
 You can install the released version of StructuRly from [GitHub](https://github.com) in RStudio with:
 
 ``` r
+install.packages(pkgs = "devtools")
+
 library(devtools)
 
 install_github(repo = "nicocriscuolo/StructuRly", dependencies = TRUE)
