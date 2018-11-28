@@ -100,7 +100,7 @@ Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of 
 
 -   the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate when using a very large number (&gt; 60) of populations or sites defined a priori by the user. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot.
 
-The slight bugs related to some characteristics of the graphs are shown only in the presence of the interactive plot, but the downloaded file won't present any problem.
+The slight bugs related to some characteristics of the graphs are shown only inside the interactive plots, but the downloaded file won't present any problem.
 
 ### Citation
 
@@ -111,14 +111,13 @@ StructuRly was firstly presented during the [International BBCC meetings](https:
     #> 
     #>   Nicola Criscuolo and Claudia Angelini (2018). StructuRly:
     #>   Elegant, detailed and interactive plots for STRUCTURE and
-    #>   ADMIXTURE outputs. R package version 0.1.0.
+    #>   ADMIXTURE population analysis. R package version 0.1.0.
     #>   https://github.com/nicocriscuolo/StructuRly
     #> 
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and
-    #> ADMIXTURE outputs},
+    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis},
     #>     author = {Nicola Criscuolo and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},

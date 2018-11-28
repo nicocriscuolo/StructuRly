@@ -114,7 +114,7 @@ Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of 
 
 - the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate when using a very large number (> 60) of populations or sites defined a priori by the user. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot.
 
-The slight bugs related to some characteristics of the graphs are shown only in the presence of the interactive plot, but the downloaded file won't present any problem.
+The slight bugs related to some characteristics of the graphs are shown only inside the interactive plots, but the downloaded file won't present any problem.
 
 ### Citation
 
