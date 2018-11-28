@@ -1,4 +1,4 @@
-1. 1. Install "Rtools" (version > 3.5) from here: https://cran.r-project.org/bin/windows/Rtools/ (Windows users only)
+1. Install "Rtools" (version > 3.5) from here: https://cran.r-project.org/bin/windows/Rtools/ (Windows users only)
 
 
 2. Install the package "genefilter" with the following line command:
