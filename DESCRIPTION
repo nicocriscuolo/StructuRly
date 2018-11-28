@@ -35,8 +35,6 @@ Encoding: UTF-8
 LazyData: TRUE
 Imports:
   ggplot2 (>= 3.1.0),
-Depends: 
-  R (>= 3.5),
   ade4 (>= 1.7),
   adegenet (>= 2.1.1),
   assertthat (>= 0.2.0),
@@ -53,7 +51,8 @@ Depends:
   shiny (>= 1.1.0),
   shinyjs (>= 0.7.0),
   tidyr (>= 0.8.1)
-Suggests:
+Depends: 
+  R (>= 3.5)
 Repository: GitHub
 RoxygenNote: 6.1.0
 URL: https://github.com/nicocriscuolo/StructuRly

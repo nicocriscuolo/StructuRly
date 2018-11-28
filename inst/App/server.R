@@ -160,289 +160,6 @@ output$download_subset <- downloadHandler(
 )
 
 
-##### Hierarchical cluster analysis #####
-
-### Reactive hclust object
-dend <- reactive({
-
-  # COLNAMES of loci splitted
-  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
-      "Pop_ID" %in% colnames(Data_PER_Str()) |
-      "Loc_ID" %in% colnames(Data_PER_Str())) {
-
-    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
-                                                       loci()*ploidy()))]))
-
-  } else {
-
-    COLNAMES_loci <- colnames(Data_PER_Str())
-
-  }
-
-  # Dataset just with the loci splitted
-  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
-
-  # Combining columns based on ploidy
-  Dataset_grouped <- as.data.frame(sapply(seq(from = 1,
-                                              to = length(COLNAMES_loci),
-                                              by = ploidy()),
-                                          FUN = function(i)
-                                            unite(Dataset_s[, i:(i + (ploidy() - 1))],
-                                                  sep = "/")))
-
-  colnames(Dataset_grouped) <- colnames(Data_export())[-c(1:(length(colnames(Data_export())) -
-                                                               loci()))]
-
-  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
-
-    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
-                              Dataset_grouped)
-
-    rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
-
-    Dataset_adegenet$Sample_ID <- NULL
-
-  }
-
-  else {
-
-    rownames(Dataset_grouped) <- seq(from = 1,
-                                     to = nrow(Data_PER_Str()),
-                                     by = 1)
-
-    Dataset_adegenet <- Dataset_grouped
-
-  }
-
-  Dataset_adegenet[Dataset_adegenet == "NA/NA"] <- NA
-
-  Dataset_AD <- df2genind(X = Dataset_adegenet,
-                          ploidy = ploidy(),
-                          sep = "/",
-                          loc.names = c(colnames(Dataset_adegenet))
-  )
-
-  tab_AD <- tab(Dataset_AD,
-                NA.method = input$na_value)
-
-  if (input$distance == "binary") {
-
-    DIST <- dist.binary(df = tab_AD,
-                        method = input$similarity_coefficient)
-
-  } else if (input$distance == "geometric") {
-
-    DIST <- dist(tab_AD,
-                 method = input$geometric_distance)
-
-  }
-
-  dend <- hclust(DIST, method = input$hierarchical_method) %>%
-    as.dendrogram %>%
-    set("labels_cex", 0.4) %>% set("labels_col", "black") %>%
-    set("branches_k_color",
-        value = c("black",
-                  "lightcoral",
-                  "deepskyblue2",
-                  "limegreen",
-                  "orange",
-                  "lightblue",
-                  "yellow1",
-                  "burlywood4",
-                  "royalblue4",
-                  "darkorange",
-                  "magenta3",
-                  "palegreen4",
-                  "palegreen1",
-                  "red",
-                  "green",
-                  "blue",
-                  "brown",
-                  "pink",
-                  "deepskyblue3",
-                  "magenta2"),
-        k = input$cluster_count) %>%
-    set("leaves_pch", 19) %>%
-    set("leaves_cex", 0.2)
-
-  return(dend)
-
-})
-
-
-
-### Reactive dendrogram plot
-Dendrogram_plot <- reactive({
-
-  Dataset <- Data_PER_Str()
-
-  dend_gg <- as.ggdend(dend())
-
-  dend_gg_segments <- data.frame(dend_gg$segments)
-
-  dend_gg_segments$col[is.na(dend_gg_segments$col)] <- "black"
-
-  dend_gg_data <- data.frame(dend_gg$labels)
-
-  colnames(dend_gg_data)[3] <- "Sample_ID"
-
-  # First part of the dendrogram
-  Dendrogram_plot <- ggplot() +
-    geom_segment(data = dend_gg_segments,
-                 aes(x = x,
-                     y = y,
-                     xend = xend,
-                     yend = yend),
-                 colour = dend_gg_segments$col, size = 0.6) +
-    labs(x = "Sample_ID",
-         y = NULL,
-         title = input$dendrogram_title) +
-    lims(y = c(-0.08, NA)) +
-    theme(
-      axis.title.x = element_text(size = 15),
-      axis.text.y = element_text(size = 12),
-      axis.text.x = element_blank(),
-      axis.ticks.x = element_blank(),
-      plot.title = element_text(hjust = 0.5),
-      legend.position = "none"
-    )
-
-  if (all(c("Sample_ID", "Pop_ID") %in% colnames(Dataset))) {
-
-    dend_gg_labels <- merge(dend_gg_data,
-                            Dataset,
-                            by = "Sample_ID",
-                            sort = FALSE)
-
-    Dendrogram_plot <- Dendrogram_plot +
-      geom_text(data = dend_gg_labels,
-                aes(x = x,
-                    y = y,
-                    label = Sample_ID,
-                    angle = 90,
-                    hjust = 1,
-                    colour = dend_gg_labels$Pop_ID
-                ),
-                size = 3)
-
-  } else if ("Sample_ID" %in% colnames(Dataset) &&
-             !"Pop_ID" %in% colnames(Dataset)) {
-
-    dend_gg_labels <- merge(dend_gg_data,
-                            Dataset,
-                            by = "Sample_ID",
-                            sort = FALSE)
-
-    Dendrogram_plot <- Dendrogram_plot
-
-
-  } else if ("Pop_ID" %in% colnames(Dataset) &&
-             !"Sample_ID" %in% colnames(Dataset)) {
-
-    Dataset$Sample_ID <- seq(from = 1,
-                             to = length(Dataset$Pop_ID),
-                             by = 1)
-
-    dend_gg_labels <- merge(dend_gg_data,
-                            Dataset,
-                            by = "Sample_ID",
-                            sort = FALSE)
-
-    Dendrogram_plot <- Dendrogram_plot +
-      geom_text(data = dend_gg_labels,
-                aes(x = x,
-                    y = y,
-                    label = Sample_ID,
-                    angle = 90,
-                    hjust = 1,
-                    colour = dend_gg_labels$Pop_ID
-                ),
-                size = 3)
-
-  }  else {
-
-    dend_gg_labels <- dend_gg_data
-
-    Dendrogram_plot <- Dendrogram_plot +
-      geom_text(data = dend_gg_labels,
-                aes(x = x,
-                    y = y,
-                    label = Sample_ID,
-                    angle = 90,
-                    hjust = 1
-                ),
-                size = 3)
-
-  }
-
-  return(Dendrogram_plot)
-
-})
-
-
-
-### Dendrogram plot
-output$tree <- renderPlot({ # To be made interactive when the bug is fixed
-
-  Dendrogram_plot()
-
-})
-
-
-
-### Download dendrogram plot
-output$download_dendrogram <- downloadHandler(
-
-  filename <- function() {
-
-    input$dendrogram_title
-
-  },
-
-  content <- function(file) {
-
-    if (input$dendrogram_format == ".bmp") {
-
-      device <- function(..., width, height) grDevices::bmp(...,
-                                                            width = input$dendrogram_width*2.5,
-                                                            height = input$dendrogram_height*2.5,
-                                                            res = input$dendrogram_resolution,
-                                                            units = "px")
-
-    } else if (input$dendrogram_format == ".jpeg") {
-
-      device <- function(..., width, height) grDevices::jpeg(...,
-                                                             width = input$dendrogram_width*2.5,
-                                                             height = input$dendrogram_height*2.5,
-                                                             res = input$dendrogram_resolution,
-                                                             quality = 100,
-                                                             units = "px")
-
-    } else if (input$dendrogram_format == ".png") {
-
-      device <- function(..., width, height) grDevices::png(...,
-                                                            width = input$dendrogram_width*2.5,
-                                                            height = input$dendrogram_height*2.5,
-                                                            res = input$dendrogram_resolution,
-                                                            units = "px")
-
-    } else if (input$dendrogram_format == ".tiff") {
-
-      device <- function(..., width, height) grDevices::tiff(...,
-                                                             width = input$dendrogram_width*2.5,
-                                                             height = input$dendrogram_height*2.5,
-                                                             res = input$dendrogram_resolution,
-                                                             units = "px")
-
-    }
-
-    ggsave(file, plot = Dendrogram_plot(), device = device)
-
-  }
-
-)
-
-
 
 ##### Reactive dataset FOR STRUCTURE to export #####
 Data_export <- reactive({
@@ -994,6 +711,301 @@ output$download <- downloadHandler(
   }
 
 )
+
+
+
+##### Hierarchical cluster analysis #####
+
+### Reactive hclust object
+dend <- reactive({
+
+  # COLNAMES of loci splitted
+  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
+      "Pop_ID" %in% colnames(Data_PER_Str()) |
+      "Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
+                                                       loci()*ploidy()))]))
+
+  } else {
+
+    COLNAMES_loci <- colnames(Data_PER_Str())
+
+  }
+
+  # Dataset just with the loci splitted
+  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
+
+  # Combining columns based on ploidy
+  if (ploidy() > 1) {
+
+
+    Dataset_grouped <- as.data.frame(sapply(seq(from = 1,
+                                                to = length(COLNAMES_loci),
+                                                by = ploidy()),
+                                            FUN = function(i)
+                                              unite(Dataset_s[, i:(i + (ploidy() - 1))],
+                                                    sep = "/")))
+
+  } else {
+
+    Dataset_grouped <- Dataset_s
+
+  }
+
+  colnames(Dataset_grouped) <- colnames(Data_export())[-c(1:(length(colnames(Data_export())) -
+                                                               loci()))]
+
+  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+
+    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
+                              Dataset_grouped)
+
+    rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
+
+    Dataset_adegenet$Sample_ID <- NULL
+
+  }
+
+  else {
+
+    rownames(Dataset_grouped) <- seq(from = 1,
+                                     to = nrow(Data_PER_Str()),
+                                     by = 1)
+
+    Dataset_adegenet <- Dataset_grouped
+
+  }
+
+  Dataset_adegenet[Dataset_adegenet == "NA/NA"] <- NA
+
+  Dataset_AD <- df2genind(X = Dataset_adegenet,
+                          ploidy = ploidy(),
+                          sep = "/",
+                          loc.names = c(colnames(Dataset_adegenet))
+  )
+
+  tab_AD <- tab(Dataset_AD,
+                NA.method = input$na_value)
+
+  if (input$distance == "binary") {
+
+    DIST <- dist.binary(df = tab_AD,
+                        method = input$similarity_coefficient)
+
+  } else if (input$distance == "geometric") {
+
+    DIST <- dist(tab_AD,
+                 method = input$geometric_distance)
+
+  }
+
+  dend <- hclust(DIST, method = input$hierarchical_method) %>%
+    as.dendrogram %>%
+    set("labels_cex", 0.4) %>% set("labels_col", "black") %>%
+    set("branches_k_color",
+        value = c("black",
+                  "lightcoral",
+                  "deepskyblue2",
+                  "limegreen",
+                  "orange",
+                  "lightblue",
+                  "yellow1",
+                  "burlywood4",
+                  "royalblue4",
+                  "darkorange",
+                  "magenta3",
+                  "palegreen4",
+                  "palegreen1",
+                  "red",
+                  "green",
+                  "blue",
+                  "brown",
+                  "pink",
+                  "deepskyblue3",
+                  "magenta2",
+                  "grey10"),
+        k = input$cluster_count) %>%
+    set("leaves_pch", 19) %>%
+    set("leaves_cex", 0.2)
+
+  return(dend)
+
+})
+
+
+
+### Reactive dendrogram plot
+Dendrogram_plot <- reactive({
+
+  Dataset <- Data_PER_Str()
+
+  dend_gg <- as.ggdend(dend())
+
+  dend_gg_segments <- data.frame(dend_gg$segments)
+
+  dend_gg_segments$col[is.na(dend_gg_segments$col)] <- "black"
+
+  dend_gg_data <- data.frame(dend_gg$labels)
+
+  colnames(dend_gg_data)[3] <- "Sample_ID"
+
+  # First part of the dendrogram
+  Dendrogram_plot <- ggplot() +
+    geom_segment(data = dend_gg_segments,
+                 aes(x = x,
+                     y = y,
+                     xend = xend,
+                     yend = yend),
+                 colour = dend_gg_segments$col, size = 0.8) +
+    labs(x = "Sample_ID",
+         y = NULL,
+         title = input$dendrogram_title) +
+    lims(y = c(-0.08, NA)) +
+    theme(
+      axis.title.x = element_text(size = 15),
+      axis.text.y = element_text(size = 12),
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      legend.position = "none"
+    )
+
+  if (all(c("Sample_ID", "Pop_ID") %in% colnames(Dataset))) {
+
+    dend_gg_labels <- merge(dend_gg_data,
+                            Dataset,
+                            by = "Sample_ID",
+                            sort = FALSE)
+
+    Dendrogram_plot <- Dendrogram_plot +
+      geom_text(data = dend_gg_labels,
+                aes(x = x,
+                    y = y,
+                    label = Sample_ID,
+                    angle = 90,
+                    hjust = 1,
+                    colour = as.factor(dend_gg_labels$Pop_ID)
+                ),
+                size = 3.2)
+
+  } else if ("Sample_ID" %in% colnames(Dataset) &&
+             !"Pop_ID" %in% colnames(Dataset)) {
+
+    dend_gg_labels <- merge(dend_gg_data,
+                            Dataset,
+                            by = "Sample_ID",
+                            sort = FALSE)
+
+    Dendrogram_plot <- Dendrogram_plot
+
+
+  } else if ("Pop_ID" %in% colnames(Dataset) &&
+             !"Sample_ID" %in% colnames(Dataset)) {
+
+    Dataset$Sample_ID <- seq(from = 1,
+                             to = length(Dataset$Pop_ID),
+                             by = 1)
+
+    dend_gg_labels <- merge(dend_gg_data,
+                            Dataset,
+                            by = "Sample_ID",
+                            sort = FALSE)
+
+    Dendrogram_plot <- Dendrogram_plot +
+      geom_text(data = dend_gg_labels,
+                aes(x = x,
+                    y = y,
+                    label = Sample_ID,
+                    angle = 90,
+                    hjust = 1,
+                    colour = as.factor(dend_gg_labels$Pop_ID)
+                ),
+                size = 3.2)
+
+  }  else {
+
+    dend_gg_labels <- dend_gg_data
+
+    Dendrogram_plot <- Dendrogram_plot +
+      geom_text(data = dend_gg_labels,
+                aes(x = x,
+                    y = y,
+                    label = Sample_ID,
+                    angle = 90,
+                    hjust = 1
+                ),
+                size = 3)
+
+  }
+
+  return(Dendrogram_plot)
+
+})
+
+
+
+### Dendrogram plot
+output$tree <- renderPlot({ # To be made interactive when the bug is fixed
+
+  Dendrogram_plot()
+
+})
+
+
+
+### Download dendrogram plot
+output$download_dendrogram <- downloadHandler(
+
+  filename <- function() {
+
+    input$dendrogram_title
+
+  },
+
+  content <- function(file) {
+
+    if (input$dendrogram_format == ".bmp") {
+
+      device <- function(..., width, height) grDevices::bmp(...,
+                                                            width = input$dendrogram_width*2.5,
+                                                            height = input$dendrogram_height*2.5,
+                                                            res = input$dendrogram_resolution,
+                                                            units = "px")
+
+    } else if (input$dendrogram_format == ".jpeg") {
+
+      device <- function(..., width, height) grDevices::jpeg(...,
+                                                             width = input$dendrogram_width*2.5,
+                                                             height = input$dendrogram_height*2.5,
+                                                             res = input$dendrogram_resolution,
+                                                             quality = 100,
+                                                             units = "px")
+
+    } else if (input$dendrogram_format == ".png") {
+
+      device <- function(..., width, height) grDevices::png(...,
+                                                            width = input$dendrogram_width*2.5,
+                                                            height = input$dendrogram_height*2.5,
+                                                            res = input$dendrogram_resolution,
+                                                            units = "px")
+
+    } else if (input$dendrogram_format == ".tiff") {
+
+      device <- function(..., width, height) grDevices::tiff(...,
+                                                             width = input$dendrogram_width*2.5,
+                                                             height = input$dendrogram_height*2.5,
+                                                             res = input$dendrogram_resolution,
+                                                             units = "px")
+
+    }
+
+    ggsave(file, plot = Dendrogram_plot(), device = device)
+
+  }
+
+)
+
 
 
 
