@@ -20,7 +20,7 @@ However, StructuRly presents more different features in order to:
 
 ### Installation
 
-You can install the released version of StructuRly from [GitHub](https://github.com) in RStudio (R version &gt;= 3.5) with:
+You can install the released version of StructuRly from [GitHub](https://github.com) in RStudio with:
 
 ``` r
 library(devtools)
@@ -36,7 +36,7 @@ library(StructuRly)
 runStructuRly()
 ```
 
-StructuRly 0.1.0 works on all types of browsers (Internet Explorer, Safari, Chrome, etc.) and in its current version it can also work locally and then offline. All you have to do is to install the updated versions of [R](https://www.r-project.org) and [RStudio](https://www.rstudio.com).
+StructuRly 0.1.0 works on all types of browsers (Internet Explorer, Safari, Chrome, etc.) and in its current version it can also work locally and then offline. All you have to do is to install the updated versions of [R](https://www.r-project.org) (&gt;= 3.5) and [RStudio](https://www.rstudio.com).
 
 ### Data input
 
@@ -117,7 +117,8 @@ StructuRly was firstly presented during the [International BBCC meetings](https:
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE outputs},
+    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and
+    #> ADMIXTURE outputs},
     #>     author = {Nicola Criscuolo and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},
