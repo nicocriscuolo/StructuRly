@@ -38,7 +38,7 @@ runStructuRly()
 
 StructuRly 0.1.0 works on all types of browsers (Internet Explorer, Safari, Chrome, etc.) and in its current version it can also work locally and then offline. All you have to do is to install the updated versions of [R](https://www.r-project.org) (&gt;= 3.5) and [RStudio](https://www.rstudio.com).
 
-If you have trouble installing StructuRly you can follow the instructions present in the file at this [link](https://github.com/nicocriscuolo/StructuRly/blob/master/inst/Instructions_install_StructuRly.txt)
+If you have trouble installing StructuRly you can follow the instructions present in the file at this [link](https://github.com/nicocriscuolo/StructuRly/blob/master/inst/Instructions_install_StructuRly.txt).
 
 ### Data input
 
