@@ -1,0 +1,26 @@
+
+1. Install the package "genefilter" with the following line command:
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("genefilter", version = "3.8")
+
+
+
+2. Install all StructuRly dependencies:
+
+install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "clusterSim", "dendextend", "ggplot2", "grDevices", "plotly", "processx", "randomcoloR", "RColorBrewer", "reshape2", "scales", "shiny", "shinyjs", "tidyr"))
+
+
+
+3. At the question "Do you want to install from sources the package which needs compilation?" type "no" and wait until all dependencies are installed.
+
+
+
+4. Install StructuRly with the following line command:
+
+install_github(repo = "nicocriscuolo/StructuRly", dependencies = TRUE)
+
+
+
+5. Decide whether to update dependencies or not and wait until StructuRly is installed.
