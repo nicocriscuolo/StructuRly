@@ -21,7 +21,7 @@ The main purpose for which StructuRly was conceived is to provide researchers wi
 
 However, StructuRly presents more different features in order to:
 
-  - upload datasets wit raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
+  - upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
 - produce and customize a table ready to be imported into the STRUCTURE software for the Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
 
@@ -33,7 +33,7 @@ However, StructuRly presents more different features in order to:
 
 ### Installation
 
-You can install the released version of StructuRly from [GitHub](https://github.com) in R with:
+You can install the released version of StructuRly from [GitHub](https://github.com) in RStudio (R version >= 3.5) with:
 
 ``` r
 library(devtools)
@@ -118,7 +118,7 @@ The slight bugs related to some characteristics of the graphs are shown only in 
 
 ### Citation
 
-StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly - A novel shiny app to produce elegant, detailed and interactive plot from STRUCTURE and ADMIXTURE outputs* (submitted). If you use this package for results included in your paper please cite:
+StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis* (submitted). If you use this package for results included in your paper please cite:
 
 ```{r, echo = FALSE}
 citation("StructuRly")
