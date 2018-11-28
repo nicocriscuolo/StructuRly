@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 
 # StructuRly 0.1.0
 
-StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of the results of a Bayesian cluster analysis obtained with the most common population genetic softwares used to investigate population structure, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to infer the admixture ancestry of samples starting from the most common genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information of each sample (encoded in percentages in a range from 0 to 1).
-The main purpose for which StructuRly was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of a software with a user-friendly interface, which can therefore be easily used by those who do not know a programming language. In fact, in a typical StructuRly output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or sub - populations) and the label relative to the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of StructuRly outputs, which allows the user to extrapolate even more information through a single chart.
+StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of the results of a Bayesian cluster analysis obtained with the most common population genetic softwares used to investigate population structure, such as [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html) or [ADMIXTURE](http://software.genetics.ucla.edu/admixture/), widely used to infer the admixture ancestry of samples starting from genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, StructuRly can generate graphs from any file containing admixture information of each sample (encoded in percentages in a range from 0 to 1).
+The main purpose for which StructuRly was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of a software with a user-friendly interface, which can therefore be easily used by those who do not know a programming language. In fact, in a typical StructuRly output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or sub - populations) and the label of the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of StructuRly outputs, which allows the user to extrapolate even more information through a single chart.
 
 However, StructuRly presents more different features in order to:
 
@@ -25,11 +25,11 @@ However, StructuRly presents more different features in order to:
 
 - produce and customize tables ready to be imported into the STRUCTURE software for the Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
 
-- import the results of the STRUCTURE analysis into user's pre-formatted tables, in order to insert detailed information about the samples. Likewise, the user can import into StructuRly the results of the population analysis carried out in the ADMIXTURE software (files in **.Q** and **.fam** format), without having to re-format the output in another software (such as R);
+- import the results of the STRUCTURE analysis into user's pre-formatted tables, in order to insert detailed samples information. Likewise, the user can import into StructuRly the results of the population analysis carried out in the ADMIXTURE software (files in **.Q** and **.fam** format), without having to re-format the output in another software (such as R);
 
 - produce, in addition to the barplot, also the interactive triangle plot, well known graphical STRUCTUER graphical output. Both graphs can show the admixture ancestry of the samples subdivided in a maximum of 20 different clusters;
 
-- to visually compare the partition obtained from the hierarchical cluster analysis and the one with the Bayesian analysis through a confusion matric and estimate an agreement value with three different agreement indeces.
+- to visually compare the partition obtained from the hierarchical cluster analysis and the one from the Bayesian analysis through a confusion matrix and estimate an agreement value with three different agreement indeces.
 
 ### Installation
 
@@ -59,11 +59,11 @@ StructuRly is divided into three different sections depending on the input file 
 
 In this section, the user has the possibility to import his data file in the **.csv** or **.txt** format. This file can contain three optional variables present in the following order and whose header must be exactly the one shown below:
 
-* **Sample_ID**: is the variable that contains the IDs of each sample, so each name in this column will be different from the others (although it is good practice to use only numbers and letters, the IDs characters can be separated also by the following symbols "_" and "-");
+  * **Sample_ID**: is the variable that contains the IDs of each sample, so each name in this column will be different from the others (although it is good practice to use only numbers and letters, the IDs characters can be separated also by the following symbols: "_" and "-");
 
-* **Pop_ID**: is a categorical variable identified by an integer that indicates the population defined by the user for each sample (e.g .: 1, 2, 3 ..);
+  * **Pop_ID**: is a categorical variable identified by an integer that indicates the population defined by the user for each sample (e.g .: 1, 2, 3 ..);
 
-* **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with to StructuRly and then imported into STRUCTURE for population analysis can be used by the Bayesian algorithm as a support to the elaboration of the results.
+  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with to StructuRly and then imported into STRUCTURE for population analysis, can be used by the Bayesian algorithm as a support to resutls elaboration.
 
 The following variables present in the dataset to import in this section are mandatory, and must contain numerical values relative to the types of markers used. Depending on the ploidy of the organism analyzed, there must be a number of columns for each locus equal to the number of alleles. For the same locus, the column header must contain a single name of the locus followed by the symbol "." and the identification number of the allele, starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", etc.). Furthermore, in this type of file the missing values must be indicated only with the abbreviation **NA**.
 
@@ -77,20 +77,20 @@ Here the user can import a dataset obtained directly following the analysis of h
 
 * the three optional variables (**Sample_ID**, **Pop_ID** and **Loc_ID**) can be inserted again, in this precise order, within the import file, with the only difference that in this case the categories of the variables **Pop_ID** and **Loc_ID** do not necessarily have to be represented by numbers, but also by characters.
 
-* the other mandatory variables to be inserted must be those of the admixture proportion calculated by the software mentioned above, and which will be equal in number to the number of clusters chosen by the user before executing the Bayesian analysis. Each of these variables must be identified by a header containing the letter "K" and the number of the relative cluster in sequence (eg: "K1", "K2", "K3", etc.), i. e. in same the order of the dataset exported by the software.
+* the other mandatory variables to be inserted must be those of the admixture proportion calculated by the software mentioned above, and which will be equal in number to the number of clusters chosen by the user before executing the Bayesian analysis. Each of these variables must be identified by a header containing the letter "K" and the number of the relative cluster in sequence (e. g.: "K1", "K2", "K3", etc.), i. e. in the same order of the dataset exported by the software.
 
 
-An example of the structure of this type of file is shown below:
+An example of this type of file structure is shown below (for example, in this case the **Loc_ID** column is not present, in fact the three information variable are not mandatory for the datasets to import in section 1. and 2.):
 
 ![image_2](https://user-images.githubusercontent.com/35098432/49116054-b88f0200-f29c-11e8-9abf-0c050bdb1e45.png)
 
-* If your admixture data matrix was obtained as a result of the admixture software, there are two ways to proceed to prepare your StructuRly dataset. From the analysis of a file in .bed or .ped format you will get a **.Q** format file that you can either import into R and then modify as you like, exporting it in .txt or .csv format and then import it into StructuRly (for example, after adding the columns identifying the name of the samples or the population) or you can import directly into StructuRly the **.Q** format file. This file only contains the variables with the values of the ancestry admixture: if you want to add metadata to this dataset you will have to import the **.fam** file into StructuRly, which generally accompanies .bed and .ped files. If you want more details about the information encoded in these types of formats, you can find them [here](https://www.cog-genomics.org/plink2/formats#fam). StructuRly will automatically use the first two variables of the **.fam** file, which are generally used to insure the sample identifier and the user-defined putative population respectively.
+* If your admixture data matrix was obtained as a result of the ADMIXTURE software, there are two ways to proceed to prepare your StructuRly dataset. From the analysis of a file in .bed or .ped format you will get a **.Q** format file that you can either import into R and then modify as you like, exporting it in .txt or .csv format and then import it into StructuRly (for example, after adding the columns identifying the name of the samples or the population) or you can import directly into StructuRly the **.Q** format file. This file only contains the variables with the values of the ancestry admixture: if you want to add metadata to this dataset you will have to import the **.fam** file into StructuRly, which generally accompanies .bed and .ped files. If you want more details about the information encoded in these types of formats, you can find them [here](https://www.cog-genomics.org/plink2/formats#fam). StructuRly will automatically use the first two variables of the **.fam** file, which are generally used to insure the sample identifier and the user-defined population respectively.
 
-Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRly are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an [ADMIXTURE](http://software.genetics.ucla.edu/admixture/) analysis with the sample files are downloadable directly from the software website).
+Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRly are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an [ADMIXTURE](http://software.genetics.ucla.edu/admixture/) analysis with the sample files downloadable directly from the software website).
 
 #### Section 3: Compare partitions
 
-The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
+The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
 
 ### Outputs download
 
@@ -102,7 +102,7 @@ All StructuRly outputs can be downloaded as images in various high quality forma
 
 ### Example
 
-Below is a link to the [YouTube]() video of the application showing an example of using the software:
+Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of the application showing an example of using the software:
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
 
