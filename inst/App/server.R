@@ -603,7 +603,7 @@ output$download <- downloadHandler(
 
     paste0(substr(input$Data_PER_Str, start = 1,
                   stop = nchar(input$Data_PER_Str)-4),
-           "_FOR_STRUCTURE")
+           "_FOR_STRUCTURE.txt")
 
   },
 
