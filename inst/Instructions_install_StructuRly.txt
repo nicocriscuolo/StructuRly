@@ -19,7 +19,7 @@ install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "clu
 
 4. Install StructuRly with the following line command:
 
-install_github(repo = "nicocriscuolo/StructuRly", dependencies = TRUE)
+install_github(repo = "nicocriscuolo/StructuRly")
 
 
 
