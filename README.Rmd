@@ -23,7 +23,7 @@ However, StructuRly presents more different features in order to:
 
   - upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
-- produce and customize a table ready to be imported into the STRUCTURE software for the Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
+- produce and customize tables ready to be imported into the STRUCTURE software for the Bayesian analysis (detailed references about the structure of the table to import in STRUCTURE and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
 
 - import the results of the STRUCTURE analysis into user's pre-formatted tables, in order to insert detailed information about the samples. Likewise, the user can import into StructuRly the results of the population analysis carried out in the ADMIXTURE software (files in **.Q** and **.fam** format), without having to re-format the output in another software (such as R);
 
