@@ -96,9 +96,11 @@ Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of 
 
 -   in the interactive barplot the X axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at [link](https://github.com/ropensci/plotly/issues/1328);
 
+-   for a number major than 40 of pre - defined populations present in the dataset to produce the barplot, the colours used to distinguish such populations within the labels of the X axis of the barplot could start to repeat;
+
 -   in the comparison plot the separation lines of the heatmap cells are not visible when using the interactive graph for a bug present in the package used to produce this output. Again, download the output to view the complete chart;
 
--   the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate when using a very large number (&gt; 60) of populations or sites defined a priori by the user. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot.
+-   when using a large number (&gt; 60) of populations or sites defined a priori by the user, the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot;
 
 The slight bugs related to some characteristics of the graphs are shown only inside the interactive plots, but the downloaded file won't present any problem.
 
