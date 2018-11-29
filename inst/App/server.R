@@ -102,7 +102,19 @@ observeEvent(input$show_comparison_table, {
 ### Open STRUCTURE
 observeEvent(input$open_structure, {
 
-  system("open -a structure")
+  System_info <- data.frame("Info" = Sys.info())
+
+  if (System_info$Info[1] == "Darwin") {
+
+    system("open -a structure")
+
+  }  else if (System_info$Info[1] == "Windows") {
+
+    setwd(dir = "C:/Program Files (x86)/Structure 2.3.4")
+
+    shell.exec("file:///C:/Program Files (x86)/Structure2.3.4/structure.exe")
+
+  }
 
 })
 
