@@ -105,12 +105,11 @@ In StructuRly there are 25 different symbols available but you can also simply d
 
 ![image_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
 
-All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). 
-If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
+All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
 
 ### Example
 
-Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of the application showing an example of using the software:
+Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of StructuRly showing an example of using of the software:
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
 

@@ -94,7 +94,7 @@ All StructuRly outputs can be downloaded as images in various high quality forma
 
 ### Example
 
-Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of the application showing an example of using the software:
+Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of StructuRly showing an example of using of the software:
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
 
