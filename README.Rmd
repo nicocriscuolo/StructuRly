@@ -57,7 +57,9 @@ If you have trouble installing StructuRly you can follow the instructions presen
 
 ### Data input
 
-StructuRly is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset, in particular:
+StructuRly is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset.
+
+N. B.: when you start a new session of StructuRly, if you change the uploaded file with a new one (inside the same section),  in order to produce new outputs remember to re-define every time type of separator and to indicate if your data have quotation marks.
 
 #### Section 1: Import raw genetic data
 
@@ -94,16 +96,17 @@ Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRl
 
 #### Section 3: Compare partitions
 
-The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files.
+The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files. The samples cluster memberships of the admixture analysis partition are assigned considering the highest value of ancestry found in a specific population (STRUCTURE or ADMIXTURE cluster) for each sample.
 
 ### Outputs download
 
-The following image shows the main output of StructuRly (the barplot of the ancestry admixture) downloaded from the application after being customized. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site:
+The following image shows the main output of StructuRly (the barplot of the ancestry admixture) downloaded from the application after being customized. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site. 
+In StructuRly there are 25 different symbols available but you can also simply decide to split the entire plot on the basis of the different categories of the **Pop_ID** and **Loc_ID** variables. 
 
 ![image_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
 
 All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). 
-If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package, then
+If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
 
 ### Example
 
