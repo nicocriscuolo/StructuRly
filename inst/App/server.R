@@ -108,11 +108,13 @@ observeEvent(input$open_structure, {
 
     system("open -a structure")
 
-  }  else if (System_info$Info[1] == "Windows") {
-
-      shell.exec("file:///C:/Program Files (x86)/Structure2.3.4/structure.exe")
-
   }
+
+  # else if (System_info$Info[1] == "Windows") {
+  #
+  #     shell.exec("file:///C:/Program Files (x86)/Structure2.3.4/structure.exe")
+  #
+  # }
 
 })
 
@@ -979,7 +981,7 @@ output$download_dendrogram <- downloadHandler(
 
   filename <- function() {
 
-    input$dendrogram_title
+    paste0(input$dendrogram_title, input$dendrogram_format)
 
   },
 
@@ -1780,7 +1782,7 @@ output$download_barplot <- downloadHandler(
 
   filename <- function() {
 
-    input$barplot_title
+    paste0(input$barplot_title, input$barplot_format)
 
   },
 
@@ -1824,7 +1826,9 @@ output$download_barplot <- downloadHandler(
 
     }
 
-    ggsave(file, plot = Structure_Plot(), device = device)
+    ggsave(filename = file,
+           plot = Structure_Plot(),
+           device = device)
 
   }
 
@@ -2537,7 +2541,7 @@ output$download_comparison_plot <- downloadHandler(
 
   filename <- function() {
 
-    input$comparison_plot_title
+    paste0(input$comparison_plot_title, input$comparison_plot_format)
 
   },
 
