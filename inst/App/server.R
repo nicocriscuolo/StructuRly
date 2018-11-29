@@ -981,7 +981,15 @@ output$download_dendrogram <- downloadHandler(
 
   filename <- function() {
 
-    paste0(input$dendrogram_title, input$dendrogram_format)
+    if (input$dendrogram_title == "") {
+
+      paste0("dendrogram", input$dendrogram_format)
+
+    } else {
+
+      paste0(input$dendrogram_title, input$dendrogram_format)
+
+    }
 
   },
 
@@ -1022,7 +1030,9 @@ output$download_dendrogram <- downloadHandler(
 
     }
 
-    ggsave(file, plot = Dendrogram_plot(), device = device)
+    ggsave(filename = file,
+           plot = Dendrogram_plot(),
+           device = device)
 
   }
 
@@ -1782,7 +1792,15 @@ output$download_barplot <- downloadHandler(
 
   filename <- function() {
 
-    paste0(input$barplot_title, input$barplot_format)
+    if (input$barplot_title == "") {
+
+      paste0("barplot", input$barplot_format)
+
+    } else {
+
+      paste0(input$barplot_title, input$barplot_format)
+
+    }
 
   },
 
@@ -2541,7 +2559,15 @@ output$download_comparison_plot <- downloadHandler(
 
   filename <- function() {
 
-    paste0(input$comparison_plot_title, input$comparison_plot_format)
+    if (input$comparison_plot_title == "") {
+
+      paste0("comparison_plot", input$comparison_plot_format)
+
+    } else {
+
+      paste0(input$comparison_plot_title, input$comparison_plot_format)
+
+    }
 
   },
 
@@ -2582,7 +2608,9 @@ output$download_comparison_plot <- downloadHandler(
 
     }
 
-    ggsave(file, plot = Tableplot(), device = device)
+    ggsave(filename = file,
+           plot = Tableplot(),
+           device = device)
 
   }
 
