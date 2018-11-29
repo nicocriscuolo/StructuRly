@@ -284,26 +284,6 @@ br(),
         )
       ),
 br(),
-   # fluidRow(
-   #   column(width = 4,
-   #          h5("Plot width"),
-   #          sliderInput(inputId = "tree_width",
-   #                      label = NULL,
-   #                      value = 1100,
-   #                      min = 400,
-   #                      max = 4000
-   #          )
-   #   ),
-   #   column(width = 4,
-   #          h5("Plot height"),
-   #          sliderInput(inputId = "tree_height",
-   #                      label = NULL,
-   #                      value = 550,
-   #                      min = 100,
-   #                      max = 1000
-   #          )
-   #   ),
-   # ),
    fluidRow(
      column(width = 12,
             plotOutput(outputId = "tree",

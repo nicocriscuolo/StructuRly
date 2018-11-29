@@ -736,25 +736,26 @@ dend <- reactive({
   # Dataset just with the loci splitted
   Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
 
+  # Unique colnames
+  COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
+                                        start = 1,
+                                        stop = nchar(names(Dataset_s))-2))
+
   # Combining columns based on ploidy
   if (ploidy() > 1) {
 
 
-    Dataset_grouped <- as.data.frame(sapply(seq(from = 1,
-                                                to = length(COLNAMES_loci),
-                                                by = ploidy()),
-                                            FUN = function(i)
-                                              unite(Dataset_s[, i:(i + (ploidy() - 1))],
-                                                    sep = "/")))
+    Dataset_grouped <- do.call(cbind,
+                               lapply(COLNAMES_loci_unique, function(x){unite_(Dataset_s,
+                                                                               x,
+                                                                               grep(x, names(Dataset_s), value = TRUE),
+                                                                               sep = '/', remove = TRUE) %>% select_(x)}))
 
   } else {
 
     Dataset_grouped <- Dataset_s
 
   }
-
-  colnames(Dataset_grouped) <- colnames(Data_export())[-c(1:(length(colnames(Data_export())) -
-                                                               loci()))]
 
   if ("Sample_ID" %in% colnames(Data_PER_Str())) {
 
@@ -765,9 +766,7 @@ dend <- reactive({
 
     Dataset_adegenet$Sample_ID <- NULL
 
-  }
-
-  else {
+  } else {
 
     rownames(Dataset_grouped) <- seq(from = 1,
                                      to = nrow(Data_PER_Str()),
@@ -777,7 +776,9 @@ dend <- reactive({
 
   }
 
-  Dataset_adegenet[Dataset_adegenet == "NA/NA"] <- NA
+  Dataset_adegenet[Dataset_adegenet == paste(rep(x = "NA",
+                                                 times = ploidy()),
+                                             collapse = "/")] <- NA
 
   Dataset_AD <- df2genind(X = Dataset_adegenet,
                           ploidy = ploidy(),
@@ -949,6 +950,15 @@ Dendrogram_plot <- reactive({
 output$tree <- renderPlot({ # To be made interactive when the bug is fixed
 
   Dendrogram_plot()
+
+})
+
+observe({
+
+  output$tree <- renderPlot({
+
+    Dendrogram_plot()}, width = input$dendrogram_width,
+                        height = input$dendrogram_height)
 
 })
 
