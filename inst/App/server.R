@@ -1308,24 +1308,21 @@ Data_plot <- reactive({
 
   if (all(c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {
 
-    # Pop_ID and # Loc_ID become factors for the Labels colors and shape
-    Dataset_m$Pop_ID <- factor(Dataset_m$Pop_ID,
-                               levels = unique(Dataset_m$Pop_ID))
+    # Pop_ID and #Loc_ID become factors for the Labels colors and shape;
+    # the order is alphabetical for the facet_grid option
+    Dataset_m$Pop_ID <- factor(Dataset_m$Pop_ID)
 
-    Dataset_m$Loc_ID <- factor(Dataset_m$Loc_ID,
-                               levels = unique(Dataset_m$Loc_ID))
+    Dataset_m$Loc_ID <- factor(Dataset_m$Loc_ID)
 
   } else if ("Pop_ID" %in% colnames(Dataset) &&
              !"Loc_ID" %in% colnames(Dataset)) {
 
-    Dataset_m$Pop_ID <- factor(Dataset_m$Pop_ID,
-                               levels = unique(Dataset_m$Pop_ID))
+    Dataset_m$Pop_ID <- factor(Dataset_m$Pop_ID)
 
   } else if ("Loc_ID" %in% colnames(Dataset) &&
              !"Pop_ID" %in% colnames(Dataset)) {
 
-    Dataset_m$Loc_ID <- factor(Dataset_m$Loc_ID,
-                               levels = unique(Dataset_m$Loc_ID))
+    Dataset_m$Loc_ID <- factor(Dataset_m$Loc_ID)
 
   }
 
@@ -1340,6 +1337,12 @@ Structure_Plot <- reactive({
 
   Dataset <- Data_DA_Str()
 
+  # Vector of shapes for the collection site
+  Collection_site_shape <- as.factor(c(seq(from = 0,
+                                           to = 25,
+                                           by =1)))
+
+  # Added Sample_ID if it's not present in the first dataset
   if (!"Sample_ID" %in% colnames(Dataset)) {
 
     Dataset <- cbind("Sample_ID" = seq(from = 1,
@@ -1556,7 +1559,8 @@ Structure_Plot <- reactive({
                        y = 1.05,
                        shape = Loc_ID,
                        colour = Loc_ID),
-                   size = 1.2)
+                   size = 1) +
+          scale_shape_manual(values = Collection_site_shape)
     }
 
   } else if ("Pop_ID" %in% colnames(Dataset) &&
@@ -1735,7 +1739,9 @@ Structure_Plot <- reactive({
                        y = 1.05,
                        shape = Loc_ID,
                        colour = Loc_ID),
-                   size = 1.2)
+                   size = 1) +
+        scale_shape_manual(values = Collection_site_shape)
+
     }
 
   } else if (all(!c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {

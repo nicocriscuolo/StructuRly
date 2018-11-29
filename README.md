@@ -88,7 +88,7 @@ The following image shows the main output of StructuRly (the barplot of the ance
 
 ![image\_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
 
-All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation).
+All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package, then
 
 ### Example
 
@@ -123,7 +123,8 @@ StructuRly was firstly presented during the [International BBCC meetings](https:
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis},
+    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and
+    #> ADMIXTURE population analysis},
     #>     author = {Nicola Criscuolo and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},
