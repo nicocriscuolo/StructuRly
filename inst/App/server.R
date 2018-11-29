@@ -110,13 +110,7 @@ observeEvent(input$open_structure, {
 
   }  else if (System_info$Info[1] == "Windows") {
 
-    observe({
-
-      setwd(dir = "C:/Program Files (x86)/Structure 2.3.4")
-
       shell.exec("file:///C:/Program Files (x86)/Structure2.3.4/structure.exe")
-
-    })
 
   }
 
