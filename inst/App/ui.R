@@ -164,6 +164,25 @@ br(),
       )
     )
   ),
+  tabPanel(title = h4("Basic stats"),
+br(),
+    fluidRow(
+      column(width = 3,
+             selectInput(inputId = "stats_type",
+                         label = h5("Choose information"),
+                         choices = c("P-gen", "H-W equilibrium")
+                         )
+      ),
+      column(width = 7,
+             uiOutput(outputId = "hw.test_sliderInput")
+      )
+    ),
+br(),
+    fluidRow(
+      column(width = 7,
+             dataTableOutput(outputId = "loci_stats"))
+    )
+  ),
   tabPanel(title = h4("Cluster analysis"),
 br(),
     fluidRow(
@@ -293,7 +312,7 @@ br(),
    ),
 br()
   ),
-  tabPanel(title = h4("STRUCTURE table"),
+  tabPanel(title = h4("STRUCTURE input table"),
 br(),
     fluidRow(
       column(width = 2,
@@ -848,7 +867,7 @@ br()
              verbatimTextOutput(outputId = "Cluster_hclust")
       ),
       column(width = 2,
-             h5("Admixture"),
+             h5("Pop analysis"),
              verbatimTextOutput(outputId = "Cluster_STR")
       ),
       column(width = 3,

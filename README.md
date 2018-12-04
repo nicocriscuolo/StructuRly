@@ -8,7 +8,7 @@ StructuRly is an R package containing a [shiny](https://shiny.rstudio.com) appli
 
 However, StructuRly presents more different features in order to:
 
--   support the statistical analysis of genetic data with basic information about the molecular markers, such as through the calculation of the *P*<sub>*g**e**n*</sub> or the Hardy-Weinberg equilibrium for every loci;
+-   support the statistical analysis of genetic data with basic information about the molecular markers, such as through the calculation of the *P*<sub>*g**e**n*</sub> (if you have haploid or diploid data) or the Hardy-Weinberg equilibrium for every loci. For the calculation of the Hardy - Weinberg equilibrium, the *p*-value of the *χ*<sup>2</sup>-test can be calculated for any level of ploidy, while the exact *p*-value from the Monte Carlo test is currently available just for diploids (more details are available at the [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf) package manual);
 
 -   upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 

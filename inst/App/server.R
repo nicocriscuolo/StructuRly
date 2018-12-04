@@ -104,7 +104,8 @@ observeEvent(input$open_structure, {
 
   System_info <- data.frame("Info" = Sys.info())
 
-  if (System_info$Info[1] == "Darwin") {
+  if (System_info$Info[1] == "Darwin" ||
+      System_info$Info[1] == "Linux") {
 
     system("open -a structure")
 
@@ -171,6 +172,166 @@ output$download_subset <- downloadHandler(
   }
 )
 
+
+
+##### Basic statistics panel #####
+
+### Reactive Adegenet dataset
+Dataset_AD <- reactive({
+
+  # COLNAMES of loci splitted
+  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
+      "Pop_ID" %in% colnames(Data_PER_Str()) |
+      "Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
+                                                       loci()*ploidy()))]))
+
+  } else {
+
+    COLNAMES_loci <- colnames(Data_PER_Str())
+
+  }
+
+  # Dataset just with the loci splitted
+  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
+
+  # Unique colnames
+  COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
+                                        start = 1,
+                                        stop = nchar(names(Dataset_s))-2))
+
+  # Combining columns based on ploidy
+  if (ploidy() > 1) {
+
+
+    Dataset_grouped <- do.call(cbind,
+                               lapply(COLNAMES_loci_unique, function(x){unite_(Dataset_s,
+                                                                               x,
+                                                                               grep(x, names(Dataset_s), value = TRUE),
+                                                                               sep = '/', remove = TRUE) %>% select_(x)}))
+
+  } else {
+
+    Dataset_grouped <- Dataset_s
+
+  }
+
+  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+
+    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
+                              Dataset_grouped)
+
+    rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
+
+    Dataset_adegenet$Sample_ID <- NULL
+
+  } else {
+
+    rownames(Dataset_grouped) <- seq(from = 1,
+                                     to = nrow(Data_PER_Str()),
+                                     by = 1)
+
+    Dataset_adegenet <- Dataset_grouped
+
+  }
+
+  Dataset_adegenet[Dataset_adegenet == paste(rep(x = "NA",
+                                                 times = ploidy()),
+                                             collapse = "/")] <- NA
+
+  Dataset_AD <- df2genind(X = Dataset_adegenet,
+                          ploidy = ploidy(),
+                          sep = "/",
+                          loc.names = c(colnames(Dataset_adegenet))
+  )
+
+  return(Dataset_AD)
+
+})
+
+
+
+output$hw.test_sliderInput <- renderUI({
+
+  if (input$stats_type == "H-W equilibrium" &&
+      ploidy() == 2) {
+
+    sliderInput(inputId = "hw_replicates",
+                label = h5("Monte Carlo replicates"),
+                min = 0,
+                max = 1000000,
+                value = 100,
+                step = c(200000,
+                         400000,
+                         600000,
+                         800000,
+                         1000000))
+
+  } else {NULL}
+
+})
+
+
+
+output$loci_stats <- renderDataTable({
+
+ Dataset_genind <- Dataset_AD()
+
+ if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+
+   pop(Dataset_genind) <- Data_PER_Str()$Pop_ID
+
+ }
+
+ if (input$stats_type == "P-gen") {
+
+   Dataset_genpop <- genind2genpop(Dataset_genind)
+
+   genpop_freq <- tab(Dataset_genpop,
+                      freq = TRUE)
+
+   data.frame("Sample_ID" = rownames(Dataset_genind$tab),
+              "Pgen" = apply(pgen(gid = Dataset_genind,
+                                  log = FALSE,
+                                  freq = genpop_freq),
+                             1,
+                             prod,
+                             na.rm = TRUE))
+
+ } else if (input$stats_type == "H-W equilibrium") {
+
+    if (ploidy() != 2) {
+
+      HW_test <- as.data.frame(hw.test(x = Dataset_genind))
+
+      HW_data <- data.frame("Locus" = rownames(HW_test),
+                            "chi^2" = round(HW_test$`chi^2`,
+                                            digits = 2),
+                            "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
+                                              digits = 5))
+
+    } else {
+
+      HW_test <- as.data.frame(hw.test(x = Dataset_genind,
+                                       B = input$hw_replicates))
+
+      HW_data <- data.frame("Locus" = rownames(HW_test),
+                            "chi^2" = round(HW_test$`chi^2`,
+                                            digits = 2),
+                            "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
+                                              digits = 5),
+                            "exact.p-value" = round(HW_test$Pr.exact,
+                                                    digits = 5))
+
+    }
+
+    HW_data
+
+ }
+
+
+})
 
 
 ##### Reactive dataset FOR STRUCTURE to export #####
@@ -731,74 +892,7 @@ output$download <- downloadHandler(
 ### Reactive hclust object
 dend <- reactive({
 
-  # COLNAMES of loci splitted
-  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
-      "Pop_ID" %in% colnames(Data_PER_Str()) |
-      "Loc_ID" %in% colnames(Data_PER_Str())) {
-
-    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
-                                                       loci()*ploidy()))]))
-
-  } else {
-
-    COLNAMES_loci <- colnames(Data_PER_Str())
-
-  }
-
-  # Dataset just with the loci splitted
-  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
-
-  # Unique colnames
-  COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
-                                        start = 1,
-                                        stop = nchar(names(Dataset_s))-2))
-
-  # Combining columns based on ploidy
-  if (ploidy() > 1) {
-
-
-    Dataset_grouped <- do.call(cbind,
-                               lapply(COLNAMES_loci_unique, function(x){unite_(Dataset_s,
-                                                                               x,
-                                                                               grep(x, names(Dataset_s), value = TRUE),
-                                                                               sep = '/', remove = TRUE) %>% select_(x)}))
-
-  } else {
-
-    Dataset_grouped <- Dataset_s
-
-  }
-
-  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
-
-    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
-                              Dataset_grouped)
-
-    rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
-
-    Dataset_adegenet$Sample_ID <- NULL
-
-  } else {
-
-    rownames(Dataset_grouped) <- seq(from = 1,
-                                     to = nrow(Data_PER_Str()),
-                                     by = 1)
-
-    Dataset_adegenet <- Dataset_grouped
-
-  }
-
-  Dataset_adegenet[Dataset_adegenet == paste(rep(x = "NA",
-                                                 times = ploidy()),
-                                             collapse = "/")] <- NA
-
-  Dataset_AD <- df2genind(X = Dataset_adegenet,
-                          ploidy = ploidy(),
-                          sep = "/",
-                          loc.names = c(colnames(Dataset_adegenet))
-  )
-
-  tab_AD <- tab(Dataset_AD,
+  tab_AD <- tab(Dataset_AD(),
                 NA.method = input$na_value)
 
   if (input$distance == "binary") {
@@ -2529,8 +2623,8 @@ Tableplot <- reactive({
                           y = Population_analysis,
                           fill = Frequency)) +
     geom_tile(color = "black") +
-    scale_fill_gradient(low = "lightgray",
-                        high = "blue") +
+    scale_fill_gradient(low = "ghostwhite",
+                        high = "firebrick") +
       labs(x = "Hierarchical cluster",
            y = "Population analysis cluster",
            fill = "Common units",
