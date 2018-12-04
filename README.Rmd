@@ -21,7 +21,9 @@ The main purpose for which StructuRly was conceived is to provide researchers wi
 
 However, StructuRly presents more different features in order to:
 
-  - upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
+- support the statistical analysis of genetic data with basic information about the molecular markers, such as through the calculation of the $P_{gen}$ or the Hardy-Weinberg equilibrium for every loci;
+
+- upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
 - produce and customize tables ready to be imported into the *STRUCTURE* software for the Bayesian analysis (detailed references about the structure of the table to import in *STRUCTURE* and how to perform its main analysis are available at this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/));
 
@@ -102,7 +104,7 @@ Examples of the .txt, .csv, .Q and .fam files that you can import into StructuRl
 
 #### Section 3: Compare partitions
 
-The third section of StructuRly must be used after the files for the first two sections have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files. The samples cluster memberships of the admixture analysis partition are assigned considering the highest value of ancestry found in a specific population (*STRUCTURE* or *ADMIXTURE* cluster) for each sample.
+The third section of StructuRly must be used the first two sections files have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files. The samples cluster memberships of the admixture ancestry analysis partition are assigned considering the highest value of ancestry found in a specific population (*STRUCTURE* or *ADMIXTURE* cluster) for each sample. It means that this partition will divide the observations in the same number of clusters chosen for the population analysis, but if the admixture ancestry is the lowest for a particular sub-population, this cluster will not be shown in the comparison plot and table, because there are no observations assigned to it.
 
 ### Outputs download
 
