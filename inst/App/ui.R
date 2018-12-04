@@ -11,7 +11,7 @@ ui <- fluidPage(
                      "and",
                      a("ADMIXTURE",
                        href = "http://software.genetics.ucla.edu/admixture/"),
-                     "outputs",
+                     "population analysis",
                     align = "center")
                )
         )
@@ -30,7 +30,7 @@ br(),
             radioButtons(inputId = "analysis_type",
                          label = h5(icon(name = "list-ul"), "Choose an action"),
                          choices = list("Import raw genetic data" = 1,
-                                        "Import the admixture analysis" = 2,
+                                        "Import population analysis" = 2,
                                         "Compare partitions" = 3),
                          selected = 1),
   conditionalPanel(condition = "input.analysis_type == 1",

@@ -64,7 +64,7 @@ Below there is an image that represents data stored in a spreadsheet that, once 
 
 ![image\_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
-#### Section 2: Import the admixture analysis
+#### Section 2: Import population analysis
 
 Here the user can import a dataset obtained directly following the analysis of his genetic data through a software to investigate population structure. The characteristics of this file are not very different from the one to be imported in the previous section:
 
@@ -125,8 +125,7 @@ StructuRly was firstly presented during the [International BBCC meetings](https:
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and
-    #> ADMIXTURE population analysis},
+    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis},
     #>     author = {Nicola Criscuolo and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},
