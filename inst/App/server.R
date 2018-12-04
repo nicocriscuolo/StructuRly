@@ -2521,18 +2521,18 @@ Tableplot <- reactive({
                            Comparison_table$Admixture))
 
   colnames(Table) <- c("Hierarchic",
-                       "Admixture",
+                       "Population_analysis",
                        "Frequency")
 
   Tableplot <- ggplot(Table,
                       aes(x = Hierarchic,
-                          y = Admixture,
+                          y = Population_analysis,
                           fill = Frequency)) +
     geom_tile(color = "black") +
     scale_fill_gradient(low = "lightgray",
                         high = "blue") +
       labs(x = "Hierarchical cluster",
-           y = "Admixture cluster",
+           y = "Population analysis cluster",
            fill = "Common units",
            title = input$comparison_plot_title) +
         theme(
