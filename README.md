@@ -44,7 +44,7 @@ If you have trouble installing StructuRly you can follow the instructions presen
 
 ### System requirements
 
-StructuRly 0.1.0 works on macOS, Linux and Windows operative systems. Install the updated version of [R](https://www.r-project.org) (&gt;= 3.5) and [RStudio](https://www.rstudio.com) and launch StructuRly on all types of browsers (Internet Explorer, Safari, Chrome, etc.). In its current version it can also work locally and then offline. If you need any information about the usage of *STRUCTURE* or *ADMIXTURE* softwares (e. g. preparation of input files and exporting of outputs), please visit their websites at the following links:
+StructuRly 0.1.0 works on macOS and Windows operative systems. Install the updated version of [R](https://www.r-project.org) (&gt;= 3.5) and [RStudio](https://www.rstudio.com) and launch StructuRly on all types of browsers (Internet Explorer, Safari, Chrome, etc.). In its current version it can also work locally and then offline. If you need any information about the usage of *STRUCTURE* or *ADMIXTURE* softwares (e. g. preparation of input files and exporting of outputs), please visit their websites at the following links:
 
 -   [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html)
 
