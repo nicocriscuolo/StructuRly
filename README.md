@@ -20,6 +20,8 @@ However, StructuRly presents more different features in order to:
 
 -   to visually compare the partition obtained from the hierarchical cluster analysis and the one from the Bayesian analysis through a confusion matrix and estimate an agreement value with three different agreement indeces.
 
+-   launch the GUI of the *STRUCTURE* software if installed on your computer (macOS users only).
+
 ### Installation
 
 You can install the released version of StructuRly from [GitHub](https://github.com) in RStudio with:
