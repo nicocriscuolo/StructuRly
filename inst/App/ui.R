@@ -975,7 +975,17 @@ br(),
     ),
 br(),
     fluidRow(
-      column(width = 12,
+      column(width = 3
+      ),
+      column(width = 9,
+             plotlyOutput(outputId = "barplot_cluster_hierarchical")
+      )
+    ),
+    fluidRow(
+      column(width = 3,
+             plotlyOutput(outputId = "barplot_cluster_pop_analysis")
+      ),
+      column(width = 9,
              plotlyOutput(outputId = "comparison_plot")
       )
     ),

@@ -104,10 +104,14 @@ observeEvent(input$open_structure, {
 
   System_info <- data.frame("Info" = Sys.info())
 
-  if (System_info$Info[1] == "Darwin" ||
-      System_info$Info[1] == "Linux") {
+  if (System_info$Info[1] == "Darwin") {
 
     system("open -a structure")
+
+  } else if (System_info$Info[1] == "Linux") {
+
+    system("cd /usr/local/Structure/
+           java -cp class/Structure.jar RunStructure")
 
   }
 
@@ -2582,6 +2586,22 @@ Comparison_table <- reactive({
 
 })
 
+
+
+### Barplot cluster hierarchical
+output$barplot_cluster_hierarchical <- renderPlotly({
+
+  Comparison_table <- Comparison_table()
+
+  Barplot_hierarchical <- ggplot(data = Comparison_table,
+                                 aes(x = as.factor(Hierarchic))) +
+    geom_bar(width = 0.3) +
+      labs(x = "Hierarchic cluster")
+      coord_flip()
+
+  ggplotly
+
+})
 
 
 ### Partitions indeces
