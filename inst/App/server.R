@@ -256,6 +256,7 @@ Dataset_AD <- reactive({
 
 
 
+### SliderInput UI for H-W Monte Carlo test
 output$hw.test_sliderInput <- renderUI({
 
   if (input$stats_type == "H-W equilibrium" &&
@@ -275,6 +276,7 @@ output$hw.test_sliderInput <- renderUI({
   } else {NULL}
 
 })
+
 
 
 
