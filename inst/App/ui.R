@@ -176,10 +176,16 @@ br(),
   tabPanel(title = h4("Basic stats"),
 br(),
     fluidRow(
-      column(width = 3,
+      column(width = 5,
              selectInput(inputId = "stats_type",
                          label = h5("Choose information"),
-                         choices = c("P-gen", "H-W equilibrium")
+                         choices = c("Types of different alleles",
+                                     "Missing values per locus",
+                                     "N° of different alleles per locus",
+                                     "Locus summary statistics",
+                                     "P-gen",
+                                     "H-W equilibrium"),
+                         selected = "N° of alleles per locus"
                          )
       ),
       column(width = 7,
@@ -188,8 +194,22 @@ br(),
     ),
 br(),
     fluidRow(
-      column(width = 7,
-             dataTableOutput(outputId = "loci_stats"))
+  conditionalPanel(condition = "input.stats_type == 'Types of different alleles'",
+      column(width = 12,
+             verbatimTextOutput(outputId = "alleles_types")
+      )
+  ),
+  conditionalPanel(condition = "input.stats_type == 'N° of different alleles per locus'",
+      column(width = 12,
+             plotlyOutput(outputId = "number_alleles_per_locus")
+      )
+  ),
+  conditionalPanel(condition = " input.stats_type == 'Missing values per locus' || input.stats_type == 'Locus summary statistics'
+                                 || input.stats_type == 'P-gen' || input.stats_type == 'H-W equilibrium'",
+      column(width = 8,
+             dataTableOutput(outputId = "loci_stats")
+      )
+  )
     )
   ),
   tabPanel(title = h4("Cluster analysis"),

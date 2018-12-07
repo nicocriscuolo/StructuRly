@@ -183,22 +183,24 @@ output$download_subset <- downloadHandler(
 ### Reactive Adegenet dataset
 Dataset_AD <- reactive({
 
-  # COLNAMES of loci splitted
-  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
-      "Pop_ID" %in% colnames(Data_PER_Str()) |
-      "Loc_ID" %in% colnames(Data_PER_Str())) {
+  Dataset <- Data_PER_Str()
 
-    COLNAMES_loci <- c(colnames(Data_PER_Str()[-c(1:(length(colnames(Data_PER_Str())) -
-                                                       loci()*ploidy()))]))
+  # COLNAMES of loci splitted
+  if ("Sample_ID" %in% colnames(Dataset) |
+      "Pop_ID" %in% colnames(Dataset) |
+      "Loc_ID" %in% colnames(Dataset)) {
+
+    COLNAMES_loci <- c(colnames(Dataset[-c(1:(length(colnames(Dataset)) -
+                                                loci()*ploidy()))]))
 
   } else {
 
-    COLNAMES_loci <- colnames(Data_PER_Str())
+    COLNAMES_loci <- colnames(Dataset)
 
   }
 
   # Dataset just with the loci splitted
-  Dataset_s <- Data_PER_Str()[, COLNAMES_loci]
+  Dataset_s <- Dataset[, COLNAMES_loci]
 
   # Unique colnames
   COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
@@ -221,9 +223,9 @@ Dataset_AD <- reactive({
 
   }
 
-  if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+  if ("Sample_ID" %in% colnames(Dataset)) {
 
-    Dataset_adegenet <- cbind("Sample_ID" = Data_PER_Str()$Sample_ID,
+    Dataset_adegenet <- cbind("Sample_ID" = Dataset$Sample_ID,
                               Dataset_grouped)
 
     rownames(Dataset_adegenet) <- Dataset_adegenet$Sample_ID
@@ -233,7 +235,7 @@ Dataset_AD <- reactive({
   } else {
 
     rownames(Dataset_grouped) <- seq(from = 1,
-                                     to = nrow(Data_PER_Str()),
+                                     to = nrow(Dataset),
                                      by = 1)
 
     Dataset_adegenet <- Dataset_grouped
@@ -250,7 +252,53 @@ Dataset_AD <- reactive({
                           loc.names = c(colnames(Dataset_adegenet))
   )
 
+  if ("Pop_ID" %in% colnames(Dataset)) {
+
+    pop(Dataset_AD) <- Dataset$Pop_ID
+
+  }
+
   return(Dataset_AD)
+
+})
+
+
+
+# Types of different alleles
+output$alleles_types <- renderPrint({
+
+  alleles(Dataset_AD())
+
+})
+
+
+
+### Plot of the number of alleles per locus
+output$number_alleles_per_locus <- renderPlotly({
+
+  Dataset_genind <- Dataset_AD()
+
+  Alleles_count <- data.frame("Alleles_number" = Dataset_genind$loc.n.all)
+
+  Alleles_per_locus <- data.frame("Locus" = rownames(Alleles_count),
+                                  Alleles_count)
+
+  Alleles_per_locus$Locus <- factor(Alleles_per_locus$Locus,
+                                    levels = Alleles_per_locus$Locus)
+
+  barplot_alleles_per_locus <- ggplot(Alleles_per_locus,
+                            aes(x = Locus,
+                                y = Alleles_number )) +
+    geom_bar(aes(fill = Locus),
+             stat = "identity",
+             width = 0.4) +
+      labs(y = "Number of alleles") +
+      scale_y_continuous(breaks = c(seq(from = 0,
+                                        to = max(Alleles_per_locus$Alleles_number),
+                                        by = 2))) +
+        theme(legend.position = "none")
+
+  ggplotly(barplot_alleles_per_locus)
 
 })
 
@@ -267,11 +315,7 @@ output$hw.test_sliderInput <- renderUI({
                 min = 0,
                 max = 1000000,
                 value = 100,
-                step = c(200000,
-                         400000,
-                         600000,
-                         800000,
-                         1000000))
+                ticks = FALSE)
 
   } else {NULL}
 
@@ -279,18 +323,36 @@ output$hw.test_sliderInput <- renderUI({
 
 
 
-
+### Loci statistics
 output$loci_stats <- renderDataTable({
 
  Dataset_genind <- Dataset_AD()
 
- if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+ if (input$stats_type == "Locus summary statistics") {
 
-   pop(Dataset_genind) <- Data_PER_Str()$Pop_ID
 
- }
+   Locus_summary_Simpson <- data.frame(locus_table(x = Dataset_genind,
+                                                   index = "simpson"))
 
- if (input$stats_type == "P-gen") {
+   Locus_summary_Shannon <- data.frame(locus_table(x = Dataset_genind,
+                                                   index = "shannon"))
+
+   Locus_summary_Stoddard <- data.frame(locus_table(x = Dataset_genind,
+                                                   index = "invsimpson"))
+
+   Locus_summary <- cbind("Locus" = rownames(Locus_summary_Simpson),
+                          "Simpson" = Locus_summary_Simpson[, 2],
+                          "Shannon" = Locus_summary_Shannon[, 2],
+                          "Stoddard" = Locus_summary_Stoddard[, 2],
+                          Locus_summary_Simpson[, c(3, 4)])
+
+   Locus_summary <- cbind("Locus" = Locus_summary[, 1],
+                          round(Locus_summary[, -1],
+                                digits = 2))
+
+   Locus_summary
+
+ } else if (input$stats_type == "P-gen") {
 
    Dataset_genpop <- genind2genpop(Dataset_genind)
 
@@ -319,25 +381,68 @@ output$loci_stats <- renderDataTable({
 
     } else {
 
-      HW_test <- as.data.frame(hw.test(x = Dataset_genind,
-                                       B = input$hw_replicates))
+      if (input$hw_replicates != 0) {
 
-      HW_data <- data.frame("Locus" = rownames(HW_test),
-                            "chi^2" = round(HW_test$`chi^2`,
-                                            digits = 2),
-                            "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
-                                              digits = 5),
-                            "exact.p-value" = round(HW_test$Pr.exact,
-                                                    digits = 5))
+        HW_test <- as.data.frame(hw.test(x = Dataset_genind,
+                                         B = input$hw_replicates))
+
+        HW_data <- data.frame("Locus" = rownames(HW_test),
+                              "chi^2" = round(HW_test$`chi^2`,
+                                              digits = 2),
+                              "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
+                                                digits = 5),
+                              "exact.p-value" = round(HW_test$Pr.exact,
+                                                      digits = 5))
+
+      } else {
+
+        HW_test <- as.data.frame(hw.test(x = Dataset_genind,
+                                         B = 0))
+
+        HW_data <- data.frame("Locus" = rownames(HW_test),
+                              "chi^2" = round(HW_test$`chi^2`,
+                                              digits = 2),
+                              "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
+                                                      digits = 5))
+
+      }
 
     }
 
     HW_data
 
+ } else if (input$stats_type == "Missing values per locus") {
+
+   Dataset_adegenet <- genind2df(Dataset_AD(),
+                                 sep = "/")
+
+   NA_per_locus <- data.frame("Number" = colSums(is.na(Dataset_adegenet)))
+
+   NA_per_locus <- cbind("Locus" = rownames(NA_per_locus),
+                         "Number" = NA_per_locus$Number,
+                         "%" = round(NA_per_locus$Number*100/length(Data_PER_Str()[, 1]),
+                                     digits = 2))
+
+   NA_per_locus <- rbind(NA_per_locus,
+                         c("Total",
+                           sum(is.na(Dataset_adegenet)),
+                           round(sum(is.na(Dataset_adegenet))*100/length(Data_PER_Str()[, 1]),
+                                 digits = 2)))
+
+   if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+
+     NA_per_locus[-1, ]
+
+   } else {
+
+     NA_per_locus
+
+   }
+
  }
 
-
 })
+
 
 
 ##### Reactive dataset FOR STRUCTURE to export #####
