@@ -2779,7 +2779,7 @@ Tableplot <- reactive({
   Comparison_table <- Comparison_table()
 
   Table <- as.data.frame(table(Comparison_table$Hierarchic,
-                           Comparison_table$Population_analysis))
+                               Comparison_table$Population_analysis))
 
   colnames(Table) <- c("Hierarchic",
                        "Population_analysis",
@@ -2820,6 +2820,18 @@ output$comparison_plot <- renderPlotly({
            height = input$comparison_plot_height)
 
 })
+
+
+
+### Contingency table
+output$contingency_table <- renderPrint({
+
+  table(Comparison_table()$Population_analysis,
+        Comparison_table()$Hierarchic)
+
+})
+
+
 
 # Download Tableplot
 output$download_comparison_plot <- downloadHandler(

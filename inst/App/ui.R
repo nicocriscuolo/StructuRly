@@ -884,11 +884,11 @@ br()
       column(width = 2,
              h5("Output"),
              shinyjs::hidden(actionButton(inputId = "show_comparison_plot",
-                          label = h6("Comparison plot")
+                          label = h6("Plot")
                              )
                       ),
              actionButton(inputId = "show_comparison_table",
-                                          label = h6("Comparison table")
+                                          label = h6("Tables")
              )
       ),
       column(width = 2,
@@ -919,30 +919,35 @@ br(),
                      ),
       mainPanel(id = "panel_comparison_plot",
                 width = 12,
-                fluidRow(
-                  column(width = 5),
-                  column(width = 3,
-                         h5("Plot title"),
-                         textInput(inputId = "comparison_plot_title",
-                                   label = NULL,
-                                   value = "")
-                  ),
-                  column(width = 2,
-                         h5("Image format"),
-                         selectInput(inputId = "comparison_plot_format",
-                                     label = NULL,
-                                     choices = list(".bmp" = ".bmp",
-                                                    ".jpeg" = ".jpeg",
-                                                    ".png" = ".png",
-                                                    ".tiff" = ".tiff"),
-                                     selected = ".jpeg")
-                  ),
-                  column(width = 2,
-                         h5("Plot"),
-                         downloadButton(outputId = "download_comparison_plot",
-                                        label = "Download")
-                  )
-                ),
+      fluidRow(
+        column(width = 3),
+        column(width = 2,
+               checkboxInput(inputId = "show_contingency_table",
+                             label = h5("Show in contingency table"),
+                             value = FALSE)
+        ),
+        column(width = 3,
+               h5("Plot title"),
+               textInput(inputId = "comparison_plot_title",
+                         label = NULL,
+                         value = "")
+        ),
+        column(width = 2,
+               h5("Image format"),
+               selectInput(inputId = "comparison_plot_format",
+                           label = NULL,
+                           choices = list(".bmp" = ".bmp",
+                                          ".jpeg" = ".jpeg",
+                                          ".png" = ".png",
+                                          ".tiff" = ".tiff"),
+                           selected = ".jpeg")
+        ),
+        column(width = 2,
+               h5("Plot"),
+               downloadButton(outputId = "download_comparison_plot",
+                              label = "Download")
+        )
+      ),
       fluidRow(
         column(width = 4,
                h5("Plot width"),
@@ -1003,6 +1008,7 @@ br(),
       )
     ),
 br(),
+  conditionalPanel(condition = "input.show_contingency_table == false",
     fluidRow(
       column(width = 3
       ),
@@ -1019,7 +1025,15 @@ br(),
       column(width = 9,
              plotlyOutput(outputId = "comparison_plot")
       )
-    ),
+    )
+  ),
+  conditionalPanel(condition = "input.show_contingency_table == true",
+    fluidRow(
+      column(width = 12,
+             verbatimTextOutput(outputId = "contingency_table")
+      )
+    )
+  ),
 br()
       )
                    )
