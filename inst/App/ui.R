@@ -86,11 +86,17 @@ br(),
                                                      "StructuRly")
                                           )
                             )
-      ),
+      )
+    ),
+br(),
+br(),
+br(),
+br(),
+    fluidRow(
       column(width = 5,
              actionButton(inputId = "open_structure",
                           label = h6(icon(name = "bar-chart"),
-                                     "STRUCTURE")
+                                     "Run STRUCTURE")
              )
       )
     )
@@ -100,7 +106,10 @@ br(),
         column(width = 10,
   shinyjs::hidden(mainPanel(id = "instructions",
                             # img(src = "Pipeline_Structurly.png")
-                            h4("Detailed instructions for the usage of", em("StructuRly"), "will be soon available..")
+                            h4("Detailed instructions for the usage of", em("StructuRly"), "will be soon available.."),
+br(),
+                            "GitHub page:", a("StructuRly",
+                                              href = "https://github.com/nicocriscuolo/StructuRly"), "  "
                  )
   ),
   conditionalPanel(condition = "input.check_table == 0 &

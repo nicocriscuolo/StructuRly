@@ -1435,6 +1435,12 @@ Structure_Plot <- reactive({
 
   Dataset <- Data_DA_Str()
 
+  if ("Loc_ID" %in% colnames(Dataset)) {
+
+    Dataset$Loc_ID <- factor(Dataset$Loc_ID)
+
+  }
+
   # Vector of shapes for the collection site
   Collection_site_shape <- as.factor(c(seq(from = 0,
                                            to = 25,
