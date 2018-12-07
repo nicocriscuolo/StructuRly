@@ -176,7 +176,7 @@ br(),
   tabPanel(title = h4("Basic stats"),
 br(),
     fluidRow(
-      column(width = 5,
+      column(width = 4,
              selectInput(inputId = "stats_type",
                          label = h5("Choose information"),
                          choices = c("Types of different alleles",

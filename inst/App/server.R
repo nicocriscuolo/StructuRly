@@ -264,7 +264,7 @@ Dataset_AD <- reactive({
 
 
 
-# Types of different alleles
+### Types of different alleles
 output$alleles_types <- renderPrint({
 
   alleles(Dataset_AD())
@@ -359,13 +359,17 @@ output$loci_stats <- renderDataTable({
    genpop_freq <- tab(Dataset_genpop,
                       freq = TRUE)
 
-   data.frame("Sample_ID" = rownames(Dataset_genind$tab),
-              "Pgen" = apply(pgen(gid = Dataset_genind,
-                                  log = FALSE,
-                                  freq = genpop_freq),
-                             1,
-                             prod,
-                             na.rm = TRUE))
+   Dataset_pgen <- data.frame("Sample_ID" = rownames(Dataset_genind$tab),
+                              "Pgen" = apply(pgen(gid = Dataset_genind,
+                                                  log = FALSE,
+                                                  freq = genpop_freq),
+                                             1,
+                                             prod,
+                                             na.rm = TRUE))
+
+   cbind("Sample_ID" = rownames(Dataset_genind$tab),
+         "Pgen" = round(Dataset_pgen$Pgen,
+                        digits = 5))
 
  } else if (input$stats_type == "H-W equilibrium") {
 
