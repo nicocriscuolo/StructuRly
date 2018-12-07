@@ -919,7 +919,7 @@ br(),
                h5("Plot width"),
                sliderInput(inputId = "comparison_plot_width",
                            label = NULL,
-                           value = 1000,
+                           value = 950,
                            min = 500,
                            max = 5000
                )
@@ -978,7 +978,9 @@ br(),
       column(width = 3
       ),
       column(width = 9,
+             fluidRow(style = "height:250px;",
              plotlyOutput(outputId = "barplot_cluster_hierarchical")
+             )
       )
     ),
     fluidRow(

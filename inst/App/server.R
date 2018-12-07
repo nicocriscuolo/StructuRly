@@ -2474,7 +2474,7 @@ Comparison_table <- reactive({
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Pop_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     } else {
 
@@ -2484,7 +2484,7 @@ Comparison_table <- reactive({
 
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     }
 
@@ -2501,7 +2501,7 @@ Comparison_table <- reactive({
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Pop_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     } else {
 
@@ -2511,7 +2511,7 @@ Comparison_table <- reactive({
 
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     }
 
@@ -2528,7 +2528,7 @@ Comparison_table <- reactive({
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Pop_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     } else {
 
@@ -2538,7 +2538,7 @@ Comparison_table <- reactive({
 
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     }
 
@@ -2555,7 +2555,7 @@ Comparison_table <- reactive({
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Pop_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     } else {
 
@@ -2565,7 +2565,7 @@ Comparison_table <- reactive({
 
       colnames(Data_partitions) <- c("Sample_ID",
                                      "Hierarchic",
-                                     "Admixture")
+                                     "Population_analysis")
 
     }
 
@@ -2580,7 +2580,7 @@ Comparison_table <- reactive({
   #                           select = c("Sample_ID",
   #                                      "Pop_ID",
   #                                      "Hierarchic",
-  #                                      "Admixture"))
+  #                                      "Population_analysis"))
 
   return(Data_partitions)
 
@@ -2593,15 +2593,45 @@ output$barplot_cluster_hierarchical <- renderPlotly({
 
   Comparison_table <- Comparison_table()
 
+  Comparison_table$Hierarchic <- factor(Comparison_table$Hierarchic)
+
   Barplot_hierarchical <- ggplot(data = Comparison_table,
-                                 aes(x = as.factor(Hierarchic))) +
+                                 aes(x = Hierarchic)) +
     geom_bar(width = 0.3) +
-      labs(x = "Hierarchic cluster")
+      labs(x = "Hierarchic cluster",
+           y = "Units") +
+      scale_y_continuous(position = "right") +
       coord_flip()
 
-  ggplotly
+  ggplotly(Barplot_hierarchical,
+           width = 825,
+           height = 220)
 
 })
+
+
+
+### Barplot cluster hierarchical
+output$barplot_cluster_pop_analysis <- renderPlotly({
+
+  Comparison_table <- Comparison_table()
+
+  Comparison_table$Population_analysis <- factor(Comparison_table$Population_analysis)
+
+  Barplot_population_analysis <- ggplot(data = Comparison_table,
+                                        aes(x = Population_analysis)) +
+    geom_bar(width = 0.3,
+             colour = "gray60",
+             fill = "gray60") +
+    labs(x = "Pop analysis cluster",
+         y = "Units")
+
+  ggplotly(Barplot_population_analysis,
+           width = 180,
+           height = 560)
+
+})
+
 
 
 ### Partitions indeces
@@ -2610,7 +2640,7 @@ output$agreement_value <- renderText({
   Comparison_table <- Comparison_table()
 
   comparing.Partitions(as.vector(Comparison_table$Hierarchic),
-                       as.vector(Comparison_table$Admixture),
+                       as.vector(Comparison_table$Population_analysis),
                        type = input$agreement_index)
 
 })
@@ -2632,7 +2662,7 @@ Tableplot <- reactive({
   Comparison_table <- Comparison_table()
 
   Table <- as.data.frame(table(Comparison_table$Hierarchic,
-                           Comparison_table$Admixture))
+                           Comparison_table$Population_analysis))
 
   colnames(Table) <- c("Hierarchic",
                        "Population_analysis",
