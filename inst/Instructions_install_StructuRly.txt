@@ -1,6 +1,7 @@
 1. Install "Rtools" (version > 3.5) from here: https://cran.r-project.org/bin/windows/Rtools/ (Windows users only)
 
 
+
 2. Install the package "genefilter" with the following line command:
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -11,7 +12,7 @@ BiocManager::install("genefilter", version = "3.8")
 
 3. Install all StructuRly dependencies:
 
-install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "clusterSim", "dendextend", "ggplot2", "grDevices", "plotly", "processx", "randomcoloR", "RColorBrewer", "reshape2", "scales", "shiny", "shinyjs", "tidyr"))
+install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "clusterSim", "dendextend", "ggplot2", "grDevices", "janitor", "pegas", "plotly", "poppr", "processx", "randomcoloR", "RColorBrewer", "reshape2", "scales", "shiny", "shinyjs", "tidyr"))
 
 
 
@@ -21,7 +22,7 @@ install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "clu
 
 5. Install StructuRly with the following line command:
 
-install_github(repo = "nicocriscuolo/StructuRly")
+install_github(repo = "nicocriscuolo/StructuRly", dependencies = TRUE)
 
 
 
