@@ -99,6 +99,32 @@ observeEvent(input$open_structure, {
 
 
 
+### Open ADMIXTURE
+observeEvent(input$open_admixture, {
+
+  System_info <- data.frame("Info" = Sys.info())
+
+  if (System_info$Info[1] == "Darwin") {
+
+    system("open -a terminal")
+
+  } else if (System_info$Info[1] == "Linux") {
+
+    system("cd /usr/local/Structure/
+           java -cp class/Structure.jar RunStructure")
+
+  }
+
+  # else if (System_info$Info[1] == "Windows") {
+  #
+  #     shell.exec("file:///C:/Program Files (x86)/Structure2.3.4/structure.exe")
+  #
+  # }
+
+})
+
+
+
 ############################### TABLE SECTION #####
 
 ##### Reactive dataset FOR STRUCTURE input #####

@@ -93,10 +93,16 @@ br(),
 br(),
 br(),
     fluidRow(
-      column(width = 5,
+      column(width = 6,
              actionButton(inputId = "open_structure",
                           label = h6(icon(name = "bar-chart"),
-                                     "Run STRUCTURE")
+                                     "STRUCTURE")
+             )
+      ),
+      column(width = 6,
+             actionButton(inputId = "open_admixture",
+                          label = h6(icon(name = "bar-chart"),
+                                     "ADMIXTURE")
              )
       )
     )
