@@ -110,8 +110,7 @@ observeEvent(input$open_admixture, {
 
   } else if (System_info$Info[1] == "Linux") {
 
-    system("cd /usr/local/Structure/
-           java -cp class/Structure.jar RunStructure")
+    system("gnome-terminal")
 
   }
 
