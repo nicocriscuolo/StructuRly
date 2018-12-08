@@ -1036,11 +1036,9 @@ br(),
              plotlyOutput(outputId = "comparison_plot")
       )
     )
-  ),
-br()
+  )
                    )
     )
         ) # Closes output column
     )
-
 ) # Closes fluidPage
