@@ -34,7 +34,7 @@ License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
 Imports:
-    ggplot2 (>= 3.1.0)
+  ggplot2 (>= 3.1.0)
 Depends: 
   R (>= 3.5),
   ade4 (>= 1.7),
@@ -44,6 +44,7 @@ Depends:
   clusterSim (>= 0.47),
   dendextend (>= 1.8),
   grDevices (>= 3.5.0),
+  janitor (>= 1.1.1),
   pegas (>= 0.11),
   plotly (>= 4.8.0),
   poppr (>= 2.8.1),

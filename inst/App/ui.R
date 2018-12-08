@@ -882,16 +882,6 @@ br()
                    mainPanel(id = "comparison_true",
     fluidRow(
       column(width = 2,
-             h5("Output"),
-             shinyjs::hidden(actionButton(inputId = "show_comparison_plot",
-                          label = h6("Plot")
-                             )
-                      ),
-             actionButton(inputId = "show_comparison_table",
-                                          label = h6("Tables")
-             )
-      ),
-      column(width = 2,
              h5("Hierarchic"),
              verbatimTextOutput(outputId = "Cluster_hclust")
       ),
@@ -900,82 +890,96 @@ br()
              verbatimTextOutput(outputId = "Cluster_STR")
       ),
       column(width = 3,
-             h5("Agreement index"),
+             h5("Agr. index"),
              selectInput(inputId = "agreement_index",
                          label = NULL,
                          choices = list("Rand Index" = "rand",
                                         "Adj. Rand Index" = "crand",
                                         "Nowak Index" = "nowak"))
       ),
-      column(width = 3,
-             h5("Agreement value"),
+      column(width = 2,
+             h5("Agr. value"),
              verbatimTextOutput(outputId = "agreement_value")
+      ),
+      column(width = 3,
+             h5("Comparison outputs"),
+             selectInput(inputId = "show_comparison_outputs",
+                         label = NULL,
+                         choices = c("Table",
+                                     "Contingency table",
+                                     "Contingency plot"))
       )
     ),
 br(),
-      shinyjs::hidden(mainPanel(id = "panel_comparison_table",
-                                dataTableOutput(outputId = "comparison_table")
-                                )
-                     ),
-      mainPanel(id = "panel_comparison_plot",
-                width = 12,
-      fluidRow(
-        column(width = 3),
-        column(width = 2,
-               checkboxInput(inputId = "show_contingency_table",
-                             label = h5("Show in contingency table"),
-                             value = FALSE)
-        ),
-        column(width = 3,
-               h5("Plot title"),
-               textInput(inputId = "comparison_plot_title",
+  conditionalPanel(condition = "input.show_comparison_outputs == 'Table'",
+    fluidRow(
+      column(width = 12,
+             dataTableOutput(outputId = "comparison_table")
+      )
+    )
+  ),
+  conditionalPanel(condition = "input.show_comparison_outputs == 'Contingency table'",
+    fluidRow(
+      column(width = 12,
+             column(width = 12,
+                    verbatimTextOutput(outputId = "contingency_table")
+             )
+      )
+    )
+  ),
+  conditionalPanel(condition = "input.show_comparison_outputs == 'Contingency plot'",
+    fluidRow(
+      column(width = 5),
+      column(width = 3,
+             h5("Plot title"),
+             textInput(inputId = "comparison_plot_title",
+                       label = NULL,
+                       value = "")
+      ),
+      column(width = 2,
+             h5("Image format"),
+             selectInput(inputId = "comparison_plot_format",
                          label = NULL,
-                         value = "")
-        ),
-        column(width = 2,
-               h5("Image format"),
-               selectInput(inputId = "comparison_plot_format",
-                           label = NULL,
-                           choices = list(".bmp" = ".bmp",
-                                          ".jpeg" = ".jpeg",
-                                          ".png" = ".png",
-                                          ".tiff" = ".tiff"),
-                           selected = ".jpeg")
-        ),
-        column(width = 2,
-               h5("Plot"),
-               downloadButton(outputId = "download_comparison_plot",
-                              label = "Download")
-        )
+                         choices = list(".bmp" = ".bmp",
+                                        ".jpeg" = ".jpeg",
+                                        ".png" = ".png",
+                                        ".tiff" = ".tiff"),
+                         selected = ".jpeg")
       ),
-      fluidRow(
-        column(width = 4,
-               h5("Plot width"),
-               sliderInput(inputId = "comparison_plot_width",
-                           label = NULL,
-                           value = 950,
-                           min = 500,
-                           max = 5000
-               )
-        ),
-        column(width = 4,
-               h5("Plot height"),
-               sliderInput(inputId = "comparison_plot_height",
-                           label = NULL,
-                           value = 570,
-                           min = 200,
-                           max = 900
-               )
-        ),
-        column(width = 4,
-               h5("Plot resolution"),
-               sliderInput(inputId = "comparison_plot_resolution",
-                           label = NULL,
-                           value = 300,
-                           min = 100,
-                           max = 400)
-        )
+      column(width = 2,
+             h5("Plot"),
+             downloadButton(outputId = "download_comparison_plot",
+                            label = "Download")
+      )
+    ),
+    fluidRow(
+      column(width = 4,
+             h5("Plot width"),
+             sliderInput(inputId = "comparison_plot_width",
+                         label = NULL,
+                         value = 950,
+                         min = 500,
+                         max = 5000
+             )
       ),
+      column(width = 4,
+             h5("Plot height"),
+             sliderInput(inputId = "comparison_plot_height",
+                         label = NULL,
+                         value = 570,
+                         min = 200,
+                         max = 900
+             )
+      ),
+      column(width = 4,
+             h5("Plot resolution"),
+             sliderInput(inputId = "comparison_plot_resolution",
+                         label = NULL,
+                         value = 300,
+                         min = 100,
+                         max = 400)
+      )
+    ),
 br(),
     fluidRow(
       column(width = 3,
@@ -1008,7 +1012,6 @@ br(),
       )
     ),
 br(),
-  conditionalPanel(condition = "input.show_contingency_table == false",
     fluidRow(
       column(width = 3
       ),
@@ -1027,15 +1030,7 @@ br(),
       )
     )
   ),
-  conditionalPanel(condition = "input.show_contingency_table == true",
-    fluidRow(
-      column(width = 12,
-             verbatimTextOutput(outputId = "contingency_table")
-      )
-    )
-  ),
 br()
-      )
                    )
     )
         ) # Closes output column

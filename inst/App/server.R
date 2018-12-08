@@ -73,32 +73,6 @@ observeEvent(input$customize_plot, {
 
 
 
-# Show and hide comparison_plot and comparison_table buttons
-observeEvent(input$show_comparison_plot, {
-  shinyjs::showElement(id = "show_comparison_table")
-  shinyjs::hideElement(id = "show_comparison_plot")
-})
-
-observeEvent(input$show_comparison_table, {
-  shinyjs::showElement(id = "show_comparison_plot")
-  shinyjs::hideElement(id = "show_comparison_table")
-})
-
-
-
-# Show and hide comparison plot and comparison table panel
-observeEvent(input$show_comparison_plot, {
-  shinyjs::showElement(id = "panel_comparison_plot")
-  shinyjs::hideElement(id = "panel_comparison_table")
-})
-
-observeEvent(input$show_comparison_table, {
-  shinyjs::showElement(id = "panel_comparison_table")
-  shinyjs::hideElement(id = "panel_comparison_plot")
-})
-
-
-
 ### Open STRUCTURE
 observeEvent(input$open_structure, {
 
@@ -287,16 +261,16 @@ output$number_alleles_per_locus <- renderPlotly({
                                     levels = Alleles_per_locus$Locus)
 
   barplot_alleles_per_locus <- ggplot(Alleles_per_locus,
-                            aes(x = Locus,
-                                y = Alleles_number )) +
+                                      aes(x = Locus,
+                                          y = Alleles_number )) +
     geom_bar(aes(fill = Locus),
              stat = "identity",
              width = 0.4) +
-      labs(y = "Number of alleles") +
-      scale_y_continuous(breaks = c(seq(from = 0,
-                                        to = max(Alleles_per_locus$Alleles_number),
-                                        by = 2))) +
-        theme(legend.position = "none")
+    labs(y = "Number of alleles") +
+    scale_y_continuous(breaks = c(seq(from = 0,
+                                      to = max(Alleles_per_locus$Alleles_number),
+                                      by = 2))) +
+    theme(legend.position = "none")
 
   ggplotly(barplot_alleles_per_locus)
 
@@ -326,52 +300,52 @@ output$hw.test_sliderInput <- renderUI({
 ### Loci statistics
 output$loci_stats <- renderDataTable({
 
- Dataset_genind <- Dataset_AD()
+  Dataset_genind <- Dataset_AD()
 
- if (input$stats_type == "Locus summary statistics") {
+  if (input$stats_type == "Locus summary statistics") {
 
 
-   Locus_summary_Simpson <- data.frame(locus_table(x = Dataset_genind,
-                                                   index = "simpson"))
+    Locus_summary_Simpson <- data.frame(locus_table(x = Dataset_genind,
+                                                    index = "simpson"))
 
-   Locus_summary_Shannon <- data.frame(locus_table(x = Dataset_genind,
-                                                   index = "shannon"))
+    Locus_summary_Shannon <- data.frame(locus_table(x = Dataset_genind,
+                                                    index = "shannon"))
 
-   Locus_summary_Stoddard <- data.frame(locus_table(x = Dataset_genind,
-                                                   index = "invsimpson"))
+    Locus_summary_Stoddard <- data.frame(locus_table(x = Dataset_genind,
+                                                     index = "invsimpson"))
 
-   Locus_summary <- cbind("Locus" = rownames(Locus_summary_Simpson),
-                          "Simpson" = Locus_summary_Simpson[, 2],
-                          "Shannon" = Locus_summary_Shannon[, 2],
-                          "Stoddard" = Locus_summary_Stoddard[, 2],
-                          Locus_summary_Simpson[, c(3, 4)])
+    Locus_summary <- cbind("Locus" = rownames(Locus_summary_Simpson),
+                           "Simpson" = Locus_summary_Simpson[, 2],
+                           "Shannon" = Locus_summary_Shannon[, 2],
+                           "Stoddard" = Locus_summary_Stoddard[, 2],
+                           Locus_summary_Simpson[, c(3, 4)])
 
-   Locus_summary <- cbind("Locus" = Locus_summary[, 1],
-                          round(Locus_summary[, -1],
-                                digits = 2))
+    Locus_summary <- cbind("Locus" = Locus_summary[, 1],
+                           round(Locus_summary[, -1],
+                                 digits = 2))
 
-   Locus_summary
+    Locus_summary
 
- } else if (input$stats_type == "P-gen") {
+  } else if (input$stats_type == "P-gen") {
 
-   Dataset_genpop <- genind2genpop(Dataset_genind)
+    Dataset_genpop <- genind2genpop(Dataset_genind)
 
-   genpop_freq <- tab(Dataset_genpop,
-                      freq = TRUE)
+    genpop_freq <- tab(Dataset_genpop,
+                       freq = TRUE)
 
-   Dataset_pgen <- data.frame("Sample_ID" = rownames(Dataset_genind$tab),
-                              "Pgen" = apply(pgen(gid = Dataset_genind,
-                                                  log = FALSE,
-                                                  freq = genpop_freq),
-                                             1,
-                                             prod,
-                                             na.rm = TRUE))
+    Dataset_pgen <- data.frame("Sample_ID" = rownames(Dataset_genind$tab),
+                               "Pgen" = apply(pgen(gid = Dataset_genind,
+                                                   log = FALSE,
+                                                   freq = genpop_freq),
+                                              1,
+                                              prod,
+                                              na.rm = TRUE))
 
-   cbind("Sample_ID" = rownames(Dataset_genind$tab),
-         "Pgen" = round(Dataset_pgen$Pgen,
-                        digits = 5))
+    cbind("Sample_ID" = rownames(Dataset_genind$tab),
+          "Pgen" = round(Dataset_pgen$Pgen,
+                         digits = 5))
 
- } else if (input$stats_type == "H-W equilibrium") {
+  } else if (input$stats_type == "H-W equilibrium") {
 
     if (ploidy() != 2) {
 
@@ -381,7 +355,7 @@ output$loci_stats <- renderDataTable({
                             "chi^2" = round(HW_test$`chi^2`,
                                             digits = 2),
                             "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
-                                              digits = 5))
+                                                    digits = 5))
 
     } else {
 
@@ -394,7 +368,7 @@ output$loci_stats <- renderDataTable({
                               "chi^2" = round(HW_test$`chi^2`,
                                               digits = 2),
                               "chi^2.p-value" = round(HW_test$`Pr(chi^2 >)`,
-                                                digits = 5),
+                                                      digits = 5),
                               "exact.p-value" = round(HW_test$Pr.exact,
                                                       digits = 5))
 
@@ -415,35 +389,35 @@ output$loci_stats <- renderDataTable({
 
     HW_data
 
- } else if (input$stats_type == "Missing values per locus") {
+  } else if (input$stats_type == "Missing values per locus") {
 
-   Dataset_adegenet <- genind2df(Dataset_AD(),
-                                 sep = "/")
+    Dataset_adegenet <- genind2df(Dataset_AD(),
+                                  sep = "/")
 
-   NA_per_locus <- data.frame("Number" = colSums(is.na(Dataset_adegenet)))
+    NA_per_locus <- data.frame("Number" = colSums(is.na(Dataset_adegenet)))
 
-   NA_per_locus <- cbind("Locus" = rownames(NA_per_locus),
-                         "Number" = NA_per_locus$Number,
-                         "%" = round(NA_per_locus$Number*100/length(Data_PER_Str()[, 1]),
-                                     digits = 2))
+    NA_per_locus <- cbind("Locus" = rownames(NA_per_locus),
+                          "Number" = NA_per_locus$Number,
+                          "%" = round(NA_per_locus$Number*100/length(Data_PER_Str()[, 1]),
+                                      digits = 2))
 
-   NA_per_locus <- rbind(NA_per_locus,
-                         c("Total",
-                           sum(is.na(Dataset_adegenet)),
-                           round(sum(is.na(Dataset_adegenet))*100/length(Data_PER_Str()[, 1]),
-                                 digits = 2)))
+    NA_per_locus <- rbind(NA_per_locus,
+                          c("Total",
+                            sum(is.na(Dataset_adegenet)),
+                            round(sum(is.na(Dataset_adegenet))*100/length(Data_PER_Str()[, 1]),
+                                  digits = 2)))
 
-   if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+    if ("Pop_ID" %in% colnames(Data_PER_Str())) {
 
-     NA_per_locus[-1, ]
+      NA_per_locus[-1, ]
 
-   } else {
+    } else {
 
-     NA_per_locus
+      NA_per_locus
 
-   }
+    }
 
- }
+  }
 
 })
 
@@ -1179,7 +1153,7 @@ observe({
   output$tree <- renderPlot({
 
     Dendrogram_plot()}, width = input$dendrogram_width,
-                        height = input$dendrogram_height)
+    height = input$dendrogram_height)
 
 })
 
@@ -1594,28 +1568,28 @@ Structure_Plot <- reactive({
 
   if (all(c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {
 
-  # number of colours needed
-  numColors <- length(levels(Dataset_m$Pop_ID))
+    # number of colours needed
+    numColors <- length(levels(Dataset_m$Pop_ID))
 
-  # genero un numero di colori uguale al numero che mi serve (potrebbe non funzionare per k > 40)
-  Pop_Col <- distinctColorPalette(k = numColors)
-  names(Pop_Col) <- levels(Dataset_m$Pop_ID)
+    # genero un numero di colori uguale al numero che mi serve (potrebbe non funzionare per k > 40)
+    Pop_Col <- distinctColorPalette(k = numColors)
+    names(Pop_Col) <- levels(Dataset_m$Pop_ID)
 
-  # every variable of the dataset has ben changed in "character"
-  Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE)
+    # every variable of the dataset has ben changed in "character"
+    Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE)
 
-  # Dataframe with the enconding "populations - colors"
-  Palette_Match$Pop_ID <- rownames(Palette_Match)
+    # Dataframe with the enconding "populations - colors"
+    Palette_Match$Pop_ID <- rownames(Palette_Match)
 
-  # presa la colonna Pop_ID dal dataset ordinato (considerando solo quella per un cluster)
-  y <- split(Dataset_m, f = Dataset_m$Cluster)
-  Pop_ID <- data.frame(Pop_ID = y$`1`$Pop_ID)
+    # presa la colonna Pop_ID dal dataset ordinato (considerando solo quella per un cluster)
+    y <- split(Dataset_m, f = Dataset_m$Cluster)
+    Pop_ID <- data.frame(Pop_ID = y$`1`$Pop_ID)
 
-  vec <- c(Palette_Match$Pop_Col[match(Pop_ID$Pop_ID, Palette_Match$Pop_ID)])
+    vec <- c(Palette_Match$Pop_Col[match(Pop_ID$Pop_ID, Palette_Match$Pop_ID)])
 
     if (input$group_barplot_by == "-----") {
 
-    # ggplot
+      # ggplot
       p <- ggplot() +
         geom_bar(data = Dataset_m,
                  aes(x = Sample_ID,
@@ -1628,28 +1602,28 @@ Structure_Plot <- reactive({
                  size = 0.2,
                  position = input$barpos) +
         # sometimes the sum of Q is not 1 ma "1.001", so better to abound
-          scale_y_continuous(limits = c(0, 1.06),
-                             breaks = c(seq(from = 0,
-                                            to = 1,
-                                            by = 0.1))) +
-          scale_fill_manual("Cluster",
-                            values = Colours) +
-          labs(y = "Admixture index [%]",
-               title = input$barplot_title,
-               colour = "Collection site",
-               shape = "Collection site") +
-            theme(
-              axis.title = element_text(size = input$axis_title_size*2),
-              axis.text.y = element_text(size = input$y_label_size),
-              axis.text.x = element_text(size = input$x_label_size,
-                                         angle = input$x_label_angle,
-                                         hjust = 1,
-                                         colour = vec),
-              axis.ticks = element_line(size = 0.3),
-              plot.title = element_text(size = input$axis_title_size*2,
-                                        hjust = 0.5),
-              legend.title = element_text(size = input$axis_title_size*2)
-            )
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1,
+                                     colour = vec),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
 
     } else if (input$group_barplot_by == "Pop_ID") {
 
@@ -1775,7 +1749,7 @@ Structure_Plot <- reactive({
                        shape = Loc_ID,
                        colour = Loc_ID),
                    size = 1) +
-          scale_shape_manual(values = Collection_site_shape)
+        scale_shape_manual(values = Collection_site_shape)
     }
 
   } else if ("Pop_ID" %in% colnames(Dataset) &&
@@ -1810,26 +1784,26 @@ Structure_Plot <- reactive({
                  colour = "black",
                  size = 0.2,
                  position = input$barpos) +
-          scale_y_continuous(limits = c(0, 1.01),
-                             breaks = c(seq(from = 0,
-                                            to = 1,
-                                            by = 0.1))) +
-          scale_fill_manual("Cluster",
-                            values = Colours) +
-          labs(y = "Admixture index [%]",
-               title = input$barplot_title) +
-            theme(
-              axis.title = element_text(size = input$axis_title_size*2),
-              axis.text.y = element_text(size = input$y_label_size),
-              axis.text.x = element_text(size = input$x_label_size,
-                                         angle = input$x_label_angle,
-                                         hjust = 1,
-                                         colour = vec),
-              axis.ticks = element_line(size = 0.3),
-              plot.title = element_text(size = input$axis_title_size*2,
-                                        hjust = 0.5),
-              legend.title = element_text(size = input$axis_title_size*2)
-            )
+        scale_y_continuous(limits = c(0, 1.01),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title) +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1,
+                                     colour = vec),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
 
     } else if (input$group_barplot_by == "Pop_ID") {
 
@@ -1845,27 +1819,27 @@ Structure_Plot <- reactive({
                  colour = "black",
                  size = 0.2,
                  position = input$barpos) +
-          facet_grid(facet_formula,
-                     scales = "free_x") +
-          scale_y_continuous(limits = c(0, 1.01),
-                             breaks = c(seq(from = 0,
-                                            to = 1,
-                                            by = 0.1))) +
-          scale_fill_manual("Cluster",
-                            values = Colours) +
-          labs(y = "Admixture index [%]",
-               title = input$barplot_title) +
-            theme(
-              axis.title = element_text(size = input$axis_title_size*2),
-              axis.text.y = element_text(size = input$y_label_size),
-              axis.text.x = element_text(size = input$x_label_size,
-                                         angle = input$x_label_angle,
-                                         hjust = 1),
-              axis.ticks = element_line(size = 0.3),
-              plot.title = element_text(size = input$axis_title_size*2,
-                                        hjust = 0.5),
-              legend.title = element_text(size = input$axis_title_size*2)
-            )
+        facet_grid(facet_formula,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.01),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title) +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
 
     }
 
@@ -1884,27 +1858,27 @@ Structure_Plot <- reactive({
                  colour = "black",
                  size = 0.2,
                  position = input$barpos) +
-          scale_y_continuous(limits = c(0, 1.06),
-                             breaks = c(seq(from = 0,
-                                            to = 1,
-                                            by = 0.1))) +
-          scale_fill_manual("Cluster",
-                            values = Colours) +
-          labs(y = "Admixture index [%]",
-               title = input$barplot_title,
-               colour = "Collection site",
-               shape = "Collection site") +
-            theme(
-              axis.title = element_text(size = input$axis_title_size*2),
-              axis.text.y = element_text(size = input$y_label_size),
-              axis.text.x = element_text(size = input$x_label_size,
-                                         angle = input$x_label_angle,
-                                         hjust = 1),
-              axis.ticks = element_line(size = 0.3),
-              plot.title = element_text(size = input$axis_title_size*2,
-                                        hjust = 0.5),
-              legend.title = element_text(size = input$axis_title_size*2)
-            )
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
 
     } else if (input$group_barplot_by == "Loc_ID") {
 
@@ -1922,27 +1896,27 @@ Structure_Plot <- reactive({
                  position = input$barpos) +
         facet_grid(facet_formula,
                    scales = "free_x") +
-          scale_y_continuous(limits = c(0, 1.06),
-                             breaks = c(seq(from = 0,
-                                            to = 1,
-                                            by = 0.1))) +
-          scale_fill_manual("Cluster",
-                            values = Colours) +
-          labs(y = "Admixture index [%]",
-               title = input$barplot_title,
-               colour = "Collection site",
-               shape = "Collection site") +
-            theme(
-              axis.title = element_text(size = input$axis_title_size*2),
-              axis.text.y = element_text(size = input$y_label_size),
-              axis.text.x = element_text(size = input$x_label_size,
-                                         angle = input$x_label_angle,
-                                         hjust = 1),
-              axis.ticks = element_line(size = 0.3),
-              plot.title = element_text(size = input$axis_title_size*2,
-                                        hjust = 0.5),
-              legend.title = element_text(size = input$axis_title_size*2)
-            )
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
 
     }
 
@@ -2157,8 +2131,8 @@ output$triangle_plot <- renderPlotly({
 
   # Triangleplot
   Triangleplot <- plot_ly(data = Data_DA_Str(),
-          width = input$triangleplot_width,
-          height = input$triangleplot_height)
+                          width = input$triangleplot_width,
+                          height = input$triangleplot_height)
 
 
   if (all(c("Sample_ID", "Pop_ID", "Loc_ID") %in% colnames(Data_DA_Str()))) {
@@ -2300,16 +2274,16 @@ output$triangle_plot <- renderPlotly({
   }
 
   Triangleplot %>% layout(
-      title = input$triangleplot_title,
-      margin = margin,
-      showlegend = TRUE,
-      ternary = list(
-        sum = 1,
-        aaxis = axis("All others"),
-        baxis = axis(input$bottom_left),
-        caxis = axis(input$bottom_right)
-      )
+    title = input$triangleplot_title,
+    margin = margin,
+    showlegend = TRUE,
+    ternary = list(
+      sum = 1,
+      aaxis = axis("All others"),
+      baxis = axis(input$bottom_left),
+      caxis = axis(input$bottom_right)
     )
+  )
 
 })
 
@@ -2715,10 +2689,10 @@ output$barplot_cluster_hierarchical <- renderPlotly({
   Barplot_hierarchical <- ggplot(data = Comparison_table,
                                  aes(x = Hierarchic)) +
     geom_bar(width = 0.3) +
-      labs(x = "Hierarchic cluster",
-           y = "Units") +
-      scale_y_continuous(position = "right") +
-      coord_flip()
+    labs(x = "Hierarchic cluster",
+         y = "Units") +
+    scale_y_continuous(position = "right") +
+    coord_flip()
 
   ggplotly(Barplot_hierarchical,
            width = 825,
@@ -2756,9 +2730,10 @@ output$agreement_value <- renderText({
 
   Comparison_table <- Comparison_table()
 
-  comparing.Partitions(as.vector(Comparison_table$Hierarchic),
-                       as.vector(Comparison_table$Population_analysis),
-                       type = input$agreement_index)
+  round(comparing.Partitions(as.vector(Comparison_table$Hierarchic),
+                             as.vector(Comparison_table$Population_analysis),
+                             type = input$agreement_index),
+        digits = 4)
 
 })
 
@@ -2792,21 +2767,21 @@ Tableplot <- reactive({
     geom_tile(color = "black") +
     scale_fill_gradient(low = "ghostwhite",
                         high = "firebrick") +
-      labs(x = "Hierarchical cluster",
-           y = "Population analysis cluster",
-           fill = "Common units",
-           title = input$comparison_plot_title) +
-        theme(
-          axis.title = element_text(size = input$comp_axis_title_size*2),
-          axis.text.y = element_text(size = input$comp_y_label_size,
-                                     angle = input$comp_label_angle),
-          axis.text.x = element_text(size = input$comp_x_label_size,
-                                     angle = input$comp_label_angle),
-          axis.ticks = element_line(size = 0.3),
-          plot.title = element_text(size = input$comp_axis_title_size*2,
-                                    hjust = 0.5),
-          legend.title = element_text(size = input$comp_axis_title_size*2)
-        )
+    labs(x = "Hierarchical cluster",
+         y = "Population analysis cluster",
+         fill = "Common units",
+         title = input$comparison_plot_title) +
+    theme(
+      axis.title = element_text(size = input$comp_axis_title_size*2),
+      axis.text.y = element_text(size = input$comp_y_label_size,
+                                 angle = input$comp_label_angle),
+      axis.text.x = element_text(size = input$comp_x_label_size,
+                                 angle = input$comp_label_angle),
+      axis.ticks = element_line(size = 0.3),
+      plot.title = element_text(size = input$comp_axis_title_size*2,
+                                hjust = 0.5),
+      legend.title = element_text(size = input$comp_axis_title_size*2)
+    )
 
   return(Tableplot)
 
@@ -2826,8 +2801,13 @@ output$comparison_plot <- renderPlotly({
 ### Contingency table
 output$contingency_table <- renderPrint({
 
-  table(Comparison_table()$Population_analysis,
-        Comparison_table()$Hierarchic)
+  Comparison_table() %>%
+    tabyl(Population_analysis,
+          Hierarchic) %>%
+    adorn_totals(c("row", "col"))
+
+  # addmargins(table(Comparison_table()$Population_analysis,
+  #                  Comparison_table()$Hierarchic))
 
 })
 
