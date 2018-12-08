@@ -894,8 +894,7 @@ br()
              selectInput(inputId = "agreement_index",
                          label = NULL,
                          choices = list("Rand Index" = "rand",
-                                        "Adj. Rand Index" = "crand",
-                                        "Nowak Index" = "nowak"))
+                                        "Adj. Rand Index" = "crand"))
       ),
       column(width = 2,
              h5("Agr. value"),

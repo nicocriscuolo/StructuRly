@@ -44,6 +44,7 @@ Depends:
   dendextend (>= 1.8),
   grDevices (>= 3.5.0),
   janitor (>= 1.1.1),
+  mcclust (>= 1.0),
   pegas (>= 0.11),
   plotly (>= 4.8.0),
   poppr (>= 2.8.1),

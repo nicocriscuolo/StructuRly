@@ -2662,17 +2662,6 @@ Comparison_table <- reactive({
 
   }
 
-  # Data_partitions <- Data_partitions[Names_Data_cluster_STR, -4]
-
-  # Data_partitions <- subset(x = Data_partitions,
-  #                           subset = is.element(el = Sample_ID,
-  #                                               set = intersect(Data_partitions$Sample_ID,
-  #                                                               Names_Data_cluster_STR)),
-  #                           select = c("Sample_ID",
-  #                                      "Pop_ID",
-  #                                      "Hierarchic",
-  #                                      "Population_analysis"))
-
   return(Data_partitions)
 
 })
@@ -2728,12 +2717,19 @@ output$barplot_cluster_pop_analysis <- renderPlotly({
 ### Partitions indeces
 output$agreement_value <- renderText({
 
-  Comparison_table <- Comparison_table()
+  if (input$agreement_index == "rand") {
 
-  # round(comparing.Partitions(as.vector(Comparison_table$Hierarchic),
-  #                            as.vector(Comparison_table$Population_analysis),
-  #                            type = input$agreement_index),
-  #       digits = 4)
+    arandi(Comparison_table()$Hierarchic,
+           Comparison_table()$Population_analysis,
+           adjust = FALSE)
+
+  } else if (input$agreement_index == "crand") {
+
+    arandi(Comparison_table()$Hierarchic,
+           Comparison_table()$Population_analysis,
+           adjust = TRUE)
+
+  }
 
 })
 
