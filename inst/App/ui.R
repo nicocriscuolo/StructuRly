@@ -77,15 +77,16 @@ br(),
 br(),
     fluidRow(
       column(width = 5,
-             actionButton(inputId = "back_instructions",
-                          label = h6(icon(name = "book"),
-                                     "Instructions")
-             ),
-             shinyjs::hidden(actionButton(inputId = "back_results",
-                                          label = h6(icon(name = "book"),
-                                                     "StructuRly")
-                                          )
-                            )
+             actionButton(inputId = "open_structure",
+                          label = h6(icon(name = "bar-chart"),
+                                     "STRUCTURE")
+             )
+      ),
+      column(width = 5,
+             actionButton(inputId = "open_admixture",
+                          label = h6(icon(name = "bar-chart"),
+                                     "ADMIXTURE")
+             )
       )
     ),
 br(),
@@ -93,16 +94,17 @@ br(),
 br(),
 br(),
     fluidRow(
-      column(width = 6,
-             actionButton(inputId = "open_structure",
-                          label = h6(icon(name = "bar-chart"),
-                                     "STRUCTURE")
+      column(width = 12,
+             actionButton(inputId = "back_instructions",
+                          label = h6(icon(name = "book"),
+                                     "Instructions"),
+                          width = "100%"
+             ),
+             shinyjs::hidden(actionButton(inputId = "back_results",
+                                          label = h6(icon(name = "book"),
+                                                     "StructuRly"),
+                                          width = "100%"
              )
-      ),
-      column(width = 6,
-             actionButton(inputId = "open_admixture",
-                          label = h6(icon(name = "bar-chart"),
-                                     "ADMIXTURE")
              )
       )
     )
