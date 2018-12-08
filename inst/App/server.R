@@ -2730,10 +2730,10 @@ output$agreement_value <- renderText({
 
   Comparison_table <- Comparison_table()
 
-  round(comparing.Partitions(as.vector(Comparison_table$Hierarchic),
-                             as.vector(Comparison_table$Population_analysis),
-                             type = input$agreement_index),
-        digits = 4)
+  # round(comparing.Partitions(as.vector(Comparison_table$Hierarchic),
+  #                            as.vector(Comparison_table$Population_analysis),
+  #                            type = input$agreement_index),
+  #       digits = 4)
 
 })
 
