@@ -138,12 +138,76 @@ Data_PER_Str <- reactive({
                  sep = input$separator,
                  quote = input$quote)
 
+  COLNAMES_all <- c(colnames(df)[seq(from = 1,
+                                     to = ncol(df),
+                                     by = 1)])
+
+  COLNAMES <- c("Sample_ID",
+                "Pop_ID",
+                "Loc_ID")
+
+  COLNAMES_loci <- setdiff(COLNAMES_all, COLNAMES)
+
+  if (grepl(pattern = ".1",
+            x = COLNAMES_loci[1],
+            fixed = TRUE) == FALSE) {
+
+    ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci)
+
+  } else {
+
+    COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci,
+                                          start = 1,
+                                          stop = nchar(COLNAMES_loci)-2))
+
+    ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci_unique)
+
+  }
+
   updateSelectInput(session,
                     inputId = "subset_variable",
                     choices = names(df),
                     selected = NULL)
 
+  if (ploidy == 1) {
+
+    updateSelectInput(session,
+                      inputId = "stats_type",
+                      choices = c("Types of different alleles",
+                                  "Missing values per locus",
+                                  "N° of different alleles per locus",
+                                  "Locus summary statistics",
+                                  "P-gen"),
+                      selected = "Locus summary statistics")
+
+  } else if (ploidy > 1) {
+
+    updateSelectInput(session,
+                      inputId = "stats_type",
+                      choices = c("Types of different alleles",
+                                  "Missing values per locus",
+                                  "N° of different alleles per locus",
+                                  "Locus summary statistics",
+                                  "P-gen",
+                                  "H-W equilibrium"),
+                      selected = "Locus summary statistics")
+
+  }
+
   return(df)
+
+})
+
+
+
+### Colnames Data_PER_Str
+COLNAMES_all <- reactive({
+
+  COLNAMES_all <- c(colnames(Data_PER_Str())[seq(from = 1,
+                                                 to = ncol(Data_PER_Str()),
+                                                 by = 1)])
+
+  return(COLNAMES_all)
 
 })
 
@@ -177,6 +241,62 @@ output$download_subset <- downloadHandler(
 
 
 
+### Ploidy
+ploidy <- reactive({
+
+  COLNAMES <- c("Sample_ID",
+                "Pop_ID",
+                "Loc_ID")
+
+  COLNAMES_loci <- setdiff(COLNAMES_all(), COLNAMES)
+
+    if (grepl(pattern = ".1",
+              x = COLNAMES_loci[1],
+              fixed = TRUE) == FALSE) {
+
+      ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci)
+
+    } else {
+
+      COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci,
+                                            start = 1,
+                                            stop = nchar(COLNAMES_loci)-2))
+
+      ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci_unique)
+
+    }
+
+  return(ploidy)
+
+})
+
+
+
+### Number of loci
+loci <- reactive({
+
+  COLNAMES <- c("Sample_ID",
+                "Pop_ID",
+                "Loc_ID")
+
+  COLNAMES_loci <- setdiff(COLNAMES_all(), COLNAMES)
+
+  if (ploidy() > 1) {
+
+    loci <- length(COLNAMES_loci)/ploidy()
+
+  } else {
+
+    loci <- length(COLNAMES_loci)
+
+  }
+
+  return(loci)
+
+})
+
+
+
 ##### Basic statistics panel #####
 
 ### Reactive Adegenet dataset
@@ -201,14 +321,12 @@ Dataset_AD <- reactive({
   # Dataset just with the loci splitted
   Dataset_s <- Dataset[, COLNAMES_loci]
 
-  # Unique colnames
-  COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
-                                        start = 1,
-                                        stop = nchar(names(Dataset_s))-2))
-
-  # Combining columns based on ploidy
+  # Unique colnames and combining columns on the basis of ploidy
   if (ploidy() > 1) {
 
+    COLNAMES_loci_unique <- unique(substr(x = names(Dataset_s),
+                                          start = 1,
+                                          stop = nchar(names(Dataset_s))-2))
 
     Dataset_grouped <- do.call(cbind,
                                lapply(COLNAMES_loci_unique, function(x){unite_(Dataset_s,
@@ -245,11 +363,22 @@ Dataset_AD <- reactive({
                                                  times = ploidy()),
                                              collapse = "/")] <- NA
 
-  Dataset_AD <- df2genind(X = Dataset_adegenet,
-                          ploidy = ploidy(),
-                          sep = "/",
-                          loc.names = c(colnames(Dataset_adegenet))
-  )
+  if (ploidy() > 1) {
+
+    Dataset_AD <- df2genind(X = Dataset_adegenet,
+                            ploidy = ploidy(),
+                            sep = "/",
+                            loc.names = c(colnames(Dataset_adegenet))
+    )
+
+  } else {
+
+    Dataset_AD <- df2genind(X = Dataset_adegenet,
+                            ploidy = ploidy(),
+                            loc.names = c(colnames(Dataset_adegenet))
+    )
+
+  }
 
   if ("Pop_ID" %in% colnames(Dataset)) {
 
@@ -287,7 +416,7 @@ output$number_alleles_per_locus <- renderPlotly({
 
   barplot_alleles_per_locus <- ggplot(Alleles_per_locus,
                                       aes(x = Locus,
-                                          y = Alleles_number )) +
+                                          y = Alleles_number)) +
     geom_bar(aes(fill = Locus),
              stat = "identity",
              width = 0.4) +
@@ -462,15 +591,23 @@ Data_export <- reactive({
 
     COLNAMES <- c(colnames(Dataset[-c(1, 2, 3)]))
 
-    Dataset_reshape <- reshape(Dataset, # must takes all variables of dataset
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL,
-                               # drop = c("UDO6.1", "UDO6.2", "UDO6.3"), # con drop specificare quali variabili lasciare indietro
-                               # times = c("UDO36"),
-                               idvar = "Sample_ID"
-                               # new.row.names = seq(from = 1, to = nrow(Dataset)*length(COLNAMES)/input$ploidy, by = 1) # 2 è il numero di loci, il tutto è la ploidia
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset, # must takes all variables of dataset
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL,
+                                 # drop = c("UDO6.1", "UDO6.2", "UDO6.3"), # con drop specificare quali variabili lasciare indietro
+                                 # times = c("UDO36"),
+                                 idvar = "Sample_ID"
+                                 # new.row.names = seq(from = 1, to = nrow(Dataset)*length(COLNAMES)/input$ploidy, by = 1) # 2 è il numero di loci, il tutto è la ploidia
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
 
     Dataset_reshape$Sample_ID <- factor(Dataset_reshape$Sample_ID,
                                         levels = Dataset$Sample_ID)
@@ -540,12 +677,20 @@ Data_export <- reactive({
 
     COLNAMES <- c(colnames(Dataset[-1]))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL,
-                               idvar = "Sample_ID"
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL,
+                                 idvar = "Sample_ID"
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
 
     Dataset_reshape$Sample_ID <- factor(Dataset_reshape$Sample_ID,
                                         levels = Dataset$Sample_ID)
@@ -566,11 +711,21 @@ Data_export <- reactive({
 
     ID <- factor(seq(from = 1, to = nrow(Dataset), by = 1))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
+
+    Dataset_reshape$id <- ID
 
     Dataset_reshape$id <- factor(Dataset_reshape$id, levels = ID)
 
@@ -592,11 +747,21 @@ Data_export <- reactive({
 
     ID <- factor(seq(from = 1, to = nrow(Dataset), by = 1))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
+
+    Dataset_reshape$id <- ID
 
     Dataset_reshape$id <- factor(Dataset_reshape$id, levels = ID)
 
@@ -618,12 +783,20 @@ Data_export <- reactive({
 
     COLNAMES <- c(colnames(Dataset[-c(1, 2)]))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL,
-                               idvar = "Sample_ID"
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL,
+                                 idvar = "Sample_ID"
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
 
     Dataset_reshape$Sample_ID <- factor(Dataset_reshape$Sample_ID,
                                         levels = Dataset$Sample_ID)
@@ -657,12 +830,20 @@ Data_export <- reactive({
 
     COLNAMES <- c(colnames(Dataset[-c(1, 2)]))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL,
-                               idvar = "Sample_ID"
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL,
+                                 idvar = "Sample_ID"
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
 
     Dataset_reshape$Sample_ID <- factor(Dataset_reshape$Sample_ID,
                                         levels = Dataset$Sample_ID)
@@ -696,11 +877,21 @@ Data_export <- reactive({
 
     ID <- factor(seq(from = 1, to = nrow(Dataset), by = 1))
 
-    Dataset_reshape <- reshape(Dataset,
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset,
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
+
+    Dataset_reshape$id <- ID
 
     Dataset_reshape$id <- factor(Dataset_reshape$id, levels = ID)
 
@@ -734,11 +925,21 @@ Data_export <- reactive({
 
     ID <- factor(seq(from = 1, to = nrow(Dataset), by = 1))
 
-    Dataset_reshape <- reshape(Dataset, # must take all variables of dataset
-                               direction = "long",
-                               varying = COLNAMES,
-                               timevar = NULL
-    )
+    if (ploidy() > 1) {
+
+      Dataset_reshape <- reshape(Dataset, # must take all variables of dataset
+                                 direction = "long",
+                                 varying = COLNAMES,
+                                 timevar = NULL
+      )
+
+    } else {
+
+      Dataset_reshape <- Dataset
+
+    }
+
+    Dataset_reshape$id <- ID
 
     Dataset_reshape$id <- factor(Dataset_reshape$id, levels = ID)
 
@@ -823,52 +1024,10 @@ output$individuals_number <- renderText({
 
 
 
-### Number of loci
-loci <- reactive({
-
-  req(c(Data_export(), Data_PER_Str()))
-
-  x <- c(colnames(Data_export())[seq(from = 1,
-                                     to = ncol(Data_export()),
-                                     by = 1)])
-
-  y <- c("Sample_ID", "Pop_ID", "Loc_ID")
-
-  loci <- length(x) - length(intersect(x, y))
-
-  return(loci)
-
-})
-
-
-
 # loci output
 output$loci_number <- renderText({
 
   loci()
-
-})
-
-
-### Ploidy
-ploidy <- reactive({
-
-  req(c(Data_export(), Data_PER_Str()))
-
-  x <- c(colnames(Data_export())[seq(from = 1,
-                                     to = ncol(Data_export()),
-                                     by = 1)])
-
-  y <- c("Sample_ID", "Pop_ID", "Loc_ID")
-
-  z <- c(colnames(Data_PER_Str())[seq(from = 1,
-                                      to = ncol(Data_PER_Str()),
-                                      by = 1)])
-
-  ploidy <- (length(z) - length(intersect(z, y)))/
-    (length(x) - length(intersect(x, y)))
-
-  return(ploidy)
 
 })
 

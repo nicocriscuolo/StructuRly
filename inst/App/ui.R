@@ -187,14 +187,7 @@ br(),
       column(width = 4,
              selectInput(inputId = "stats_type",
                          label = h5("Choose information"),
-                         choices = c("Types of different alleles",
-                                     "Missing values per locus",
-                                     "N° of different alleles per locus",
-                                     "Locus summary statistics",
-                                     "P-gen",
-                                     "H-W equilibrium"),
-                         selected = "N° of alleles per locus"
-                         )
+                         choices = "")
       ),
       column(width = 7,
              uiOutput(outputId = "hw.test_sliderInput")
