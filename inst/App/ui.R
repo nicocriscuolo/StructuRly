@@ -205,7 +205,7 @@ br(),
              plotlyOutput(outputId = "number_alleles_per_locus")
       )
   ),
-  conditionalPanel(condition = " input.stats_type == 'Missing values per locus' || input.stats_type == 'Locus summary statistics'
+  conditionalPanel(condition = " input.stats_type == 'Missing values per locus' || input.stats_type == 'Diversity indices'
                                  || input.stats_type == 'P-gen' || input.stats_type == 'H-W equilibrium'",
       column(width = 8,
              dataTableOutput(outputId = "loci_stats")

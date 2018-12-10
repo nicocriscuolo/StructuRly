@@ -176,9 +176,9 @@ Data_PER_Str <- reactive({
                       choices = c("Types of different alleles",
                                   "Missing values per locus",
                                   "N° of different alleles per locus",
-                                  "Locus summary statistics",
+                                  "Diversity indices",
                                   "P-gen"),
-                      selected = "Locus summary statistics")
+                      selected = "Diversity indices")
 
   } else if (ploidy > 1) {
 
@@ -187,10 +187,10 @@ Data_PER_Str <- reactive({
                       choices = c("Types of different alleles",
                                   "Missing values per locus",
                                   "N° of different alleles per locus",
-                                  "Locus summary statistics",
+                                  "Diversity indices",
                                   "P-gen",
                                   "H-W equilibrium"),
-                      selected = "Locus summary statistics")
+                      selected = "Diversity indices")
 
   }
 
@@ -456,7 +456,7 @@ output$loci_stats <- renderDataTable({
 
   Dataset_genind <- Dataset_AD()
 
-  if (input$stats_type == "Locus summary statistics") {
+  if (input$stats_type == "Diversity indices") {
 
 
     Locus_summary_Simpson <- data.frame(locus_table(x = Dataset_genind,
@@ -551,7 +551,7 @@ output$loci_stats <- renderDataTable({
     NA_per_locus <- data.frame("Number" = colSums(is.na(Dataset_adegenet)))
 
     NA_per_locus <- cbind("Locus" = rownames(NA_per_locus),
-                          "Number" = NA_per_locus$Number,
+                          "NA number" = NA_per_locus$Number,
                           "%" = round(NA_per_locus$Number*100/length(Data_PER_Str()[, 1]),
                                       digits = 2))
 
