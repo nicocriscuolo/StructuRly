@@ -8,7 +8,7 @@ StructuRly 0.1.0
 
 However, this shiny application presents more different features in order to:
 
--   support the statistical genetic analysis with basic information about the molecular markers and diversity indeces and through the calculation of the *P*<sub>*g**e**n*</sub> (if you have haploid or diploid data) or the Hardy-Weinberg equilibrium for every locus. For the calculation of the Hardy-Weinberg equilibrium, the *p*-value of the *χ*<sup>2</sup>-test can be calculated for any level of ploidy (&gt;= 2), while the exact *p*-value from the Monte Carlo test is currently available just for diploids (more details are available inside the [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf) package manual);
+-   support the statistical genetic analysis with basic information about the molecular markers and diversity indices and through the calculation of the *P*<sub>*g**e**n*</sub> (if you have haploid or diploid data) or the Hardy-Weinberg equilibrium for every locus. For the calculation of the Hardy-Weinberg equilibrium, the *p*-value of the *χ*<sup>2</sup>-test can be calculated for any level of ploidy (&gt;= 2), while the exact *p*-value from the Monte Carlo test is currently available just for diploids (more details are available inside the [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf) package manual);
 
 -   upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
@@ -18,7 +18,7 @@ However, this shiny application presents more different features in order to:
 
 -   produce an interactive barplot and triangle plot, the most well known *STRUCTURE* graphical outputs. Both graphs can show the admixture ancestry of the samples subdivided in a maximum of 20 different clusters;
 
--   to visually compare the partition obtained from the hierarchical cluster analysis and the one from the Bayesian analysis through a confusion matrix and estimate an agreement value of the two partitions with two different agreement indeces.
+-   to visually compare the partition obtained from the hierarchical cluster analysis and the one from the Bayesian analysis through a confusion matrix and estimate an agreement value of the two partitions with two different agreement indices.
 
 ### Installation
 
