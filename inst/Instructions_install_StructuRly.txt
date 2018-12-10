@@ -5,13 +5,19 @@ install.packages(pkgs = c("ade4", "adegenet", "assertthat", "colourpicker", "den
 
 
 
+
+
 2. At the question "Do you want to install from sources the package which needs compilation?" type "no" and wait until all dependencies are installed.
+
+
 
 
 
 3. Install StructuRly with the following line command:
 
 install_github(repo = "nicocriscuolo/StructuRly", dependencies = TRUE)
+
+
 
 
 
