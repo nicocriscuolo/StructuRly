@@ -77,7 +77,16 @@ N. B.: If you use a Linux based machine, to properly configure **R** and to inst
 
 ### Data input
 
-StructuRly is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset. When you start a new session of StructuRly, if you change the uploaded file with a new one (inside the same section), in order to produce new outputs remember to re-define every time type of separator and to indicate if your data have quotation marks.
+**StructuRly** is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset. When you start a new session of **StructuRly**, if you change the uploaded file with a new one (inside the same section), in order to produce new outputs remember to re-define every time type of separator and to indicate if your data have quotation marks.
+
+###### Data format
+
+In the first section of **StructuRly** you can import both **.txt** and **.csv** file. Since the second section accepts also the output file obtained after the population analysis performed with *ADMIXTURE*, here you can import also **.Q** format file and a **.fam** file (if the latter one is available).
+
+In **StructuRly** you have also the possibility to export a table ready to be imported inside the *STRUCTURE* software. If you need detailed references about the structure of this dataset and how to perform the population analysis with *STUCTURE* you can find them this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/).
+If you want to use your raw genetic data to produce an input table for the *ADMIXTURE* software, you have to convert your matrix in a **.ped** or **.bed** file. You can do that through the functionalities of the *PLINK* software, illustrated step by step at this [link](http://zzz.bwh.harvard.edu/plink/data.shtml). If you need more information about this last data formats, they are available [here](https://www.cog-genomics.org/plink2/formats#bed).
+
+Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you can import into **StructuRly** are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis with the sample files downloadable directly from the software website).
 
 #### Section 1: Import raw genetic data
 
@@ -87,19 +96,19 @@ This file can contain three optional variables present in the following order an
 
   * **Pop_ID**: is a categorical variable identified by an integer that indicates the population defined by the user for each sample (e.g .: 1, 2, 3 ..);
 
-  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with to StructuRly and then imported into *STRUCTURE* for population analysis, can be used by the Bayesian algorithm as a support to resutls elaboration.
+  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with to **StructuRly** and then imported into *STRUCTURE* for population analysis, can be used by the Bayesian algorithm as a support to resutls elaboration.
 
 The following variables present in the dataset to import in this section are mandatory, and must contain numerical values relative to the types of markers used. Depending on the ploidy of the organism analyzed, there must be a number of columns for each locus equal to the number of alleles, in particular: 
 
   * for haploid organisms, each column must a unique name of a locus coded with alpha-numeric characters, but it must absolutely not contain the dot symbol (e. g.: "Locus_1", "Locus_2", etc.);
   
-  * for diploid and polyploid organisms the column header must contain a single name of the locus followed, this time, by the dot symbol (".") and the identification number of the allele, mandatorily starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", etc.). Below there is an image that represents data stored in a spreadsheet that, once converted in **.txt** or **.csv** format, can be properly read by StructuRly:
+  * for diploid and polyploid organisms the column header must contain a single name of the locus followed, this time, by the dot symbol (".") and the identification number of the allele, mandatorily starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", etc.). Below there is an image that represents data stored in a spreadsheet that, once converted in **.txt** or **.csv** format, can be properly read by **StructuRly**:
 
 ![image_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
 ###### Missing values
 
-When you produce the file for this section of StructuRly, the missing values must be indicated only with the abbreviation **NA**; the cells of the reactive table (in the table panel named "Input table") that contain missing values will appear empty, while they are codified as **-9** in the table that can be produced and downloaded by StructuRly and imported into *STRUCTURE* to perform the population analysis.
+When you produce the file for this section of **StructuRly**, the missing values must be indicated only with the abbreviation **NA**; the cells of the reactive table (in the table panel named "Input table") that contain missing values will appear empty, while they are codified as **-9** in the table that can be produced and downloaded by **StructuRly** and imported into *STRUCTURE* to perform the population analysis.
 
 N. B.: if your data refear to diploid or polyploid organisms and you encounter a missing value in one or more of your samples in a specific locus, the **NA** value must be present for all the alleles of that locus. 
 
@@ -115,11 +124,11 @@ An example of this type of file structure is shown below (in this case the **Loc
 
 ![image_2](https://user-images.githubusercontent.com/35098432/49116054-b88f0200-f29c-11e8-9abf-0c050bdb1e45.png)
 
-* If you have obtained the results of your population analysis with the *ADMIXTURE* software, there are two ways to proceed to prepare the dataset for StructuRly. From the analysis of a file in **.bed** or **.ped** format you will get a **.Q** format file that you can either import into **R** and then modify as you like, exporting it in **.txt** or **.csv** format and then import it into StructuRly (for example, after adding the columns identifying the name of the samples or the population) or you can import directly into StructuRly the **.Q** format file. This file only contains the variables with the values of the ancestry admixture: if you want to add metadata to this dataset you will have to import the **.fam** file into StructuRly, which generally accompanies .bed and .ped files. If you want more details about the information encoded in these types of formats, you can find them [here](https://www.cog-genomics.org/plink2/formats#fam). StructuRly will automatically use the first two variables of the **.fam** file, which are generally used to insure the sample identifier and the user-defined population respectively.
+* If you have obtained the results of your population analysis with the *ADMIXTURE* software, there are two ways to proceed to prepare the dataset for **StructuRly**. From the analysis of a file in **.bed** or **.ped** format you will get a **.Q** format file that you can either import into **R** and then modify as you like, exporting it in **.txt** or **.csv** format and then import it into **StructuRly** (for example, after adding the columns identifying the name of the samples or the population) or you can import directly into **StructuRly** the **.Q** format file. This file only contains the variables with the values of the ancestry admixture: if you want to add metadata to this dataset you will have to import the **.fam** file into **StructuRly**, which generally accompanies .bed and .ped files. If you want more details about the information encoded in these types of formats, you can find them [here](https://www.cog-genomics.org/plink2/formats#fam). **StructuRly** will automatically use the first two variables of the **.fam** file, which are generally used to insure the sample identifier and the user-defined population respectively.
 
 #### Section 3: Compare partitions
 
-The third section of StructuRly must be used the first two sections files have been loaded and read by StructuRly, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files. The samples cluster memberships of the admixture ancestry analysis partition are assigned considering the highest value of ancestry found in a specific population (*STRUCTURE* or *ADMIXTURE* cluster) for each sample. It means that this partition will divide the observations in the same number of clusters chosen for the population analysis, but if the admixture ancestry is the lowest for a particular sub-population, this cluster will not be shown in the comparison plot and table, because there are no observations assigned to it.
+The third section of **StructuRly** must be used the first two sections files have been loaded and read by **StructuRly**, in order to compare the partitions obtained from the hierarchical and Bayesian cluster analysis. Obviously the imported datasets must refer to data of same nature and the number of observations must be the same in both files. The samples cluster memberships of the admixture ancestry analysis partition are assigned considering the highest value of ancestry found in a specific population (*STRUCTURE* or *ADMIXTURE* cluster) for each sample. It means that this partition will divide the observations in the same number of clusters chosen for the population analysis, but if the admixture ancestry is the lowest for a particular sub-population, this cluster will not be shown in the comparison plot and table, because there are no observations assigned to it.
 
 
 
@@ -127,11 +136,11 @@ The third section of StructuRly must be used the first two sections files have b
 
 ### Outputs download
 
-The following image shows the main output of StructuRly (the barplot of the ancestry admixture) downloaded from the application. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site. In StructuRly there are 25 different symbols available but you can also simply decide to split the entire plot on the basis of the different categories inside the **Pop_ID** and **Loc_ID** variables. 
+The following image shows the main output downloaded from **StructuRly**, the barplot of the ancestry admixture. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site. In **StructuRly** there are 25 different symbols available but you can also simply decide to split the entire plot on the basis of the different categories inside the **Pop_ID** and **Loc_ID** variables. 
 
 ![image_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
 
-All StructuRly outputs can be downloaded as images in various high quality formats directly from the application user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
+All **StructuRly** outputs can be downloaded as images in various high quality formats directly from the user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
 
 N. B.: for dataset with a high sample number (> 500) remember to re-size your plot (width, height and resolution) to better distinguish the bars and the relative IDs.
 
@@ -141,7 +150,7 @@ N. B.: for dataset with a high sample number (> 500) remember to re-size your pl
 
 ### Example
 
-Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of StructuRly showing an example of using of the software:
+Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of **StructuRly** showing an example of using of the software:
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
 
@@ -151,13 +160,13 @@ Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it) video of 
 
 ### Known bugs and issues
 
-- in the interactive barplot the X axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at [link](https://github.com/ropensci/plotly/issues/1328);
+- in the interactive barplot the X axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at this [link](https://github.com/ropensci/plotly/issues/1328);
 
-- for a number major than 40 of pre - defined populations present in the dataset to produce the barplot, the colours used to distinguish such populations within the labels of the X axis of the barplot could start to repeat;
+- for more than 40 pre - defined populations present in the dataset to produce the barplot, the colours used to distinguish such populations within the labels of the X axis of the barplot could start to repeat;
 
 - in the comparison plot the separation lines of the heatmap cells are not visible when using the interactive graph for a bug present in the package used to produce this output. Again, download the output to view the complete chart;
 
-- when using a large number (> 60) of populations or sites defined a priori by the user, the graphic output produced when the observations of the barplot are divided into sections according to the different populations or sampling sites (or both) may not be accurate. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot;
+- when using a large number of populations (> 60) or collection sites defined a priori by the user, the graphic output produced when the observations of the barplot are divided into sections according to the different populations or collection sites (or both) may not be accurate. Moreover, in this case, you could see a light overlap between the axis title and the axis text of the barplot;
 
 The slight bugs related to some characteristics of the graphs are shown only inside the interactive plots, but the downloaded file won't present any problem.
 
@@ -167,7 +176,7 @@ The slight bugs related to some characteristics of the graphs are shown only ins
 
 ### Citation
 
-StructuRly was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis* (submitted). If you use this package for results included in your paper please cite:
+**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis* (submitted). If you use this package for results included in your paper please cite:
 
 ```{r, echo = FALSE}
 citation("StructuRly")
@@ -179,4 +188,4 @@ citation("StructuRly")
 
 ### Contact
 
-For additional information regarding StructuRly, please consult the documentation or [email us](mailto:nico.criscuolo981@gmail.com).
+For additional information regarding **StructuRly**, please consult the documentation or [email us](mailto:nico.criscuolo981@gmail.com).
