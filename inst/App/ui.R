@@ -197,7 +197,7 @@ br(),
     fluidRow(
   conditionalPanel(condition = "input.stats_type == 'Types of different alleles'",
       column(width = 12,
-             verbatimTextOutput(outputId = "alleles_types")
+             dataTableOutput(outputId = "alleles_types")
       )
   ),
   conditionalPanel(condition = "input.stats_type == 'N° of different alleles per locus'",

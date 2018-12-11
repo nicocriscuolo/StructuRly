@@ -42,7 +42,7 @@ runStructuRly()
 
 If you have trouble installing **StructuRly** you can follow the instructions present this [link](https://github.com/nicocriscuolo/StructuRly/blob/master/inst/Instructions_install_StructuRly.txt).
 
-###### System requirements
+### System requirements
 
 **StructuRly** works on macOS, Windows and Linux operative systems. Install the updated version of [R](https://www.r-project.org) (&gt;= 3.5) and [RStudio](https://www.rstudio.com) and launch **StructuRly** on all types of browsers (Internet Explorer, Safari, Chrome, etc.). In its current version it can also work locally and then offline. If you need any information about the usage of *STRUCTURE* or *ADMIXTURE* softwares (e. g. instructions to launch the softwares, preparation of input files and how to exports the outputs), please visit their websites at the following links:
 
@@ -50,7 +50,7 @@ If you have trouble installing **StructuRly** you can follow the instructions pr
 
 -   [ADMIXTURE](http://software.genetics.ucla.edu/admixture/)
 
-Moreover, the user has the possibility to launch the Terminal (to start an *ADMIXTURE* population analysis) or the *STRUCTURE* software (if it is installed on the computer) directly from the user interface of **StructurRly** (this function is currently available for macOS and Linux users).
+Moreover, the user has the possibility to launch the Terminal (to start an *ADMIXTURE* population analysis) or the *STRUCTURE* software directly from the user interface of **StructurRly** (this function is currently available for macOS and Linux users). To make this buttons work, both softwares need to be installed on your computer.
 
 N. B.: If you use a Linux based machine, to properly configure **R** and to install some **StructuRly** dependencies you may need specific Linux libraries in order to make these softwares work with this operative system. To install these libraries in **R** just follow the instructions displayed inside the **R** console when you load the dependency packages.
 

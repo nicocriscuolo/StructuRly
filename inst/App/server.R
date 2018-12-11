@@ -213,6 +213,19 @@ COLNAMES_all <- reactive({
 
 
 
+### Colnames loci
+COLNAMES_loci <- reactive({
+
+  COLNAMES <- c("Sample_ID",
+                "Pop_ID",
+                "Loc_ID")
+
+  COLNAMES_loci <- setdiff(COLNAMES_all(), COLNAMES)
+
+})
+
+
+
 ### Output table imported
 output$table_import <- renderDataTable({
 
@@ -244,25 +257,19 @@ output$download_subset <- downloadHandler(
 ### Ploidy
 ploidy <- reactive({
 
-  COLNAMES <- c("Sample_ID",
-                "Pop_ID",
-                "Loc_ID")
-
-  COLNAMES_loci <- setdiff(COLNAMES_all(), COLNAMES)
-
     if (grepl(pattern = ".1",
-              x = COLNAMES_loci[1],
+              x = COLNAMES_loci()[1],
               fixed = TRUE) == FALSE) {
 
-      ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci)
+      ploidy <- length(COLNAMES_loci())/length(COLNAMES_loci())
 
     } else {
 
-      COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci,
+      COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci(),
                                             start = 1,
-                                            stop = nchar(COLNAMES_loci)-2))
+                                            stop = nchar(COLNAMES_loci())-2))
 
-      ploidy <- length(COLNAMES_loci)/length(COLNAMES_loci_unique)
+      ploidy <- length(COLNAMES_loci())/length(COLNAMES_loci_unique)
 
     }
 
@@ -275,19 +282,13 @@ ploidy <- reactive({
 ### Number of loci
 loci <- reactive({
 
-  COLNAMES <- c("Sample_ID",
-                "Pop_ID",
-                "Loc_ID")
-
-  COLNAMES_loci <- setdiff(COLNAMES_all(), COLNAMES)
-
   if (ploidy() > 1) {
 
-    loci <- length(COLNAMES_loci)/ploidy()
+    loci <- length(COLNAMES_loci())/ploidy()
 
   } else {
 
-    loci <- length(COLNAMES_loci)
+    loci <- length(COLNAMES_loci())
 
   }
 
@@ -393,11 +394,32 @@ Dataset_AD <- reactive({
 
 
 ### Types of different alleles
-output$alleles_types <- renderPrint({
+output$alleles_types <- renderDataTable({
 
-  alleles(Dataset_AD())
+  COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci(),
+                                        start = 1,
+                                        stop = nchar(COLNAMES_loci())-2))
 
-})
+  List_alleles <- alleles(Dataset_AD())
+
+  List_alleles <- lapply(List_alleles,
+                         `length<-`,
+                         max(lengths(List_alleles)))
+
+  Data_alleles <- data.frame(matrix(unlist(List_alleles),
+                                    nrow = max(lengths(List_alleles)),
+                                    byrow = F))
+
+  colnames(Data_alleles) <- COLNAMES_loci_unique
+
+  Data_alleles
+
+}, options = list(pageLength = 10))
+
+
+
+### Barplot alleles frequency
+
 
 
 
