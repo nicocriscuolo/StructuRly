@@ -180,6 +180,11 @@ Data_PER_Str <- reactive({
                                   "P-gen"),
                       selected = "Diversity indices")
 
+    updateSelectInput(session,
+                      inputId = "locus_name",
+                      choices = COLNAMES_loci,
+                      selected = COLNAMES_loci[1])
+
   } else if (ploidy > 1) {
 
     updateSelectInput(session,
@@ -191,6 +196,11 @@ Data_PER_Str <- reactive({
                                   "P-gen",
                                   "H-W equilibrium"),
                       selected = "Diversity indices")
+
+    updateSelectInput(session,
+                      inputId = "locus_name",
+                      choices = COLNAMES_loci_unique,
+                      selected = COLNAMES_loci_unique[1])
 
   }
 
@@ -396,10 +406,6 @@ Dataset_AD <- reactive({
 ### Types of different alleles
 output$alleles_types <- renderDataTable({
 
-  COLNAMES_loci_unique <- unique(substr(x = COLNAMES_loci(),
-                                        start = 1,
-                                        stop = nchar(COLNAMES_loci())-2))
-
   List_alleles <- alleles(Dataset_AD())
 
   List_alleles <- lapply(List_alleles,
@@ -410,7 +416,7 @@ output$alleles_types <- renderDataTable({
                                     nrow = max(lengths(List_alleles)),
                                     byrow = F))
 
-  colnames(Data_alleles) <- COLNAMES_loci_unique
+  colnames(Data_alleles) <- levels(Dataset_AD()$loc.fac)
 
   Data_alleles
 
@@ -419,7 +425,71 @@ output$alleles_types <- renderDataTable({
 
 
 ### Barplot alleles frequency
+output$allele_frequency <- renderPlotly({
 
+  # ricordati la diversa ploidia
+
+  if (ploidy() > 1) {
+
+    Dataset_adegenet <- genind2df(Dataset_AD(),
+                                  sep = "/")
+
+    Dataset_locus <- data.frame(cbind("Sample_ID" = rownames(Dataset_adegenet),
+                                      Dataset_adegenet[, c(input$locus_name)]))
+
+    names(Dataset_locus)[2] <- input$locus_name
+
+    Dataset_locus_sep <- separate(data = Dataset_locus,
+                                  col = input$locus_name,
+                                  into = paste0(rep(x = "L",
+                                                    times = ploidy()),
+                                                seq(from = 1,
+                                                    to = ploidy(),
+                                                    by = 1)),
+                                  sep = "/")
+
+    List_locus <- c(Dataset_locus_sep[, -1])
+
+    Vector_locus <- unlist(List_locus,
+                           use.names = FALSE)
+
+  } else {
+
+    Dataset_adegenet <- genind2df(Dataset_AD())
+
+    Dataset_locus <- data.frame(cbind("Sample_ID" = rownames(Dataset_adegenet),
+                                      Dataset_adegenet[, c(input$locus_name)]))
+
+    names(Dataset_locus)[2] <- input$locus_name
+
+    List_locus <- list(Dataset_locus[, -1])
+
+    Vector_locus <- unlist(List_locus,
+                           use.names = FALSE)
+
+  }
+
+  Dataset_alleles_freq <- count(Vector_locus)
+
+  names(Dataset_alleles_freq) <- c("Allele",
+                                   "Frequency")
+
+  Freq_plot <- ggplot(data = Dataset_alleles_freq,
+                      aes(x = Allele,
+                          y = Frequency)) +
+    geom_col(width = 0.4) +
+      scale_y_continuous(breaks = seq(from = 0,
+                                      to = max(Dataset_alleles_freq$Frequency),
+                                      by = 15)) +
+      labs(title = input$locus_name) +
+        coord_flip()
+
+  ggplotly(Freq_plot,
+           height = 380)
+
+  # Dataset_locus
+
+})
 
 
 

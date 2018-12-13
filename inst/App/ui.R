@@ -189,6 +189,13 @@ br(),
                          label = h5("Choose information"),
                          choices = "")
       ),
+  conditionalPanel(condition = "input.stats_type == 'Types of different alleles'",
+      column(width = 3,
+             selectInput(inputId = "locus_name",
+                         label = h5("Select locus"),
+                         choices = "")
+      )
+  ),
       column(width = 7,
              uiOutput(outputId = "hw.test_sliderInput")
       )
@@ -211,7 +218,15 @@ br(),
              dataTableOutput(outputId = "loci_stats")
       )
   )
+    ),
+br(),
+  conditionalPanel(condition = "input.stats_type == 'Types of different alleles'",
+    fluidRow(
+      column(width = 12,
+             plotlyOutput(outputId = "allele_frequency")
+      )
     )
+  )
   ),
   tabPanel(title = h4("Cluster analysis"),
 br(),
