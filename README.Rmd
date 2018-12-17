@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 # StructuRly 0.1.0
 
 **StructuRly** is an **R** package containing a [shiny](https://shiny.rstudio.com) application to produce detailed and interactive graphs of the results of a Bayesian cluster analysis obtained with the most common population genetic software used to investigate population structure, such as *STRUCTURE* or *ADMIXTURE*. These software are widely used to infer the admixture ancestry of samples starting from genetic markers such as SNPs, AFLPs, RFLPs and microsatellites (such as SSRs). More generally, **StructuRly** can generate graphs from any file containing admixture information of each sample (encoded in percentages in a range from 0 to 1).
-The main purpose for which **StructuRly** was conceived is to provide researchers with detailed graphical outputs to interpret their statistical results through the use of a software with a user-friendly interface, which can, therefore, be easily used by those who do not know a programming language. In fact, in a typical **StructuRly** output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or subpopulations) and the label of the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of **StructuRly** outputs, which allows the user to extrapolate even more information through a single chart.
+We developed **StructuRly** to provide researchers with detailed graphical outputs to interpret their statistical results through the use of software with a user-friendly interface, which can, therefore, be easily used by those who do not know a programming language. In fact, in a typical **StructuRly** output, the user will have the possibility to display information about the ID of each sample, the original membership assigned by the researcher to the sampled populations (or subpopulations) and the label of the sampling site, a variable, the latter, which is used in software for population analysis to support the data analysis algorithm. Furthermore, interactivity is a typical feature of **StructuRly** outputs, which allows the user to extrapolate even more information through a single chart.
 
-However, this shiny application presents more different features in order to:
+However, this shiny application presents more different features to:
 
-- support the statistical genetic analysis with basic information about the molecular markers and diversity indices and through the calculation of the $P_{gen}$ (if you have haploid or diploid data) or the Hardy-Weinberg equilibrium for every locus. For the calculation of the Hardy-Weinberg equilibrium, the $p$-value of the $\chi^2$-test can be calculated for any level of ploidy (>= 2), while the exact $p$-value from the Monte Carlo test is currently available just for diploids (more details are available inside the [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf) package manual);
+- support the statistical genetic analysis with necessary information about the molecular markers and diversity indices and through the calculation of the $P_{gen}$ (if you have haploid or diploid data) or the Hardy-Weinberg equilibrium for every locus. For the calculation of the Hardy-Weinberg equilibrium, the $p$-value of the $\chi^2$-test can be calculated for any level of ploidy (>= 2), while the exact $p$-value from the Monte Carlo test is currently available just for diploids (more details are available inside the [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf) package manual);
 
 - upload datasets with raw genetic data to analyze them through hierarchical cluster analysis algorithms and view and download the dendrograms based on different distance matrices and linkage methods;
 
@@ -67,9 +67,9 @@ If you have trouble installing **StructuRly** you can follow the instructions pr
 
 - [ADMIXTURE](http://software.genetics.ucla.edu/admixture/)
 
-Moreover, the user has the possibility to launch the Terminal (to start an *ADMIXTURE* population analysis) or the *STRUCTURE* software directly from the user interface of **StructurRly** (this function is currently available for macOS and Linux users). To make this buttons work, both software need to be installed on your computer.
+Moreover, the user can launch the Terminal (to start an *ADMIXTURE* population analysis) or the *STRUCTURE* software directly from the user interface of **StructurRly** (this function is currently available for macOS and Linux users). To make this buttons work, both software must be installed on your computer.
 
-N. B.: If you use a Linux based machine, to properly configure **R** and to install some **StructuRly** dependencies you may need specific Linux libraries in order to make these software work with this operative system. To install these libraries in **R** just follow the instructions displayed inside the **R** console when you load the dependency packages.
+N. B.: If you use a Linux based machine, to properly configure **R** and to install some **StructuRly** dependencies you may need specific Linux libraries to make these software work with this operative system. To install these libraries in **R** follow the instructions displayed inside the **R** console when you load the dependency packages.
 
 
 
@@ -77,38 +77,38 @@ N. B.: If you use a Linux based machine, to properly configure **R** and to inst
 
 ### Data input
 
-**StructuRly** is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset. When you start a new session of **StructuRly**, if you change the uploaded file with a new one (inside the same section), in order to produce new outputs remember to re-define every time type of separator and to indicate if your data have quotation marks.
+**StructuRly** is divided into three different sections depending on the input file chosen. For any type of file, the **header of each variable is mandatory** and varies according to the type of variable that must be present in the input dataset. When you start a new session of **StructuRly**, if you change the uploaded file with a new one (inside the same section), to produce new outputs remember to re-define every time type of separator and to indicate if your data have quotation marks.
 
 ###### Data format
 
-In the first section of **StructuRly**, you can import both **.txt** and **.csv** file. Since the second section accepts also the output file obtained after the population analysis performed with *ADMIXTURE*, here you can import also **.Q** format file and a **.fam** file (if the latter one is available).
+In the first section of **StructuRly**, you can import both **.txt** and **.csv** file. Since the second section also accepts the output file obtained after the population analysis performed with *ADMIXTURE*, here you can import also **.Q** format file and a **.fam** file (if the latter one is available).
 
-In **StructuRly** you have also the possibility to export a table ready to be imported inside the *STRUCTURE* software. If you need detailed references about the structure of this dataset and how to perform the population analysis with *STUCTURE* you can find them this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/).
+In **StructuRly** you also have the possibility to export a table ready to be imported inside the *STRUCTURE* software. If you need detailed references about the structure of this dataset and how to perform the population analysis with *STUCTURE* you can find them this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/).
 If you want to use your raw genetic data to produce an input table for the *ADMIXTURE* software, you have to convert your matrix in a **.ped** or **.bed** file. You can do that through the functionalities of the *PLINK* software, illustrated step by step at this [link](http://zzz.bwh.harvard.edu/plink/data.shtml). If you need more information about this last data formats, they are available [here](https://www.cog-genomics.org/plink2/formats#bed).
 
 Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you can import into **StructuRly** are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis with the sample files downloadable directly from the software website).
 
 #### Section 1: Import raw genetic data
 
-The input for this section can contain three optional variables present in the following order and whose header must be exactly the one shown below:
+The input for this section can contain three optional variables present in the following order and whose header must be precisely the one shown below:
 
-  * **Sample_ID**: is the variable that contains the IDs of each sample so each name in this column will be different from the others (although it is good practice to use only numbers and letters, the IDs characters can be separated also by the following symbols: "_" and "-");
+  * **Sample_ID**: is the variable that contains the IDs of each sample so each name in this column will be different from the others (although it is good practice to use only numbers and letters, the IDs characters can also be separated by the following symbols: "_" and "-");
 
-  * **Pop_ID**: is a categorical variable identified by an integer that indicates the putative population defined by the user for each sample (e.g .: 1, 2, 3 ..);
+  * **Pop_ID**: is a categorical variable identified by an integer that indicates the putative population defined by the user for each sample (e.g .: 1, 2, 3, etc.);
 
-  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with **StructuRly** and then imported into *STRUCTURE* for population analysis, can be used by the Bayesian algorithm as a support to results elaboration.
+  * **Loc_ID**: another categorical variable identified again by an integer that indicates the origin site of each sample; this variable, if present in the table produced with **StructuRly** and then imported into *STRUCTURE* for population analysis, can be used by the Bayesian algorithm as support to results elaboration.
 
 The following variables present in the dataset to import in this section are mandatory and must contain numerical values relative to the types of markers used. Depending on the ploidy of the organism analyzed, there must be a number of columns for each locus equal to the number of alleles, in particular: 
 
-  * for haploid organisms, each column must have a unique name of a locus coded with alpha-numeric characters, but it must absolutely not contain the dot symbol (e. g.: "Locus_1", "Locus_2", "UDO", "BRAC8792", etc.);
+  * for haploid organisms, each column must have a unique name of a locus coded with alpha-numeric characters, but it must not contain the dot symbol (e. g.: "Locus_1", "Locus_2", "UDO", "BRAC8792", etc.);
   
-  * for diploid and polyploid organisms the column header must contain a single name of the locus followed, this time, by the dot symbol (".") and the identification number of the allele, mandatorily starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", "UDO.1", "UDO.2", etc.). Below there is an image that represents data stored in a spreadsheet that, once converted in **.txt** or **.csv** format, can be properly read by **StructuRly**:
+  * for diploid and polyploid organisms the column header must contain a single name of the locus followed, this time, by the dot symbol (".") and the identification number of the allele, mandatorily starting from 1 (e.g .: "Locus_1.1," "Locus_1.2", "UDO.1", "UDO.2", etc.). Below there is an image that represents data stored in a spreadsheet that, once converted in **.txt** or **.csv** format, can be appropriately read by **StructuRly**:
 
 ![image_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
 ###### Missing values
 
-When you produce the file for this section of **StructuRly**, the missing values must be indicated only with the abbreviation **NA**; the cells of the reactive table (in the table panel named "Input table") that contain missing values will appear empty, while they are codified as **-9** in the table that can be produced and downloaded by **StructuRly** to be imported into *STRUCTURE*.
+When you produce the file for this section of **StructuRly**, the missing values must be indicated only with the abbreviation **NA**. The cells of the reactive table (in the table panel named "Input table") that contain missing values will appear empty, while they are codified as **-9** in the table that can be produced and downloaded by **StructuRly** to be imported into *STRUCTURE*.
 
 N. B.: if your data refer to diploid or polyploid organisms and you encounter a missing value in one or more of your samples in a specific locus, the **NA** value must be present for all the alleles of that locus. 
 
@@ -120,7 +120,7 @@ Here the user can import a dataset obtained directly following the population an
 
 * the other mandatory variables to be inserted must be those of the admixture proportion calculated by the population software mentioned above, and which will be equal in number to the number of clusters chosen by the user before executing the Bayesian analysis. Each of these variables must be identified by a header containing the letter "K" and the number of the relative cluster in sequence (e. g.: "K1", "K2", "K3", etc.), i. e. in the same order of the dataset exported by the software.
 
-An example of this type of file structure is shown below (in this case the **Loc_ID** column is not present, in fact, the three information variable are not mandatory for the datasets to import in section 1. and 2.):
+Below there is an example of this type of file structure. In this case the **Loc_ID** column is not present; in fact, the three information variable are not mandatory for the datasets to import in section 1. and 2.:
 
 ![image_2](https://user-images.githubusercontent.com/35098432/49116054-b88f0200-f29c-11e8-9abf-0c050bdb1e45.png)
 
