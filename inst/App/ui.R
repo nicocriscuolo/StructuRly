@@ -114,7 +114,7 @@ br(),
         column(width = 10,
   shinyjs::hidden(mainPanel(id = "instructions",
                             # img(src = "Pipeline_Structurly.png")
-                            h4("Detailed instructions for the usage of", em("StructuRly"), "will be soon available.."),
+                            h4("Detailed instructions for the usage of", em("StructuRly"), "are available at the GitHub page.."),
 br(),
                             "GitHub page:", a("StructuRly",
                                               href = "https://github.com/nicocriscuolo/StructuRly"), "  "

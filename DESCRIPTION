@@ -57,6 +57,6 @@ Depends:
   shinyjs (>= 0.7.0),
   tidyr (>= 0.8.1)
 Repository: GitHub
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 URL: https://github.com/nicocriscuolo/StructuRly
 BugReports: https://github.com/nicocriscuolo/StructuRly/issues
