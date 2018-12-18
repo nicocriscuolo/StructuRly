@@ -114,10 +114,14 @@ br(),
         column(width = 10,
   shinyjs::hidden(mainPanel(id = "instructions",
                             # img(src = "Pipeline_Structurly.png")
-                            h4("Detailed instructions for the usage of", em("StructuRly"), "are available at the GitHub page.."),
-br(),
-                            "GitHub page:", a("StructuRly",
-                                              href = "https://github.com/nicocriscuolo/StructuRly"), "  "
+                            p(h4("Detailed instructions of",  em("StructuRly"),
+                                 "are available at the",
+                                 a("GitHub",
+                                   href = "https://github.com/nicocriscuolo/StructuRly"),
+                                 "page",
+                                 align = "left")
+                            )
+
                  )
   ),
   conditionalPanel(condition = "input.check_table == 0 &
