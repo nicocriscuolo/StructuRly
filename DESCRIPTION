@@ -28,7 +28,7 @@ Description: Population genetics is essential for the analysis of allele
   thus obtaining an immediate visual feedback compared to the results obtained from 
   the Bayesian analysis. With StructuRly it is also possible to produce the triangle 
   plot useful for showing more specifically the degree of belonging of a sample to 
-  a certain cluster. Both charts are interactive and can be downloaded in different 
+  a certain cluster. The charts are interactive and can be downloaded in different 
   formats. 
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
