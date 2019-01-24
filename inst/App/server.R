@@ -1333,7 +1333,7 @@ Dendrogram_plot <- reactive({
     labs(x = "Sample_ID",
          y = NULL,
          title = input$dendrogram_title) +
-    lims(y = c(-0.08, NA)) +
+    lims(y = c(-0.14, NA)) +
     theme(
       axis.title.x = element_text(size = 15),
       axis.text.y = element_text(size = 12),
@@ -1972,6 +1972,7 @@ Structure_Plot <- reactive({
                                      angle = input$x_label_angle,
                                      hjust = 1),
           axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
           plot.title = element_text(size = input$axis_title_size*2,
                                     hjust = 0.5),
           legend.title = element_text(size = input$axis_title_size*2)
@@ -2009,6 +2010,7 @@ Structure_Plot <- reactive({
                                      angle = input$x_label_angle,
                                      hjust = 1),
           axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
           plot.title = element_text(size = input$axis_title_size*2,
                                     hjust = 0.5),
           legend.title = element_text(size = input$axis_title_size*2)
@@ -2112,6 +2114,7 @@ Structure_Plot <- reactive({
                                      angle = input$x_label_angle,
                                      hjust = 1),
           axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
           plot.title = element_text(size = input$axis_title_size*2,
                                     hjust = 0.5),
           legend.title = element_text(size = input$axis_title_size*2)
@@ -2189,6 +2192,7 @@ Structure_Plot <- reactive({
                                      angle = input$x_label_angle,
                                      hjust = 1),
           axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
           plot.title = element_text(size = input$axis_title_size*2,
                                     hjust = 0.5),
           legend.title = element_text(size = input$axis_title_size*2)
