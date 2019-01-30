@@ -1803,9 +1803,9 @@ Structure_Plot <- reactive({
   }
 
   # Vector of shapes for the collection site
-  Collection_site_shape <- as.factor(c(seq(from = 0,
-                                           to = 25,
-                                           by =1)))
+  Collection_site_shape <- as.factor(seq(from = 0,
+                                         to = 25,
+                                         by = 1))
 
   # Added Sample_ID if it's not present in the first dataset
   if (!"Sample_ID" %in% colnames(Dataset)) {
