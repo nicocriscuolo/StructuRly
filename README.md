@@ -52,7 +52,7 @@ If you have trouble installing **StructuRly** you can follow the instructions pr
 
 Moreover, the user can launch the Terminal (to start an *ADMIXTURE* population analysis) or the *STRUCTURE* software directly from the user interface of **StructurRly** (this function is currently available for macOS and Linux users). To make this buttons work, both software must be installed on your computer.
 
-N. B.: If you use a Linux based machine, to properly configure **R** and to install some **StructuRly** dependencies you may need specific Linux libraries to make these software work with this operative system. To install these libraries in **R** follow the instructions displayed inside the **R** console when you load the dependency packages.
+**N. B.**: If you use a Linux based machine, to properly configure **R** and to install some **StructuRly** dependencies you may need specific Linux libraries to make these software work with this operative system. To install these libraries in **R** follow the instructions displayed inside the **R** console when you load the dependency packages.
 
 ### Data input
 
@@ -84,11 +84,13 @@ The following variables present in the dataset to import in this section are man
 
 ![image\_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
+**N. B.**: for the **Sample\_ID**, **Pop\_ID** and **Loc\_ID** columns, avoid the usage of the name "NA" to indicate a name of a sample, of a putative population or a collection site, because **StructuRly** could recognize that characters as a missing value and the plot will not display the correct information. This also applies for the preparation of the input datasets for the Section 2.
+
 ###### Missing values
 
 When you produce the file for this section of **StructuRly**, the missing values must be indicated only with the abbreviation **NA**. The cells of the reactive table (in the table panel named "Input table") that contain missing values will appear empty, while they are codified as **-9** in the table that can be produced and downloaded by **StructuRly** to be imported into *STRUCTURE*.
 
-N. B.: if your data refer to diploid or polyploid organisms and you encounter a missing value in one or more of your samples in a specific locus, the **NA** value must be present for all the alleles of that locus.
+**N. B.**: if your data refer to diploid or polyploid organisms and you encounter a missing value in one or more of your samples in a specific locus, the **NA** value must be present for all the alleles of that locus;
 
 #### Section 2: Import population analysis
 
@@ -112,11 +114,11 @@ The third section uses the first two sections input files to compare the partiti
 
 The following image shows the main output downloaded from **StructuRly**, the barplot of the ancestry admixture. The sample labels on the X axis are colored according to the population indicated in the user input file, while the symbols at the top of the plot indicate the sampling site. In **StructuRly** there are 25 different symbols available but you can also simply decide to split the entire plot on the basis of the different categories inside the **Pop\_ID** and **Loc\_ID** variables.
 
-![image\_3](https://user-images.githubusercontent.com/35098432/49118209-bbd9bc00-f2a3-11e8-825f-819557ecec66.png)
+![image\_3](https://user-images.githubusercontent.com/35098432/52059268-b16cc480-2569-11e9-87c9-f6c1bbaa3962.png)
 
 All **StructuRly** outputs can be downloaded as images in various high-quality formats directly from the user interface. However, to download the graphs related to the Triangle plot, obtained through a specific function of the *plotly* package (and not with those of *ggplot2*) you need to download the **orca** software in your computer and follow the instructions at this [link](https://github.com/plotly/orca#installation). If you don't install the **orca** software you can always download the Triangle plot through the functionalities of the *plotly* package through the commands displayed directly on the interactive plot.
 
-N. B.: for a dataset with a high sample number (&gt; 500) remember to re-size your plot (width, height and resolution) to better distinguish the bars and the relative IDs.
+**N. B.**: for a dataset with a high sample number (&gt; 500) remember to re-size your plot (width, height and resolution) to better distinguish the bars and the relative IDs.
 
 ### Example
 
