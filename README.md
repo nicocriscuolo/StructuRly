@@ -140,7 +140,7 @@ The slight bugs related to some characteristics of the graphs are shown only ins
 
 ### Citation
 
-**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis* (submitted). If you use this package for results included in your paper please cite:
+**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: a novel shiny app to produce elegant, detailed and interactive plots for population analysis* (submitted). If you use this package for results included in your paper please cite:
 
     #> 
     #> To cite package 'StructuRly' in publications use:
