@@ -351,6 +351,36 @@ br(),
                            max = 400)
         )
       ),
+      fluidRow(
+        column(width = 3,
+               sliderInput(inputId = "dendrogram_leaves_size",
+                           label = h5("Leaves size"),
+                           min = 1,
+                           max = 10,
+                           value = 4)
+        ),
+        column(width = 3,
+               sliderInput(inputId = "dendrogram_leaves_angle",
+                           label = h5("Leaves angle"),
+                           min = 0,
+                           max = 90,
+                           value = 90)
+        ),
+        column(width = 3,
+               sliderInput(inputId = "dendrogram_y_label_size",
+                           label = h5("Y labels size"),
+                           min = 10,
+                           max = 20,
+                           value = 12)
+        ),
+        column(width = 3,
+               sliderInput(inputId = "dendrogram_branches_width",
+                           label = h5("Branches width"),
+                           min = 0.1,
+                           max = 2,
+                           value = 0.6)
+        )
+      ),
 br(),
    fluidRow(
      column(width = 12,

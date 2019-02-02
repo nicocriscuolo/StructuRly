@@ -1329,14 +1329,15 @@ Dendrogram_plot <- reactive({
                      y = y,
                      xend = xend,
                      yend = yend),
-                 colour = dend_gg_segments$col, size = 0.8) +
+                 colour = dend_gg_segments$col,
+                 size = input$dendrogram_branches_width) +
     labs(x = "Sample_ID",
          y = NULL,
          title = input$dendrogram_title) +
     lims(y = c(-0.14, NA)) +
     theme(
       axis.title.x = element_text(size = 15),
-      axis.text.y = element_text(size = 12),
+      axis.text.y = element_text(size = input$dendrogram_y_label_size),
       axis.text.x = element_blank(),
       axis.ticks.x = element_blank(),
       plot.title = element_text(hjust = 0.5),
@@ -1355,11 +1356,11 @@ Dendrogram_plot <- reactive({
                 aes(x = x,
                     y = y,
                     label = Sample_ID,
-                    angle = 90,
+                    angle = input$dendrogram_leaves_angle,
                     hjust = 1,
                     colour = as.factor(dend_gg_labels$Pop_ID)
                 ),
-                size = 3.2)
+                size = input$dendrogram_leaves_size)
 
   } else if ("Sample_ID" %in% colnames(Dataset) &&
              !"Pop_ID" %in% colnames(Dataset)) {
@@ -1389,11 +1390,11 @@ Dendrogram_plot <- reactive({
                 aes(x = x,
                     y = y,
                     label = Sample_ID,
-                    angle = 90,
+                    angle = input$dendrogram_leaves_angle,
                     hjust = 1,
                     colour = as.factor(dend_gg_labels$Pop_ID)
                 ),
-                size = 3.2)
+                size = input$dendrogram_leaves_size)
 
   }  else {
 
@@ -1404,10 +1405,10 @@ Dendrogram_plot <- reactive({
                 aes(x = x,
                     y = y,
                     label = Sample_ID,
-                    angle = 90,
+                    angle = input$dendrogram_leaves_angle,
                     hjust = 1
                 ),
-                size = 3)
+                size = input$dendrogram_leaves_size)
 
   }
 
