@@ -140,20 +140,20 @@ The slight bugs related to some characteristics of the graphs are shown only ins
 
 ### Citation
 
-**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: a novel shiny app to produce elegant, detailed and interactive plots for population analysis* (submitted). If you use this package for results included in your paper please cite:
+**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: a novel shiny app to produce elegant, detailed and interactive plots for population analysis* (submitted). If you use this package for your research please cite:
 
     #> 
     #> To cite package 'StructuRly' in publications use:
     #> 
     #>   Nicola Criscuolo and Claudia Angelini (2018). StructuRly:
-    #>   Elegant, detailed and interactive plots for STRUCTURE and
-    #>   ADMIXTURE population analysis. R package version 0.1.0.
+    #>   Elegant, detailed and interactive plots for population analysis.
+    #>   R package version 0.1.0.
     #>   https://github.com/nicocriscuolo/StructuRly
     #> 
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis},
+    #>     title = {StructuRly: Elegant, detailed and interactive plots for population analysis},
     #>     author = {Nicola Criscuolo and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},

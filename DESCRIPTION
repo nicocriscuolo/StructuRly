@@ -1,7 +1,7 @@
 Package: StructuRly
 Type: Package
 Date: 2018-11-10
-Title: Elegant, detailed and interactive plots for STRUCTURE and ADMIXTURE population analysis
+Title: Elegant, detailed and interactive plots for population analysis
 Version: 0.1.0
 Authors@R: c(
     person("Nicola", "Criscuolo", role = c("aut", "cre"), 
