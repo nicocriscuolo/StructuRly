@@ -118,7 +118,7 @@ br(),
                                  "are available at the",
                                  a("GitHub",
                                    href = "https://github.com/nicocriscuolo/StructuRly"),
-                                 "page",
+                                 "page.",
                                  align = "left")
                             )
 
