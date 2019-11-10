@@ -42,6 +42,7 @@ Depends:
   assertthat (>= 0.2.1),
   colourpicker (>= 1.0),
   dendextend (>= 1.12),
+  DT (>= 0.9),
   grDevices (>= 3.6.0),
   janitor (>= 1.2.0),
   mcclust (>= 1.0),
