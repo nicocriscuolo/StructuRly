@@ -153,13 +153,34 @@ information about this last data formats, they are available
 ###### Download sample datasets
 
 Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you
-can import into **StructuRly** are present at the following link of the
-repository: [Sample
+can import into **StructuRly** are present at the following repository
+link: [Sample
 datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset)
 (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis
-with the sample files downloadable directly from the software
-website).\\ To download the sample datasets, right-click on the desired
-file and choose **Download linked file**.
+with the sample files downloadable directly from the
+[ADMIXTURE](http://software.genetics.ucla.edu/admixture/) website).  
+To download the sample datasets from GitHub, right-click on the desired
+file and choose **Download linked file**. The sample datasets are
+available in pair of two files: one contains the raw genetic data and
+the other the results of the *STRUCTURE* analysis performed on such
+data. They have different format and information to describe different
+use-case scenario, in particular:
+
+  - **Sample1**: this datasets in **.txt** format contains random
+    generated values of genetic triploid loci (with different names) in
+    500 samples, with a weight that ranges from 150 to 500 base-pairs.
+    The additional information available are the Sample ID, the
+    Population ID and Location ID (see Section 1);
+  - **Sample2**: this datasets in **.csv** format contain information
+    related to diploid genetic loci of simple sequence repeats (SSR)
+    sampled in 95 *Olea europaea* specimens in [Criscuolo et
+    al., 2019](https://www.mdpi.com/2223-7747/8/9/297). They contain
+    additional information about the Sample ID and the Population ID;
+  - **Sample3**: the last sample dataset is in **.Q** format and
+    contains the results of the *ADMIXTURE* analysis on a genetic
+    dataset available on the *ADMIXTURE* website. Moreover, the **.fam**
+    file is available to add the Sample ID and the Population ID to the
+    original dataset.
 
 #### Section 1: Import raw genetic data
 
