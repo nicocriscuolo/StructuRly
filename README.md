@@ -150,14 +150,16 @@ want to use your raw genetic data to produce an input table for the
 information about this last data formats, they are available
 [here](https://www.cog-genomics.org/plink2/formats#bed).
 
+###### Download sample datasets
+
 Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you
 can import into **StructuRly** are present at the following link of the
 repository: [Sample
 datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset)
 (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis
-with the sample files downloadable directly from the software website).
-To download the sample datasets, right-click on the desired file and
-choose **Download linked file**.
+with the sample files downloadable directly from the software
+website).\\ To download the sample datasets, right-click on the desired
+file and choose **Download linked file**.
 
 #### Section 1: Import raw genetic data
 

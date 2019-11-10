@@ -86,7 +86,10 @@ In the first section of **StructuRly**, you can import both **.txt** and **.csv*
 In **StructuRly** you also have the possibility to export a table ready to be imported inside the *STRUCTURE* software. If you need detailed references about the structure of this dataset and how to perform the population analysis with *STUCTURE* you can find them this [link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665925/).
 If you want to use your raw genetic data to produce an input table for the *ADMIXTURE* software, you have to convert your matrix in a **.ped** or **.bed** file. You can do that through the functionalities of the *PLINK* software, illustrated step by step at this [link](http://zzz.bwh.harvard.edu/plink/data.shtml). If you need more information about this last data formats, they are available [here](https://www.cog-genomics.org/plink2/formats#bed).
 
-Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you can import into **StructuRly** are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis with the sample files downloadable directly from the software website). To download the sample datasets, right-click on the desired file and choose **Download linked file**.
+###### Download sample datasets
+
+Examples of the **.txt**, **.csv**, **.Q** and **.fam** files that you can import into **StructuRly** are present at the following link of the repository:  [Sample datasets](https://github.com/nicocriscuolo/StructuRly/tree/master/inst/Sample_dataset) (the .Q and the .fam files are obtained after an *ADMIXTURE* analysis with the sample files downloadable directly from the software website).\\
+To download the sample datasets, right-click on the desired file and choose **Download linked file**.
 
 #### Section 1: Import raw genetic data
 
