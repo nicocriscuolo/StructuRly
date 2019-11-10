@@ -237,7 +237,7 @@ COLNAMES_loci <- reactive({
 
 
 ### Output table imported
-output$table_import <- renderDataTable({
+output$table_import <- DT::renderDataTable({
 
   Data_PER_Str()
 
@@ -404,7 +404,7 @@ Dataset_AD <- reactive({
 
 
 ### Types of different alleles
-output$alleles_types <- renderDataTable({
+output$alleles_types <- DT::renderDataTable({
 
   List_alleles <- alleles(Dataset_AD())
 
@@ -544,7 +544,7 @@ output$hw.test_sliderInput <- renderUI({
 
 
 ### Loci statistics
-output$loci_stats <- renderDataTable({
+output$loci_stats <- DT::renderDataTable({
 
   Dataset_genind <- Dataset_AD()
 
@@ -1048,7 +1048,7 @@ Data_export <- reactive({
 
 
 ### Output table exported
-output$table_export <- renderDataTable({
+output$table_export <- DT::renderDataTable({
 
   Data_export()
 
@@ -1615,7 +1615,7 @@ Data_DA_Str <- reactive({
 
 
 ### Output table imported 2
-output$table_import2 <- renderDataTable({
+output$table_import2 <- DT::renderDataTable({
 
   Data_DA_Str()
 
@@ -3017,7 +3017,7 @@ output$agreement_value <- renderText({
 
 
 ### Table to compare partitions
-output$comparison_table <- renderDataTable({
+output$comparison_table <- DT::renderDataTable({
 
   Comparison_table()
 

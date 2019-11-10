@@ -181,7 +181,7 @@ br(),
 br(),
     fluidRow(
       column(width = 12,
-             dataTableOutput(outputId = "table_import")
+             DT::dataTableOutput(outputId = "table_import")
       )
     )
   ),
@@ -208,7 +208,7 @@ br(),
     fluidRow(
   conditionalPanel(condition = "input.stats_type == 'Types of different alleles'",
       column(width = 12,
-             dataTableOutput(outputId = "alleles_types")
+             DT::dataTableOutput(outputId = "alleles_types")
       )
   ),
   conditionalPanel(condition = "input.stats_type == 'N° of different alleles per locus'",
@@ -219,7 +219,7 @@ br(),
   conditionalPanel(condition = " input.stats_type == 'Missing values per locus' || input.stats_type == 'Diversity indices'
                                  || input.stats_type == 'P-gen' || input.stats_type == 'H-W equilibrium'",
       column(width = 8,
-             dataTableOutput(outputId = "loci_stats")
+             DT::dataTableOutput(outputId = "loci_stats")
       )
   )
     ),
@@ -465,7 +465,7 @@ br(),
 br(),
     fluidRow(
       column(width = 12,
-             dataTableOutput(outputId = "table_export")
+             DT::dataTableOutput(outputId = "table_export")
        )
     )
   )
@@ -500,7 +500,7 @@ br(),
 br(),
      fluidRow(
        column(width = 12,
-              dataTableOutput(outputId = "table_import2")
+              DT::dataTableOutput(outputId = "table_import2")
        )
      )
   ),
@@ -963,7 +963,7 @@ br(),
   conditionalPanel(condition = "input.show_comparison_outputs == 'Table'",
     fluidRow(
       column(width = 12,
-             dataTableOutput(outputId = "comparison_table")
+             DT::dataTableOutput(outputId = "comparison_table")
       )
     )
   ),
