@@ -1,3 +1,4 @@
+
 ################################### UI ########################################
 ui <- fluidPage(
   useShinyjs(), # Recall every function of Shinyjs in the UI
@@ -6,11 +7,13 @@ ui <- fluidPage(
                p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",
                     "Elegant, detailed and interactive plots for",
-                    a("STRUCTURE",
-          href = "https://web.stanford.edu/group/pritchardlab/structure.html"),
+                    a(em("STRUCTURE"),
+                      href = "https://web.stanford.edu/group/pritchardlab/structure.html",
+                      target = "_blank"),
                      "and",
-                     a("ADMIXTURE",
-                       href = "http://software.genetics.ucla.edu/admixture/"),
+                     a(em("ADMIXTURE"),
+                       href = "http://software.genetics.ucla.edu/admixture/",
+                       target = "_blank"),
                      "population analysis",
                     align = "center")
                )
@@ -72,23 +75,20 @@ br(),
   )
   )
   ),
-br(),
-br(),
-br(),
-    fluidRow(
-      column(width = 5,
-             actionButton(inputId = "open_structure",
-                          label = h6(icon(name = "bar-chart"),
-                                     "STRUCTURE")
-             )
-      ),
-      column(width = 5,
-             actionButton(inputId = "open_admixture",
-                          label = h6(icon(name = "bar-chart"),
-                                     "ADMIXTURE")
-             )
-      )
-    ),
+# br(),
+# br(),
+# br(),
+#     fluidRow(
+#       div(style = "display: inline-block;"),
+#              actionButton(inputId = "open_structure",
+#                           label = h6(icon(name = "bar-chart"),
+#                                      "STRUCTURE")
+#              ),
+#              actionButton(inputId = "open_admixture",
+#                           label = h6(icon(name = "bar-chart"),
+#                                      "ADMIXTURE")
+#              )
+#     ),
 br(),
 br(),
 br(),
@@ -117,7 +117,8 @@ br(),
                             p(h4("Detailed instructions of",  em("StructuRly"),
                                  "are available at the",
                                  a("GitHub",
-                                   href = "https://github.com/nicocriscuolo/StructuRly"),
+                                   href = "https://github.com/nicocriscuolo/StructuRly",
+                                   target = "_blank"),
                                  "page.",
                                  align = "left")
                             )
@@ -132,7 +133,7 @@ br(),
                           height = "650px",
                           width = "1150px"),
 br(),
-            a("Nicola Criscuolo",
+            a("Nicola G. Criscuolo",
               href = "mailto:nico.criscuolo981@gmail.com"),
             " - Department of Environmental Systems Science, ETH Zürich, Zurich, Switzerland",
 br(),
@@ -143,7 +144,8 @@ br(),
 br(),
 br(),
              "GitHub page:", a("StructuRly",
-              href = "https://github.com/nicocriscuolo/StructuRly"), "  ",
+                               href = "https://github.com/nicocriscuolo/StructuRly",
+                               target = "_blank"), "  ",
 
 br(),
 br()
@@ -314,7 +316,10 @@ br(),
                            choices = list(".bmp" = ".bmp",
                                           ".jpeg" = ".jpeg",
                                           ".png" = ".png",
-                                          ".tiff" = ".tiff"),
+                                          ".tiff" = ".tiff",
+                                          ".pdf" = ".pdf",
+                                          ".svg" = ".svg",
+                                          ".eps" = ".eps"),
                            selected = ".jpeg")
         ),
         column(width = 2,
@@ -543,7 +548,10 @@ br(),
                          choices = list(".bmp" = ".bmp",
                                         ".jpeg" = ".jpeg",
                                         ".png" = ".png",
-                                        ".tiff" = ".tiff"),
+                                        ".tiff" = ".tiff",
+                                        ".pdf" = ".pdf",
+                                        ".svg" = ".svg",
+                                        ".eps" = ".eps"),
                          selected = ".jpeg")
       ),
       column(width = 2,
@@ -992,7 +1000,10 @@ br(),
                          choices = list(".bmp" = ".bmp",
                                         ".jpeg" = ".jpeg",
                                         ".png" = ".png",
-                                        ".tiff" = ".tiff"),
+                                        ".tiff" = ".tiff",
+                                        ".pdf" = ".pdf",
+                                        ".svg" = ".svg",
+                                        ".eps" = ".eps"),
                          selected = ".jpeg")
       ),
       column(width = 2,

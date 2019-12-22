@@ -1,3 +1,4 @@
+
 ################################# SERVER ######################################
 server <- function(input, output, session) {
 
@@ -342,7 +343,9 @@ Dataset_AD <- reactive({
     Dataset_grouped <- do.call(cbind,
                                lapply(COLNAMES_loci_unique, function(x){unite_(Dataset_s,
                                                                                x,
-                                                                               grep(x, names(Dataset_s), value = TRUE),
+                                                                               grep(x,
+                                                                                    names(Dataset_s),
+                                                                                    value = TRUE),
                                                                                sep = '/', remove = TRUE) %>% select_(x)}))
 
   } else {
@@ -1252,9 +1255,9 @@ output$download <- downloadHandler(
 
 
 
-##### Hierarchical cluster analysis #####
+#####===== Hierarchical cluster analysis =====#####
 
-### Reactive hclust object
+###= Reactive hclust object =#####
 dend <- reactive({
 
   tab_AD <- tab(Dataset_AD(),
@@ -1307,7 +1310,7 @@ dend <- reactive({
 
 
 
-### Reactive dendrogram plot
+###= Reactive dendrogram plot =#####
 Dendrogram_plot <- reactive({
 
   Dataset <- Data_PER_Str()
@@ -1418,7 +1421,7 @@ Dendrogram_plot <- reactive({
 
 
 
-### Dendrogram plot
+###= Dendrogram plot =#####
 output$tree <- renderPlot({ # To be made interactive when the bug is fixed
 
   Dendrogram_plot()
@@ -1436,7 +1439,7 @@ observe({
 
 
 
-### Download dendrogram plot
+###= Download dendrogram plot =#####
 output$download_dendrogram <- downloadHandler(
 
   filename <- function() {
@@ -1455,44 +1458,80 @@ output$download_dendrogram <- downloadHandler(
 
   content <- function(file) {
 
-    if (input$dendrogram_format == ".bmp") {
+    if (input$dendrogram_format == ".bmp" |
+        input$dendrogram_format == ".jpeg" |
+        input$dendrogram_format == ".png" |
+        input$dendrogram_format == ".tiff" |
+        input$dendrogram_format == ".svg") {
 
-      device <- function(..., width, height) grDevices::bmp(...,
-                                                            width = input$dendrogram_width*2.5,
-                                                            height = input$dendrogram_height*2.5,
-                                                            res = input$dendrogram_resolution,
-                                                            units = "px")
+      if (input$dendrogram_format == ".bmp") {
 
-    } else if (input$dendrogram_format == ".jpeg") {
+        device <- function(..., width, height) grDevices::bmp(...,
+                                                              width = input$dendrogram_width*2.5,
+                                                              height = input$dendrogram_height*2.5,
+                                                              res = input$dendrogram_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::jpeg(...,
-                                                             width = input$dendrogram_width*2.5,
-                                                             height = input$dendrogram_height*2.5,
-                                                             res = input$dendrogram_resolution,
-                                                             quality = 100,
-                                                             units = "px")
+      } else if (input$dendrogram_format == ".jpeg") {
 
-    } else if (input$dendrogram_format == ".png") {
+        device <- function(..., width, height) grDevices::jpeg(...,
+                                                               width = input$dendrogram_width*2.5,
+                                                               height = input$dendrogram_height*2.5,
+                                                               res = input$dendrogram_resolution,
+                                                               quality = 100,
+                                                               units = "px")
 
-      device <- function(..., width, height) grDevices::png(...,
-                                                            width = input$dendrogram_width*2.5,
-                                                            height = input$dendrogram_height*2.5,
-                                                            res = input$dendrogram_resolution,
-                                                            units = "px")
+      } else if (input$dendrogram_format == ".png") {
 
-    } else if (input$dendrogram_format == ".tiff") {
+        device <- function(..., width, height) grDevices::png(...,
+                                                              width = input$dendrogram_width*2.5,
+                                                              height = input$dendrogram_height*2.5,
+                                                              res = input$dendrogram_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::tiff(...,
-                                                             width = input$dendrogram_width*2.5,
-                                                             height = input$dendrogram_height*2.5,
-                                                             res = input$dendrogram_resolution,
-                                                             units = "px")
+      } else if (input$dendrogram_format == ".tiff") {
+
+        device <- function(..., width, height) grDevices::tiff(...,
+                                                               width = input$dendrogram_width*2.5,
+                                                               height = input$dendrogram_height*2.5,
+                                                               res = input$dendrogram_resolution,
+                                                               # quality = 100,
+                                                               units = "px")
+
+      } else if (input$dendrogram_format == ".svg") {
+
+        device <- function(..., width, height) grDevices::svg(...,
+                                                              width = input$dendrogram_width/75,
+                                                              height = input$dendrogram_height/75)
+
+      }
+
+      ggsave(filename = file,
+             plot = Dendrogram_plot(),
+             device = device)
+
+    } else {
+
+      if (input$dendrogram_format == ".eps") {
+
+        device <- "eps"
+
+      } else if (input$dendrogram_format == ".pdf") {
+
+        device <- "pdf"
+
+      }
+
+      ggsave(filename = file,
+             plot = Dendrogram_plot(),
+             width = input$dendrogram_width/110,
+             height = input$dendrogram_height/110,
+             limitsize = FALSE,
+             dpi = input$dendrogram_resolution)
 
     }
-
-    ggsave(filename = file,
-           plot = Dendrogram_plot(),
-           device = device)
 
   }
 
@@ -2254,7 +2293,7 @@ Structure_Plot <- reactive({
 
 })
 
-### STRUCTURE Barplot plotly
+#####===== STRUCTURE Barplot plotly =====#####
 output$structure_plot <- renderPlotly({
 
   ggplotly(Structure_Plot(),
@@ -2263,7 +2302,7 @@ output$structure_plot <- renderPlotly({
 
 })
 
-# Download barplot
+###= Download barplot =#####
 output$download_barplot <- downloadHandler(
 
   filename <- function() {
@@ -2282,55 +2321,86 @@ output$download_barplot <- downloadHandler(
 
   content <- function(file) {
 
-    if (input$barplot_format == ".bmp") {
+    if (input$barplot_format == ".bmp" |
+        input$barplot_format == ".jpeg" |
+        input$barplot_format == ".png" |
+        input$barplot_format == ".tiff" |
+        input$barplot_format == ".svg") {
 
-      device <- function(..., width, height) grDevices::bmp(...,
-                                                            width = input$barplot_width*2.5,
-                                                            height = input$barplot_height*2.5,
-                                                            res = input$barplot_resolution,
-                                                            # quality = 100,
-                                                            units = "px")
+      if (input$barplot_format == ".bmp") {
 
-    } else if (input$barplot_format == ".jpeg") {
+        device <- function(..., width, height) grDevices::bmp(...,
+                                                              width = input$barplot_width*2.5,
+                                                              height = input$barplot_height*2.5,
+                                                              res = input$barplot_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::jpeg(...,
-                                                             width = input$barplot_width*2.5,
-                                                             height = input$barplot_height*2.5,
-                                                             res = input$barplot_resolution,
-                                                             quality = 100,
-                                                             units = "px")
+      } else if (input$barplot_format == ".jpeg") {
 
-    } else if (input$barplot_format == ".png") {
+        device <- function(..., width, height) grDevices::jpeg(...,
+                                                               width = input$barplot_width*2.5,
+                                                               height = input$barplot_height*2.5,
+                                                               res = input$barplot_resolution,
+                                                               quality = 100,
+                                                               units = "px")
 
-      device <- function(..., width, height) grDevices::png(...,
-                                                            width = input$barplot_width*2.5,
-                                                            height = input$barplot_height*2.5,
-                                                            res = input$barplot_resolution,
-                                                            # quality = 100,
-                                                            units = "px")
+      } else if (input$barplot_format == ".png") {
 
-    } else if (input$barplot_format == ".tiff") {
+        device <- function(..., width, height) grDevices::png(...,
+                                                              width = input$barplot_width*2.5,
+                                                              height = input$barplot_height*2.5,
+                                                              res = input$barplot_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::tiff(...,
-                                                             width = input$barplot_width*2.5,
-                                                             height = input$barplot_height*2.5,
-                                                             res = input$barplot_resolution,
-                                                             # quality = 100,
-                                                             units = "px")
+      } else if (input$barplot_format == ".tiff") {
+
+        device <- function(..., width, height) grDevices::tiff(...,
+                                                               width = input$barplot_width*2.5,
+                                                               height = input$barplot_height*2.5,
+                                                               res = input$barplot_resolution,
+                                                               # quality = 100,
+                                                               units = "px")
+
+      } else if (input$barplot_format == ".svg") {
+
+        device <- function(..., width, height) grDevices::svg(...,
+                                                              width = input$barplot_width/75,
+                                                              height = input$barplot_height/75)
+
+      }
+
+      ggsave(filename = file,
+             plot = Structure_Plot(),
+             device = device)
+
+    } else {
+
+      if (input$barplot_format == ".eps") {
+
+        device <- "eps"
+
+      } else if (input$barplot_format == ".pdf") {
+
+        device <- "pdf"
+
+      }
+
+      ggsave(filename = file,
+             plot = Structure_Plot(),
+             width = input$barplot_width/110,
+             height = input$barplot_height/110,
+             limitsize = FALSE,
+             dpi = input$barplot_resolution)
 
     }
-
-    ggsave(filename = file,
-           plot = Structure_Plot(),
-           device = device)
 
   }
 
 )
 
-
-
-### Membership STRUCTURE cluster
+###= Membership STRUCTURE cluster =#####
 Members_STR <- reactive({
 
   Dataset_DA <- Data_DA_Str()
@@ -2360,7 +2430,7 @@ Members_STR <- reactive({
 
 
 
-##### Triangleplot #####
+#####===== Triangleplot =====#####
 
 ### Cluster number triangle plot
 output$cluster_number_2 <- renderText({
@@ -2570,7 +2640,7 @@ output$triangle_plot <- renderPlotly({
 
 
 
-### Download triangle plot
+###= Download triangle plot =#####
 output$download_triangleplot <- downloadHandler(
 
   filename <- function() {
@@ -3025,7 +3095,7 @@ output$comparison_table <- DT::renderDataTable({
 
 
 
-### Table plot to compare partitions
+###= Table plot to compare partitions =#####
 Tableplot <- reactive({
 
   Comparison_table <- Comparison_table()
@@ -3075,7 +3145,7 @@ output$comparison_plot <- renderPlotly({
 
 
 
-### Contingency table
+###= Contingency table =#####
 output$contingency_table <- renderPrint({
 
   Comparison_table() %>%
@@ -3090,7 +3160,7 @@ output$contingency_table <- renderPrint({
 
 
 
-# Download Tableplot
+###= Download Tableplot =#####
 output$download_comparison_plot <- downloadHandler(
 
   filename <- function() {
@@ -3109,44 +3179,80 @@ output$download_comparison_plot <- downloadHandler(
 
   content <- function(file) {
 
-    if (input$comparison_plot_format == ".bmp") {
+    if (input$comparison_plot_format == ".bmp" |
+        input$comparison_plot_format == ".jpeg" |
+        input$comparison_plot_format == ".png" |
+        input$comparison_plot_format == ".tiff" |
+        input$comparison_plot_format == ".svg") {
 
-      device <- function(..., width, height) grDevices::bmp(...,
-                                                            width = input$comparison_plot_width*2.5,
-                                                            height = input$comparison_plot_height*2.5,
-                                                            res = input$comparison_plot_resolution,
-                                                            units = "px")
+      if (input$comparison_plot_format == ".bmp") {
 
-    } else if (input$comparison_plot_format == ".jpeg") {
+        device <- function(..., width, height) grDevices::bmp(...,
+                                                              width = input$comparison_plot_width*2.5,
+                                                              height = input$comparison_plot_height*2.5,
+                                                              res = input$comparison_plot_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::jpeg(...,
-                                                             width = input$comparison_plot_width*2.5,
-                                                             height = input$comparison_plot_height*2.5,
-                                                             res = input$comparison_plot_resolution,
-                                                             quality = 100,
-                                                             units = "px")
+      } else if (input$comparison_plot_format == ".jpeg") {
 
-    } else if (input$comparison_plot_format == ".png") {
+        device <- function(..., width, height) grDevices::jpeg(...,
+                                                               width = input$comparison_plot_width*2.5,
+                                                               height = input$comparison_plot_height*2.5,
+                                                               res = input$comparison_plot_resolution,
+                                                               quality = 100,
+                                                               units = "px")
 
-      device <- function(..., width, height) grDevices::png(...,
-                                                            width = input$comparison_plot_width*2.5,
-                                                            height = input$comparison_plot_height*2.5,
-                                                            res = input$comparison_plot_resolution,
-                                                            units = "px")
+      } else if (input$comparison_plot_format == ".png") {
 
-    } else if (input$comparison_plot_format == ".tiff") {
+        device <- function(..., width, height) grDevices::png(...,
+                                                              width = input$comparison_plot_width*2.5,
+                                                              height = input$comparison_plot_height*2.5,
+                                                              res = input$comparison_plot_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
 
-      device <- function(..., width, height) grDevices::tiff(...,
-                                                             width = input$comparison_plot_width*2.5,
-                                                             height = input$comparison_plot_height*2.5,
-                                                             res = input$comparison_plot_resolution,
-                                                             units = "px")
+      } else if (input$comparison_plot_format == ".tiff") {
+
+        device <- function(..., width, height) grDevices::tiff(...,
+                                                               width = input$comparison_plot_width*2.5,
+                                                               height = input$comparison_plot_height*2.5,
+                                                               res = input$comparison_plot_resolution,
+                                                               # quality = 100,
+                                                               units = "px")
+
+      } else if (input$comparison_plot_format == ".svg") {
+
+        device <- function(..., width, height) grDevices::svg(...,
+                                                              width = input$comparison_plot_width/75,
+                                                              height = input$comparison_plot_height/75)
+
+      }
+
+      ggsave(filename = file,
+             plot = Tableplot(),
+             device = device)
+
+    } else {
+
+      if (input$comparison_plot_format == ".eps") {
+
+        device <- "eps"
+
+      } else if (input$comparison_plot_format == ".pdf") {
+
+        device <- "pdf"
+
+      }
+
+      ggsave(filename = file,
+             plot = Tableplot(),
+             width = input$comparison_plot_width/110,
+             height = input$comparison_plot_height/110,
+             limitsize = FALSE,
+             dpi = input$comparison_plot_resolution)
 
     }
-
-    ggsave(filename = file,
-           plot = Tableplot(),
-           device = device)
 
   }
 

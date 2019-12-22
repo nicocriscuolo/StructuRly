@@ -339,11 +339,9 @@ the bars and the relative IDs.
 
 ### Example
 
-Below is a link to the [YouTube](https://www.youtube.com/?gl=IT&hl=it)
-video of **StructuRly** showing an example of using of the software:
-
-[![IMAGE ALT TEXT
-HERE](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)](https://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be)
+Below is a link to the [YouTube video of
+StructuRly](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)\](<https://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be>)
+showing an example of using of the software:
 
 ### Known bugs and issues
 
