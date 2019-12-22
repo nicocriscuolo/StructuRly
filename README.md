@@ -340,8 +340,8 @@ the bars and the relative IDs.
 ### Example
 
 Below is a link to the [YouTube video of
-StructuRly](http://img.youtube.com/vi/0FUFM6GNaYI&feature=youtu.be/0.jpg)\](<https://www.youtube.com/watch?v=0FUFM6GNaYI&feature=youtu.be>)
-showing an example of using of the software:
+StructuRly](https://youtu.be/0FUFM6GNaYI) showing an example of using of
+the software:
 
 ### Known bugs and issues
 
