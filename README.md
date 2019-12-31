@@ -118,6 +118,12 @@ Linux libraries to make these software work with this operative system.
 To install these libraries in **R** follow the instructions displayed
 inside the **R** console when you load the dependency packages.
 
+### Online version
+
+If you are not familiar with *R* or *RStudio* you can access to
+**StructuRly** directly from the web by using the following link:
+<https://nicocriscuolo.shinyapps.io/StructuRly/>.
+
 ### Data input
 
 **StructuRly** is divided into three different sections depending on the
@@ -126,8 +132,8 @@ is mandatory** and varies according to the type of variable that must be
 present in the input dataset. When you start a new session of
 **StructuRly**, if you change the uploaded file with a new one (inside
 the same section), to produce new outputs remember to re-define every
-time type of separator and to indicate if your data have quotation
-marks.
+time the **type of separator** (e. g. column, semi-column or tab) and to
+indicate if your data have **quotation marks**.
 
 ###### Data format
 
