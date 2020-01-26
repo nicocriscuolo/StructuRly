@@ -388,9 +388,9 @@ any problem.
 **StructuRly** was firstly presented during the [International BBCC
 meetings](https://www.bbcc-meetings.it) held in Naples in November 2018
 and its implementation has been described inside the paper *StructuRly:
-a novel shiny app to produce elegant, detailed and interactive plots for
-population analysis* (submitted). If you use this package for your
-research please cite:
+a novel shiny app to produce comprehensive, detailed and interactive
+plots for population genetic analysis* (submitted). If you use this
+package for your research please cite:
 
     #> It is recommended to use 'given' instead of 'middle'.
     #> 
@@ -404,8 +404,7 @@ research please cite:
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and
-    #> interactive plots for population genetic analysis},
+    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis},
     #>     author = {Nicola Criscuolo G. and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},
