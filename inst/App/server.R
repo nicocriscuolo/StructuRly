@@ -74,6 +74,15 @@ observeEvent(input$customize_plot, {
 
 
 
+### Visualize StrucuRly pipeline
+output$structurly_pipeline <- renderUI({
+
+  img(src = "Pipeline_StructuRly.png",
+      width = as.integer(input$pipeline_slider))
+
+})
+
+
 ### Open STRUCTURE
 observeEvent(input$open_structure, {
 

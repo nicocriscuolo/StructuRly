@@ -181,16 +181,13 @@ br(),
 ######################### UI DATA FOR STRUCUTRE ####
         column(width = 10,
   shinyjs::hidden(mainPanel(id = "instructions",
-                            # img(src = "Pipeline_Structurly.png")
-                            p(h4("Detailed instructions of",  em("StructuRly"),
-                                 "are available at the",
-                                 a("GitHub",
-                                   href = "https://github.com/nicocriscuolo/StructuRly",
-                                   target = "_blank"),
-                                 "page.",
-                                 align = "left")
-                            )
-
+                            sliderInput("pipeline_slider",
+                                        label = "Instructions panel size",
+                                        min = 1000,
+                                        max = 3000,
+                                        value = 1000),
+br(),
+                            uiOutput("structurly_pipeline")
                  )
   ),
   conditionalPanel(condition = "input.check_table == 0 &
@@ -208,13 +205,14 @@ br(),
 br(),
             a("Claudia Angelini",
               href = "mailto:c.angelini@na.iac.cnr.it"),
-            " - Institute for Applications of Calculus “M. Picone”, National Research Council",
+            " - Institute for Applications of Calculus “M. Picone”, National Research Council, Naples, Italy",
 br(),
 br(),
-             "GitHub page:", a("StructuRly",
-                               href = "https://github.com/nicocriscuolo/StructuRly",
-                               target = "_blank"), "  ",
-
+            "Detailed instructions of",  em("StructuRly"),
+                 "are available at the following",
+                 a("GitHub repository",
+                   href = "https://github.com/nicocriscuolo/StructuRly",
+                   target = "_blank"),
 br(),
 br()
             )
