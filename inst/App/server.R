@@ -77,7 +77,7 @@ observeEvent(input$customize_plot, {
 ### Visualize StrucuRly pipeline
 output$structurly_pipeline <- renderUI({
 
-  img(src = "inst/App/www/Pipeline_Structurly.png",
+  img(src = "https://user-images.githubusercontent.com/35098432/73140059-05bf5d00-4075-11ea-867f-e59cd4a9724f.png",
       width = as.integer(input$pipeline_slider))
 
 })
