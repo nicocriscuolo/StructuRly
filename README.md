@@ -349,9 +349,14 @@ the bars and the relative IDs.
 
 ### Example
 
-Below is a link to the [YouTube video of
+Here’s a link to the [YouTube video of
 StructuRly](https://youtu.be/0FUFM6GNaYI) showing an example of using of
-the software:
+the software. Moreover, the flowchart below, accessible from the
+**Instructions** panel of the application, schematize a tutorial to use
+the
+software.
+
+![image\_4](https://user-images.githubusercontent.com/35098432/73140059-05bf5d00-4075-11ea-867f-e59cd4a9724f.png)
 
 ### Known bugs and limitations
 
