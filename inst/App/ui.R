@@ -113,7 +113,8 @@ br(),
 br(),
 br(),
 
-  conditionalPanel(condition = "input.data_per_str_panels == 'dendrogram_panel'",
+  conditionalPanel(condition = "input.analysis_type == 1 &
+                                input.data_per_str_panels == 'dendrogram_panel'",
 
                    withBusyIndicatorUI(
                      actionButton(inputId = "show_r_code_dendrogram",
@@ -124,7 +125,8 @@ br(),
 
   ),
 
-  conditionalPanel(condition = "input.data_per_str_panels == 'pcoa_panel'",
+  conditionalPanel(condition = "input.analysis_type == 1 &
+                                input.data_per_str_panels == 'pcoa_panel'",
 
              withBusyIndicatorUI(
              actionButton(inputId = "show_r_code_pcoa",
@@ -135,7 +137,8 @@ br(),
 
   ),
 
-  conditionalPanel(condition = "input.data_da_str_panels == 'barplot_panel'",
+  conditionalPanel(condition = "input.analysis_type == 2 &
+                                input.data_da_str_panels == 'barplot_panel'",
 
                    withBusyIndicatorUI(
                    actionButton(inputId = "show_r_code_barplot",
@@ -146,7 +149,8 @@ br(),
 
   ),
 
-  conditionalPanel(condition = "input.data_da_str_panels == 'triangleplot_panel'",
+  conditionalPanel(condition = "input.analysis_type == 2 &
+                                input.data_da_str_panels == 'triangleplot_panel'",
 
                    withBusyIndicatorUI(
                      actionButton(inputId = "show_r_code_triangleplot",
@@ -157,7 +161,8 @@ br(),
 
   ),
 
-  conditionalPanel(condition = "input.show_comparison_outputs == 'Contingency plot'",
+  conditionalPanel(condition = "input.analysis_type == 3 &
+                                input.show_comparison_outputs == 'Contingency plot'",
 
                    withBusyIndicatorUI(
                      actionButton(inputId = "show_r_code_comparison_plot",

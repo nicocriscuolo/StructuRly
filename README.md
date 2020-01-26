@@ -40,10 +40,10 @@ However, this shiny application presents more different features to:
     [pegas](https://cran.r-project.org/web/packages/pegas/pegas.pdf)
     package manual);
 
-  - upload datasets with raw genetic data to analyze them through
-    hierarchical cluster analysis algorithms and view and download the
-    dendrograms based on different distance matrices and linkage
-    methods;
+  - upload datasets with raw genetic data to analyze them through the
+    principal coordinates analysis (MDS) and hierarchical cluster
+    analysis algorithms, and view and download the dendrograms based on
+    different distance matrices and linkage methods;
 
   - produce and customize tables ready to be imported into the
     *STRUCTURE* software for the Bayesian analysis;
@@ -58,10 +58,14 @@ However, this shiny application presents more different features to:
     admixture ancestry of the samples subdivided in a maximum of 20
     different clusters;
 
-  - to visually compare the partition obtained from the hierarchical
-    cluster analysis and the one from the Bayesian analysis through a
-    confusion matrix and estimate an agreement value of the two
-    partitions with two different agreement indices.
+  - visually compare the partition obtained from the hierarchical
+    cluster analysis and the one from the Bayesian (*STRUCTURE*) or
+    maximum likelihood (*ADMIXTURE*) analysis through a confusion matrix
+    and estimate an agreement value of the two partitions with two
+    different agreement indices.
+
+  - visualize and download the *R* code used inside the shiny
+    application to produce all the plots.
 
 ### Installation
 
@@ -388,19 +392,21 @@ a novel shiny app to produce elegant, detailed and interactive plots for
 population analysis* (submitted). If you use this package for your
 research please cite:
 
+    #> It is recommended to use 'given' instead of 'middle'.
     #> 
     #> To cite package 'StructuRly' in publications use:
     #> 
-    #>   Nicola Criscuolo and Claudia Angelini (2018). StructuRly:
-    #>   Elegant, detailed and interactive plots for population analysis.
-    #>   R package version 0.1.0.
-    #>   https://github.com/nicocriscuolo/StructuRly
+    #>   Nicola Criscuolo G. and Claudia Angelini (2018). StructuRly: A
+    #>   novel shiny app to produce comprehensive, detailed and
+    #>   interactive plots for population genetic analysis. R package
+    #>   version 0.1.0. https://github.com/nicocriscuolo/StructuRly
     #> 
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: Elegant, detailed and interactive plots for population analysis},
-    #>     author = {Nicola Criscuolo and Claudia Angelini},
+    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and
+    #> interactive plots for population genetic analysis},
+    #>     author = {Nicola Criscuolo G. and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},
     #>     url = {https://github.com/nicocriscuolo/StructuRly},

@@ -40,6 +40,7 @@ However, this shiny application presents more different features to:
 
 
 
+
 ### Installation
 
 You can install the released version of **StructuRly** from [GitHub](https://github.com) in *RStudio* with:
