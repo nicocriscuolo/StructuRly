@@ -349,7 +349,7 @@ Below is a link to the [YouTube video of
 StructuRly](https://youtu.be/0FUFM6GNaYI) showing an example of using of
 the software:
 
-### Known bugs and issues
+### Known bugs and limitations
 
   - in the interactive barplot, the X-axis labels are not colored
     according to the different populations entered by the user in the

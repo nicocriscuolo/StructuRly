@@ -6,7 +6,7 @@ ui <- fluidPage(
         column(width = 12,
                p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",
-                    "Elegant, detailed and interactive plots for",
+                    "Comprehensive, detailed and interactive plots for",
                     a(em("STRUCTURE"),
                       href = "https://web.stanford.edu/group/pritchardlab/structure.html",
                       target = "_blank"),
@@ -95,6 +95,7 @@ br(),
 br(),
     fluidRow(
       column(width = 12,
+             align = "center",
              actionButton(inputId = "back_instructions",
                           label = h6(icon(name = "book"),
                                      "Instructions"),
@@ -105,7 +106,69 @@ br(),
                                                      "StructuRly"),
                                           width = "100%"
              )
+             ),
+br(),
+br(),
+br(),
+br(),
+br(),
+
+  conditionalPanel(condition = "input.data_per_str_panels == 'dendrogram_panel'",
+
+                   withBusyIndicatorUI(
+                     actionButton(inputId = "show_r_code_dendrogram",
+                                  label = h6(icon(name = "download"),
+                                             "Download R Code"),
+                                  width = "100%")
+                   )
+
+  ),
+
+  conditionalPanel(condition = "input.data_per_str_panels == 'pcoa_panel'",
+
+             withBusyIndicatorUI(
+             actionButton(inputId = "show_r_code_pcoa",
+                          label = h6(icon(name = "download"),
+                                     "Download R Code"),
+                          width = "100%")
              )
+
+  ),
+
+  conditionalPanel(condition = "input.data_da_str_panels == 'barplot_panel'",
+
+                   withBusyIndicatorUI(
+                   actionButton(inputId = "show_r_code_barplot",
+                   label = h6(icon(name = "download"),
+                              "Download R Code"),
+                   width = "100%")
+                   )
+
+  ),
+
+  conditionalPanel(condition = "input.data_da_str_panels == 'triangleplot_panel'",
+
+                   withBusyIndicatorUI(
+                     actionButton(inputId = "show_r_code_triangleplot",
+                                  label = h6(icon(name = "download"),
+                                             "Download R Code"),
+                                  width = "100%")
+                   )
+
+  ),
+
+  conditionalPanel(condition = "input.show_comparison_outputs == 'Contingency plot'",
+
+                   withBusyIndicatorUI(
+                     actionButton(inputId = "show_r_code_comparison_plot",
+                                  label = h6(icon(name = "download"),
+                                             "Download R Code"),
+                                  width = "100%")
+                   )
+
+  ),
+
+
       )
     )
         ), # Closes input column
@@ -154,7 +217,8 @@ br()
   conditionalPanel(condition = "input.analysis_type == 1 &
                    input.check_table > 0",
                    mainPanel(id = "table_panel",
-  tabsetPanel(type = "pills",
+  tabsetPanel(id = "data_per_str_panels",
+              type = "pills",
     tabPanel(title = h4("Input table"),
 br(),
         fluidRow(
@@ -235,15 +299,15 @@ br(),
   )
   ),
   tabPanel(title = h4("Cluster analysis"),
+           value = "dendrogram_panel",
 br(),
     fluidRow(
       column(width = 2,
              radioButtons(inputId = "na_value",
-                          label = h5("NA value"),
+                          label = h5("NA values"),
                           choices = list("Zero" = "zero",
                                          "Mean" = "mean")
              )
-
       ),
       column(width = 2,
              radioButtons(inputId = "distance",
@@ -335,7 +399,7 @@ br(),
                            label = NULL,
                            value = 1000,
                            min = 500,
-                           max = 5000
+                           max = 6000
                )
         ),
         column(width = 4,
@@ -353,7 +417,7 @@ br(),
                            label = NULL,
                            value = 300,
                            min = 100,
-                           max = 400)
+                           max = 600)
         )
       ),
       fluidRow(
@@ -362,7 +426,8 @@ br(),
                            label = h5("Leaves size"),
                            min = 1,
                            max = 10,
-                           value = 4)
+                           value = 4,
+                           step = 0.5)
         ),
         column(width = 3,
                sliderInput(inputId = "dendrogram_leaves_angle",
@@ -395,6 +460,150 @@ br(),
      )
    ),
 br()
+  ),
+  tabPanel(value = "pcoa_panel",
+           title = h4("PCoA"),
+br(),
+    fluidRow(
+      # column(width = 3,
+      #        radioButtons(inputId = "pcoa_na_value",
+      #                     label = h5("NA values"),
+      #                     choices = c("Zero",
+      #                                 "Mean",
+      #                                 "Remove samples"),
+      #                     selected = "Mean")
+      # ),
+      column(width = 3,
+             selectInput(inputId = "pcoa_dissimilarity_indices",
+                         label = h5("Dissimilarity indices"),
+                         choices = list("Euclidean" = "euclidean",
+                                        "Manhattan" = "manhattan",
+                                        "Canberra" = "canberra",
+                                        "Clark" = "clark",
+                                        "Bray" = "bray",
+                                        "Kulczynski" = "kulczynski",
+                                        "Jaccard" = "jaccard",
+                                        "Gower" = "gower",
+                                        "Morisita" = "morisita",
+                                        "Horn" = "horn",
+                                        "Raup" = "raup",
+                                        "Binomial" = "binomial",
+                                        "Cao" = "cao",
+                                        "Mahalanobis" = "mahalanobis"),
+                         selected = "euclidean")
+      ),
+      column(width = 2,
+             radioButtons(inputId = "pcoa_colours",
+                          label = h5("Dots colour"),
+                          choices = c("Default",
+                                      "Gray scale"),
+                          selected = "Default")
+      ),
+  conditionalPanel(condition = "input.pcoa_colours == 'Default'",
+      column(width = 2,
+             h5("Resampling"),
+             actionButton(inputId = "resample_pcoa_default_scale",
+                          label = div(icon(name = "sync-alt",
+                                           lib = "font-awesome"),
+                                      "Colors"))
+      )
+  ),
+  conditionalPanel(condition = "input.pcoa_colours == 'Gray scale'",
+      column(width = 2,
+             h5("Resampling"),
+             actionButton(inputId = "resample_pcoa_gray_scale",
+                          label = div(icon(name = "sync-alt",
+                                           lib = "font-awesome"),
+                                      "Colors"))
+      )
+  ),
+      column(width = 1
+      ),
+      column(width = 2,
+             h5("Image format"),
+             selectInput(inputId = "pcoa_plot_format",
+                         label = NULL,
+                         choices = list(".bmp" = ".bmp",
+                                        ".jpeg" = ".jpeg",
+                                        ".png" = ".png",
+                                        ".tiff" = ".tiff",
+                                        ".pdf" = ".pdf",
+                                        ".svg" = ".svg",
+                                        ".eps" = ".eps"),
+                         selected = ".jpeg")
+      ),
+      column(width = 2,
+             h5("Plot"),
+             downloadButton(outputId = "download_pcoa_plot",
+                            label = "Download")
+      )
+    ),
+    fluidRow(
+      column(width = 4,
+             h5("Plot width"),
+             sliderInput(inputId = "pcoa_width",
+                         label = NULL,
+                         value = 1000,
+                         min = 500,
+                         max = 6000
+             )
+      ),
+      column(width = 4,
+             h5("Plot height"),
+             sliderInput(inputId = "pcoa_height",
+                         label = NULL,
+                         value = 570,
+                         min = 200,
+                         max = 900
+             )
+      ),
+      column(width = 4,
+             h5("Plot resolution"),
+             sliderInput(inputId = "pcoa_resolution",
+                         label = NULL,
+                         value = 300,
+                         min = 100,
+                         max = 600)
+      )
+    ),
+    fluidRow(
+      column(width = 3,
+             sliderInput(inputId = "pcoa_x_label_size",
+                         label = h5("X labels size"),
+                         min = 1,
+                         max = 15,
+                         value = 9)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "pcoa_y_label_size",
+                         label = h5("Y labels size"),
+                         min = 1,
+                         max = 15,
+                         value = 9)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "pcoa_dots_size",
+                         label = h5("Dots size"),
+                         min = 0.5,
+                         max = 10,
+                         value = 2,
+                         step = 0.5)
+      ),
+      column(width = 3,
+             sliderInput(inputId = "pcoa_axis_title_size",
+                         label = h5("Titles size"),
+                         min = 1,
+                         max = 15,
+                         value = 9)
+      )
+    ),
+    fluidRow(
+      column(width = 12,
+             plotlyOutput(outputId = "pcoa_plot",
+                          width = "1110px",
+                          height = "500px")
+      )
+    )
   ),
   tabPanel(title = h4("STRUCTURE input table"),
 br(),
@@ -481,7 +690,8 @@ br(),
   conditionalPanel(condition = "input.analysis_type == 2 &
                                 input.customize_plot > 0",
                    mainPanel(id = "plot_panel",
-  tabsetPanel(type = "pills",
+  tabsetPanel(id = "data_da_str_panels",
+              type = "pills",
     tabPanel(title = h4("Input table"),
  br(),
   conditionalPanel(condition = "output.dataFormat != 'Q'",
@@ -509,7 +719,8 @@ br(),
        )
      )
   ),
-  tabPanel(title = h4("Barplot"),
+  tabPanel(value = "barplot_panel",
+           title = h4("Barplot"),
 br(),
     fluidRow(
       column(width = 1,
@@ -567,7 +778,7 @@ br(),
                          label = NULL,
                          value = 1000,
                          min = 500,
-                         max = 5000
+                         max = 6000
              )
       ),
       column(width = 4,
@@ -585,7 +796,7 @@ br(),
                          label = NULL,
                          value = 300,
                          min = 100,
-                         max = 400)
+                         max = 600)
       )
     ),
     fluidRow(
@@ -619,6 +830,23 @@ br(),
         )
     ),
     fluidRow(
+      column(width = 3,
+             radioButtons(inputId = "barplot_colours_vector",
+                          label = "Colours palette",
+                          choices = c("Customized",
+                                      "Gray scale"),
+                          selected = "Customized")
+      ),
+  conditionalPanel(condition = "input.barplot_colours_vector == 'Gray scale'",
+      column(width = 4,
+             h5("Resampling"),
+             actionButton(inputId = "resample_gray_scale",
+                          label = div(icon(name = "sync-alt",
+                                           lib = "font-awesome"),
+                                      "Colors"))
+      )
+  ),
+  conditionalPanel(condition = "input.barplot_colours_vector == 'Customized'",
       column(width = 1,
   conditionalPanel(condition = "output.cluster_number >= 1",
                           colourpicker::colourInput(inputId = "colour_1",
@@ -654,34 +882,8 @@ br(),
                                                     showColour = "background",
                                                     allowTransparent = TRUE)
          )
-  ),
-  column(width = 1,
-         conditionalPanel(condition = "output.cluster_number >= 5",
-                          colourpicker::colourInput(inputId = "colour_5",
-                                                    label = h5("K 5"),
-                                                    value = "#EDA590",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-         )
-  ),
-  column(width = 1,
-         conditionalPanel(condition = "output.cluster_number >= 6",
-                          colourpicker::colourInput(inputId = "colour_6",
-                                                    label = h5("K 6"),
-                                                    value = "#74AA8A",
-                                                    showColour = "background",
-                                                    allowTransparent = TRUE)
-         )
-  ),
-      column(width = 1,
-  conditionalPanel(condition = "output.cluster_number >= 7",
-                   colourpicker::colourInput(inputId = "colour_7",
-                                             label = h5("K 7"),
-                                             value = "#337489",
-                                             showColour = "background",
-                                             allowTransparent = TRUE)
   )
-      ),
+  ),
       column(width = 2,
              uiOutput(outputId = "show_location_marks")
       ),
@@ -692,6 +894,34 @@ br(),
       )
     ),
   fluidRow(
+    conditionalPanel(condition = "input.barplot_colours_vector == 'Customized'",
+    column(width = 1,
+           conditionalPanel(condition = "output.cluster_number >= 5",
+                            colourpicker::colourInput(inputId = "colour_5",
+                                                      label = h5("K 5"),
+                                                      value = "#EDA590",
+                                                      showColour = "background",
+                                                      allowTransparent = TRUE)
+           )
+    ),
+    column(width = 1,
+           conditionalPanel(condition = "output.cluster_number >= 6",
+                            colourpicker::colourInput(inputId = "colour_6",
+                                                      label = h5("K 6"),
+                                                      value = "#74AA8A",
+                                                      showColour = "background",
+                                                      allowTransparent = TRUE)
+           )
+    ),
+    column(width = 1,
+           conditionalPanel(condition = "output.cluster_number >= 7",
+                            colourpicker::colourInput(inputId = "colour_7",
+                                                      label = h5("K 7"),
+                                                      value = "#337489",
+                                                      showColour = "background",
+                                                      allowTransparent = TRUE)
+           )
+    ),
     column(width = 1,
            conditionalPanel(condition = "output.cluster_number >= 8",
                             colourpicker::colourInput(inputId = "colour_8",
@@ -772,7 +1002,11 @@ br(),
                                                     showColour = "background",
                                                     allowTransparent = TRUE)
          )
+  )
+    )
   ),
+  fluidRow(
+    conditionalPanel(condition = "input.barplot_colours_vector == 'Customized'",
   column(width = 1,
          conditionalPanel(condition = "output.cluster_number >= 17",
                           colourpicker::colourInput(inputId = "colour_17",
@@ -811,6 +1045,7 @@ br(),
              )
       )
     )
+    )
     ),
     fluidRow(
       column(width = 12,
@@ -819,7 +1054,8 @@ br(),
       )
     )
   ),
-  tabPanel(title = h4("Triangle plot"),
+  tabPanel(value = "triangleplot_panel",
+           title = h4("Triangle plot"),
 br(),
     fluidRow(
       column(width = 1,
@@ -1019,7 +1255,7 @@ br(),
                          label = NULL,
                          value = 950,
                          min = 500,
-                         max = 5000
+                         max = 6000
              )
       ),
       column(width = 4,
@@ -1037,7 +1273,7 @@ br(),
                          label = NULL,
                          value = 300,
                          min = 100,
-                         max = 400)
+                         max = 600)
       )
     ),
 br(),

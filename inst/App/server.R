@@ -1044,6 +1044,10 @@ Data_export <- reactive({
 
   }
 
+  rownames(Dataset_reshape) <- seq(from = 1,
+                                   to = nrow(Dataset_reshape),
+                                   by = 1)
+
   return(Dataset_reshape)
 
 })
@@ -1311,7 +1315,7 @@ dend <- reactive({
 
 
 ###= Reactive dendrogram plot =#####
-Dendrogram_plot <- reactive({
+Dendrogram_plot <- metaReactive({
 
   Dataset <- Data_PER_Str()
 
@@ -1337,7 +1341,7 @@ Dendrogram_plot <- reactive({
     labs(x = "Sample_ID",
          y = NULL,
          title = input$dendrogram_title) +
-    lims(y = c(-0.14, NA)) +
+    lims(y = c(-0.16, NA)) +
     theme(
       axis.title.x = element_text(size = 15),
       axis.text.y = element_text(size = input$dendrogram_y_label_size),
@@ -1363,7 +1367,7 @@ Dendrogram_plot <- reactive({
                     hjust = 1,
                     colour = as.factor(dend_gg_labels$Pop_ID)
                 ),
-                size = input$dendrogram_leaves_size)
+                size = input$dendrogram_leaves_size - 1)
 
   } else if ("Sample_ID" %in% colnames(Dataset) &&
              !"Pop_ID" %in% colnames(Dataset)) {
@@ -1397,7 +1401,7 @@ Dendrogram_plot <- reactive({
                     hjust = 1,
                     colour = as.factor(dend_gg_labels$Pop_ID)
                 ),
-                size = input$dendrogram_leaves_size)
+                size = input$dendrogram_leaves_size - 1)
 
   }  else {
 
@@ -1411,11 +1415,11 @@ Dendrogram_plot <- reactive({
                     angle = input$dendrogram_leaves_angle,
                     hjust = 1
                 ),
-                size = input$dendrogram_leaves_size)
+                size = input$dendrogram_leaves_size - 1)
 
   }
 
-  return(Dendrogram_plot)
+  # return(Dendrogram_plot)
 
 })
 
@@ -1467,8 +1471,8 @@ output$download_dendrogram <- downloadHandler(
       if (input$dendrogram_format == ".bmp") {
 
         device <- function(..., width, height) grDevices::bmp(...,
-                                                              width = input$dendrogram_width*2.5,
-                                                              height = input$dendrogram_height*2.5,
+                                                              width = input$dendrogram_width*3.5,
+                                                              height = input$dendrogram_height*3.5,
                                                               res = input$dendrogram_resolution,
                                                               # quality = 100,
                                                               units = "px")
@@ -1476,8 +1480,8 @@ output$download_dendrogram <- downloadHandler(
       } else if (input$dendrogram_format == ".jpeg") {
 
         device <- function(..., width, height) grDevices::jpeg(...,
-                                                               width = input$dendrogram_width*2.5,
-                                                               height = input$dendrogram_height*2.5,
+                                                               width = input$dendrogram_width*3.5,
+                                                               height = input$dendrogram_height*3.5,
                                                                res = input$dendrogram_resolution,
                                                                quality = 100,
                                                                units = "px")
@@ -1485,8 +1489,8 @@ output$download_dendrogram <- downloadHandler(
       } else if (input$dendrogram_format == ".png") {
 
         device <- function(..., width, height) grDevices::png(...,
-                                                              width = input$dendrogram_width*2.5,
-                                                              height = input$dendrogram_height*2.5,
+                                                              width = input$dendrogram_width*3.5,
+                                                              height = input$dendrogram_height*3.5,
                                                               res = input$dendrogram_resolution,
                                                               # quality = 100,
                                                               units = "px")
@@ -1494,8 +1498,8 @@ output$download_dendrogram <- downloadHandler(
       } else if (input$dendrogram_format == ".tiff") {
 
         device <- function(..., width, height) grDevices::tiff(...,
-                                                               width = input$dendrogram_width*2.5,
-                                                               height = input$dendrogram_height*2.5,
+                                                               width = input$dendrogram_width*3.5,
+                                                               height = input$dendrogram_height*3.5,
                                                                res = input$dendrogram_resolution,
                                                                # quality = 100,
                                                                units = "px")
@@ -1539,6 +1543,294 @@ output$download_dendrogram <- downloadHandler(
 
 
 
+
+#####===== PCoA =====#####
+
+###= Reactive PCoA dataset =#####
+dataset_pcoa <- reactive({
+
+  if ("Sample_ID" %in% colnames(Data_PER_Str()) |
+      "Pop_ID" %in% colnames(Data_PER_Str()) |
+      "Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    dataset_pcoa <- Data_PER_Str()[ , -which(names(Data_PER_Str()) %in% c("Sample_ID", "Pop_ID", "Loc_ID"))]
+
+    if ("Sample_ID" %in% colnames(Data_PER_Str())) {
+
+      rownames(dataset_pcoa) <- Data_PER_Str()$Sample_ID
+
+    }
+
+  } else {
+
+    dataset_pcoa <- Data_PER_Str()
+
+  }
+
+  # if (input$pcoa_na_value == "Zero") {
+  #
+  #   dataset_pcoa[is.na(dataset_pcoa)] <- 0
+  #
+  # } else if (input$pcoa_na_value == "Mean") {
+
+    for (i in 1:ncol(dataset_pcoa)){
+
+      dataset_pcoa[is.na(dataset_pcoa[, i]), i] <- mean(dataset_pcoa[, i],
+                                                        na.rm = TRUE)
+
+    }
+
+  # } else if (input$pcoa_na_value == "Remove sample") {
+  #
+  #   dataset_pcoa <- dataset_pcoa[complete.cases(dataset_pcoa), ]
+  #
+  # }
+
+  return(dataset_pcoa)
+
+})
+
+
+
+###= PCoA dots colour =#####
+pcoa_dots_colours <- reactive({
+
+  if (input$pcoa_colours == "Default") {
+
+    input$resample_pcoa_default_scale
+
+    isolate({
+
+      pcoa_dots_colours <- sample(x = distinctColorPalette(k = 50),
+                                  size = 50,
+                                  replace = FALSE)
+
+    })
+
+  } else {
+
+    input$resample_pcoa_gray_scale
+
+    isolate({
+
+      pcoa_dots_colours <- sample(x = gray.colors(n = 50),
+                                  size = 50,
+                                  replace = FALSE)
+
+    })
+
+  }
+
+  return(pcoa_dots_colours)
+
+})
+
+
+
+###= PCoA reactive plot =#####
+pcoa_plot <- metaReactive({
+
+  dissimilarity_matrix <- vegan::vegdist(x = dataset_pcoa(),
+                                         method = input$pcoa_dissimilarity_indices,
+                                         na.rm = TRUE)
+
+  mds <- cmdscale(d = dissimilarity_matrix,
+                  k = 2,
+                  eig = TRUE)
+
+  pcoa_scores <- as.data.frame(mds$points)
+
+  names(pcoa_scores) <- c("PCo1", "PCo2")
+
+  # round(x = mds$eig*100/sum(mds$eig),
+  #       digits = 1)
+
+  pcoa_scores$Sample_ID <- rownames(pcoa_scores)
+
+  if ("Pop_ID" %in% colnames(Data_PER_Str())) {
+
+    pcoa_scores$Population <- as.factor(Data_PER_Str()$Pop_ID)
+
+  }
+
+  if ("Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    pcoa_scores$Location <- as.factor(Data_PER_Str()$Loc_ID)
+
+  }
+
+  pcoa_plot <- ggplot(data = pcoa_scores,
+                      aes(x = PCo1,
+                          y = PCo2))
+
+  if ("Pop_ID" %in% colnames(Data_PER_Str()) &
+      !"Loc_ID" %in% colnames(Data_PER_Str())) {
+
+    pcoa_plot <- pcoa_plot +
+      geom_point(aes(colour = Population,
+                     name = Sample_ID),
+                 size = input$pcoa_dots_size) +
+      scale_colour_manual(values = pcoa_dots_colours()) +
+      labs(colour = "Pop ID") +
+      theme(
+        axis.title = element_text(size = input$pcoa_axis_title_size),
+        axis.text.y = element_text(size = input$pcoa_y_label_size),
+        axis.text.x = element_text(size = input$pcoa_x_label_size),
+        axis.ticks = element_line(size = 0.3),
+        legend.title = element_text(size = input$pcoa_axis_title_size)
+      )
+
+  } else if ("Loc_ID" %in% colnames(Data_PER_Str()) &
+             !"Pop_ID" %in% colnames(Data_PER_Str())) {
+
+    pcoa_plot <- pcoa_plot +
+      geom_point(aes(shape = Location,
+                     name = Sample_ID),
+                 size = input$pcoa_dots_size) +
+      labs(shape = "Loc_ID") +
+      theme(
+        axis.title = element_text(size = input$pcoa_axis_title_size),
+        axis.text.y = element_text(size = input$pcoa_y_label_size),
+        axis.text.x = element_text(size = input$pcoa_x_label_size),
+        axis.ticks = element_line(size = 0.3),
+        legend.title = element_text(size = input$pcoa_axis_title_size)
+      )
+
+  } else if (all(c("Pop_ID", "Loc_ID") %in% colnames(Data_PER_Str()))) {
+
+    pcoa_plot <- pcoa_plot +
+      geom_point(aes(colour = Population,
+                     shape = Location,
+                     name = Sample_ID),
+                 size = input$pcoa_dots_size) +
+      scale_colour_manual(values = pcoa_dots_colours()) +
+      labs(colour = "Pop ID",
+           shape = "Loc ID") +
+      theme(
+        axis.title = element_text(size = input$pcoa_axis_title_size),
+        axis.text.y = element_text(size = input$pcoa_y_label_size),
+        axis.text.x = element_text(size = input$pcoa_x_label_size),
+        axis.ticks = element_line(size = 0.3),
+        legend.title = element_text(size = input$pcoa_axis_title_size)
+      )
+
+  } else {
+
+    pcoa_plot <- pcoa_plot +
+      geom_point(aes(name = Sample_ID),
+                 colour = "black",
+                 size = input$pcoa_dots_size) +
+      theme(
+        axis.title = element_text(size = input$pcoa_axis_title_size),
+        axis.text.y = element_text(size = input$pcoa_y_label_size),
+        axis.text.x = element_text(size = input$pcoa_x_label_size),
+        axis.ticks = element_line(size = 0.3)
+      )
+
+  }
+
+})
+
+
+
+###= PCoA ggplotly plot =#####
+output$pcoa_plot <- renderPlotly({
+
+  ggplotly(pcoa_plot(),
+           width = input$pcoa_width,
+           height = input$pcoa_height)
+
+})
+
+###= Download PCoA plot =#####
+output$download_pcoa_plot <- downloadHandler(
+
+  filename <- function() {
+
+    paste0("pcoa_plot", input$pcoa_plot_format)
+
+  },
+
+  content <- function(file) {
+
+    if (input$pcoa_plot_format == ".bmp" |
+        input$pcoa_plot_format == ".jpeg" |
+        input$pcoa_plot_format == ".png" |
+        input$pcoa_plot_format == ".tiff" |
+        input$pcoa_plot_format == ".svg") {
+
+      if (input$pcoa_plot_format == ".bmp") {
+
+        device <- function(..., width, height) grDevices::bmp(...,
+                                                              width = input$pcoa_width*2.5,
+                                                              height = input$pcoa_height*2.5,
+                                                              res = input$pcoa_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
+
+      } else if (input$pcoa_plot_format == ".jpeg") {
+
+        device <- function(..., width, height) grDevices::jpeg(...,
+                                                               width = input$pcoa_width*2.5,
+                                                               height = input$pcoa_height*2.5,
+                                                               res = input$pcoa_resolution,
+                                                               quality = 100,
+                                                               units = "px")
+
+      } else if (input$pcoa_plot_format == ".png") {
+
+        device <- function(..., width, height) grDevices::png(...,
+                                                              width = input$pcoa_width*2.5,
+                                                              height = input$pcoa_height*2.5,
+                                                              res = input$pcoa_resolution,
+                                                              # quality = 100,
+                                                              units = "px")
+
+      } else if (input$pcoa_plot_format == ".tiff") {
+
+        device <- function(..., width, height) grDevices::tiff(...,
+                                                               width = input$pcoa_width*2.5,
+                                                               height = input$pcoa_height*2.5,
+                                                               res = input$pcoa_resolution,
+                                                               # quality = 100,
+                                                               units = "px")
+
+      } else if (input$pcoa_plot_format == ".svg") {
+
+        device <- function(..., width, height) grDevices::svg(...,
+                                                              width = input$pcoa_width/75,
+                                                              height = input$pcoa_height/75)
+
+      }
+
+      ggsave(filename = file,
+             plot = pcoa_plot(),
+             device = device)
+
+    } else {
+
+      if (input$pcoa_plot_format == ".eps") {
+
+        device <- "eps"
+
+      } else if (input$pcoa_plot_format == ".pdf") {
+
+        device <- "pdf"
+
+      }
+
+      ggsave(filename = file,
+             plot = pcoa_plot(),
+             width = input$pcoa_width/110,
+             height = input$pcoa_height/110,
+             limitsize = FALSE,
+             dpi = input$pcoa_resolution)
+
+    }
+
+  }
+
+)
 
 ############################### PLOT FROM STRUCTURE SECTION #####
 
@@ -1860,27 +2152,48 @@ Structure_Plot <- reactive({
   Dataset_m <- Data_plot()
 
   # Cluster color vector
-  Colours <- c(input$colour_1,
-               input$colour_2,
-               input$colour_3,
-               input$colour_4,
-               input$colour_5,
-               input$colour_6,
-               input$colour_7,
-               input$colour_8,
-               input$colour_9,
-               input$colour_10,
-               input$colour_11,
-               input$colour_12,
-               input$colour_13,
-               input$colour_14,
-               input$colour_15,
-               input$colour_16,
-               input$colour_17,
-               input$colour_18,
-               input$colour_19,
-               input$colour_20
-  )
+  Colours <- reactive({
+
+    if (input$barplot_colours_vector == "Customized") {
+
+      Colours <- c(input$colour_1,
+                   input$colour_2,
+                   input$colour_3,
+                   input$colour_4,
+                   input$colour_5,
+                   input$colour_6,
+                   input$colour_7,
+                   input$colour_8,
+                   input$colour_9,
+                   input$colour_10,
+                   input$colour_11,
+                   input$colour_12,
+                   input$colour_13,
+                   input$colour_14,
+                   input$colour_15,
+                   input$colour_16,
+                   input$colour_17,
+                   input$colour_18,
+                   input$colour_19,
+                   input$colour_20)
+
+    } else {
+
+      input$resample_gray_scale
+
+      isolate({
+
+        Colours <- sample(x = gray.colors(n = 50),
+                          size = 20,
+                          replace = FALSE)
+
+      })
+
+    }
+
+    return(Colours)
+
+  })
 
   if (all(c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {
 
@@ -1923,7 +2236,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -1963,7 +2276,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -2000,7 +2313,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -2038,7 +2351,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -2107,7 +2420,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title) +
         theme(
@@ -2144,7 +2457,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title) +
         theme(
@@ -2182,7 +2495,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -2220,7 +2533,7 @@ Structure_Plot <- reactive({
                                           to = 1,
                                           by = 0.1))) +
         scale_fill_manual("Cluster",
-                          values = Colours) +
+                          values = Colours()) +
         labs(y = "Admixture index [%]",
              title = input$barplot_title,
              colour = "Collection site",
@@ -2270,7 +2583,7 @@ Structure_Plot <- reactive({
                                         to = 1,
                                         by = 0.1))) +
       scale_fill_manual("Cluster",
-                        values = Colours) +
+                        values = Colours()) +
       labs(y = "Admixture index [%]",
            title = input$barplot_title,
            colour = "Collection site",
@@ -3096,7 +3409,7 @@ output$comparison_table <- DT::renderDataTable({
 
 
 ###= Table plot to compare partitions =#####
-Tableplot <- reactive({
+Tableplot <- metaReactive({
 
   Comparison_table <- Comparison_table()
 
@@ -3129,8 +3442,6 @@ Tableplot <- reactive({
                                 hjust = 0.5),
       legend.title = element_text(size = input$comp_axis_title_size*2)
     )
-
-  return(Tableplot)
 
 })
 
@@ -3259,5 +3570,949 @@ output$download_comparison_plot <- downloadHandler(
 )
 
 
+
+#####===== Download R code =====#####
+
+###= Hierarchical cluster analysis =#####
+observeEvent(input$show_r_code_dendrogram, {
+
+  withBusyIndicatorServer(buttonId = "show_r_code_dendrogram", {
+
+    showModal(modalDialog(
+      title = "R Code - Dendrogram",
+      tags$pre(
+        id = "r_code_dendrogram",
+        expandChain(
+          library_code,
+          Dendrogram_plot()
+        ) %>% formatCode() %>% paste(collapse = "\n")
+      ),
+      footer = tagList(
+
+        fluidRow(
+          column(width = 8),
+          column(width = 2,
+                 align = "right",
+                 withBusyIndicatorUI(
+                   actionButton(inputId = "copyRCode_dendrogram",
+                                label = h6("Copy to clipboard"))
+                 )
+          ),
+          column(width = 2,
+                 modalButton(h6("Dismiss"))
+          )
+        )
+
+      ),
+      size = "l",
+      easyClose = TRUE
+    ))
+
+  })
+
+})
+
+observeEvent(input$copyRCode_dendrogram, {
+
+  withBusyIndicatorServer(buttonId = "copyRCode_dendrogram", {
+
+    clipr::write_clip(content =
+                        as.character(expandChain(
+                          library_code,
+                          Dendrogram_plot()
+                        ) %>% formatCode() %>% paste(collapse = "\n")
+                        ))
+
+  })
+
+})
+
+###= PCoA =#####
+observeEvent(input$show_r_code_pcoa, {
+
+  withBusyIndicatorServer(buttonId = "show_r_code_pcoa", {
+
+  showModal(modalDialog(
+    title = "R Code - PCoA plot",
+    tags$pre(
+      id = "r_code_pcoa",
+      expandChain(
+        library_code,
+        pcoa_plot()
+      ) %>% formatCode() %>% paste(collapse = "\n")
+    ),
+    footer = tagList(
+
+      fluidRow(
+        column(width = 8),
+        column(width = 2,
+               align = "right",
+               withBusyIndicatorUI(
+               actionButton(inputId = "copyRCode_pcoa",
+                            label = h6("Copy to clipboard"))
+               )
+        ),
+        column(width = 2,
+               modalButton(h6("Dismiss"))
+        )
+      )
+
+    ),
+    size = "l",
+    easyClose = TRUE
+  ))
+
+  })
+
+})
+
+observeEvent(input$copyRCode_pcoa, {
+
+  withBusyIndicatorServer(buttonId = "copyRCode_pcoa", {
+
+  clipr::write_clip(content =
+    as.character(expandChain(
+      library_code,
+      pcoa_plot()
+    ) %>% formatCode() %>% paste(collapse = "\n")
+  ))
+
+  })
+
+})
+
+###= Barplot =#####
+str_plot <- metaReactive({
+
+  Dataset <- Data_DA_Str()
+
+  if ("Loc_ID" %in% colnames(Dataset)) {
+
+    Dataset$Loc_ID <- factor(Dataset$Loc_ID)
+
+  }
+
+  # Vector of shapes for the collection site
+  Collection_site_shape <- as.factor(seq(from = 0,
+                                         to = 25,
+                                         by = 1))
+
+  # Added Sample_ID if it's not present in the first dataset
+  if (!"Sample_ID" %in% colnames(Dataset)) {
+
+    Dataset <- cbind("Sample_ID" = seq(from = 1,
+                                       to = length(Dataset[, 2]),
+                                       by = 1),
+                     Dataset)
+
+  }
+
+  Dataset_m <- Data_plot()
+
+  # Cluster color vector
+  Colours <- reactive({
+
+    if (input$barplot_colours_vector == "Customized") {
+
+      Colours <- c(input$colour_1,
+                   input$colour_2,
+                   input$colour_3,
+                   input$colour_4,
+                   input$colour_5,
+                   input$colour_6,
+                   input$colour_7,
+                   input$colour_8,
+                   input$colour_9,
+                   input$colour_10,
+                   input$colour_11,
+                   input$colour_12,
+                   input$colour_13,
+                   input$colour_14,
+                   input$colour_15,
+                   input$colour_16,
+                   input$colour_17,
+                   input$colour_18,
+                   input$colour_19,
+                   input$colour_20)
+
+    } else {
+
+      input$resample_gray_scale
+
+      isolate({
+
+        Colours <- sample(x = gray.colors(n = 50),
+                          size = 20,
+                          replace = FALSE)
+
+      })
+
+    }
+
+    return(Colours)
+
+  })
+
+  if (all(c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {
+
+    # number of colours needed
+    numColors <- length(levels(Dataset_m$Pop_ID))
+
+    # genero un numero di colori uguale al numero che mi serve (potrebbe non funzionare per k > 40)
+    Pop_Col <- distinctColorPalette(k = numColors)
+    names(Pop_Col) <- levels(Dataset_m$Pop_ID)
+
+    # every variable of the dataset has ben changed in "character"
+    Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE)
+
+    # Dataframe with the enconding "populations - colors"
+    Palette_Match$Pop_ID <- rownames(Palette_Match)
+
+    # presa la colonna Pop_ID dal dataset ordinato (considerando solo quella per un cluster)
+    y <- split(Dataset_m, f = Dataset_m$Cluster)
+    Pop_ID <- data.frame(Pop_ID = y$`1`$Pop_ID)
+
+    vec <- c(Palette_Match$Pop_Col[match(Pop_ID$Pop_ID, Palette_Match$Pop_ID)])
+
+    if (input$group_barplot_by == "-----") {
+
+      # ggplot
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        # sometimes the sum of Q is not 1 ma "1.001", so better to abound
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1,
+                                     colour = vec),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    } else if (input$group_barplot_by == "Pop_ID") {
+
+      facet_formula <- as.formula(paste("~", input$group_barplot_by))
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        facet_grid(facet_formula,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    } else if (input$group_barplot_by == "Loc_ID") {
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        facet_grid(~Loc_ID,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    } else if (input$group_barplot_by == "Pop_ID & Loc_ID") {
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        facet_grid(Pop_ID ~ Loc_ID,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    }
+
+    if (input$location_marks == TRUE) {
+
+      p <- p +
+        geom_point(data = Dataset,
+                   aes(x = Sample_ID,
+                       y = 1.05,
+                       shape = Loc_ID,
+                       colour = Loc_ID),
+                   size = 1) +
+        scale_shape_manual(values = Collection_site_shape)
+    }
+
+  } else if ("Pop_ID" %in% colnames(Dataset) &&
+             !"Loc_ID" %in% colnames(Dataset)) {
+
+    # number of colours needed
+    numColors <- length(levels(Dataset_m$Pop_ID))
+
+    Pop_Col <- distinctColorPalette(k = numColors)
+    names(Pop_Col) <- levels(Dataset_m$Pop_ID)
+
+    # every variable of the dataset has ben changed in "character"
+    Palette_Match <- as.data.frame(Pop_Col, stringsAsFactors = FALSE)
+
+    # Dataframe with the enconding "populations - colors"
+    Palette_Match$Pop_ID <- rownames(Palette_Match)
+
+    y <- split(Dataset_m, f = Dataset_m$Cluster)
+    Pop_ID <- data.frame(Pop_ID = y$`1`$Pop_ID)
+
+    vec <- c(Palette_Match$Pop_Col[match(Pop_ID$Pop_ID, Palette_Match$Pop_ID)])
+
+    if (input$group_barplot_by == "-----") {
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        scale_y_continuous(limits = c(0, 1.01),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title) +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1,
+                                     colour = vec),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    } else if (input$group_barplot_by == "Pop_ID") {
+
+      facet_formula <- as.formula(paste("~", input$group_barplot_by))
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     name = Pop_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        facet_grid(facet_formula,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.01),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title) +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    }
+
+  } else if ("Loc_ID" %in% colnames(Dataset) &&
+             !"Pop_ID" %in% colnames(Dataset)) {
+
+    if (input$group_barplot_by == "-----") {
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    } else if (input$group_barplot_by == "Loc_ID") {
+
+      facet_formula <- as.formula(paste("~", input$group_barplot_by))
+
+      p <- ggplot() +
+        geom_bar(data = Dataset_m,
+                 aes(x = Sample_ID,
+                     Site = Loc_ID,
+                     y = Q,
+                     fill = Cluster),
+                 stat = "identity",
+                 colour = "black",
+                 size = 0.2,
+                 position = input$barpos) +
+        facet_grid(facet_formula,
+                   scales = "free_x") +
+        scale_y_continuous(limits = c(0, 1.06),
+                           breaks = c(seq(from = 0,
+                                          to = 1,
+                                          by = 0.1))) +
+        scale_fill_manual("Cluster",
+                          values = Colours()) +
+        labs(y = "Admixture index [%]",
+             title = input$barplot_title,
+             colour = "Collection site",
+             shape = "Collection site") +
+        theme(
+          axis.title = element_text(size = input$axis_title_size*2),
+          axis.text.y = element_text(size = input$y_label_size),
+          axis.text.x = element_text(size = input$x_label_size,
+                                     angle = input$x_label_angle,
+                                     hjust = 1),
+          axis.ticks = element_line(size = 0.3),
+          strip.text = element_text(size = input$axis_title_size*2),
+          plot.title = element_text(size = input$axis_title_size*2,
+                                    hjust = 0.5),
+          legend.title = element_text(size = input$axis_title_size*2)
+        )
+
+    }
+
+    if (input$location_marks == TRUE) {
+
+      p <- p +
+        geom_point(data = Dataset,
+                   aes(x = Sample_ID,
+                       y = 1.05,
+                       shape = Loc_ID,
+                       colour = Loc_ID),
+                   size = 1) +
+        scale_shape_manual(values = Collection_site_shape)
+
+    }
+
+  } else if (all(!c("Pop_ID", "Loc_ID") %in% colnames(Dataset))) {
+
+    # ggplot
+    p <- ggplot() +
+      geom_bar(data = Dataset_m,
+               aes(x = Sample_ID,
+                   y = Q,
+                   fill = Cluster),
+               stat = "identity",
+               colour = "black",
+               size = 0.2,
+               position = input$barpos) +
+      scale_y_continuous(limits = c(0, 1.06),
+                         breaks = c(seq(from = 0,
+                                        to = 1,
+                                        by = 0.1))) +
+      scale_fill_manual("Cluster",
+                        values = Colours()) +
+      labs(y = "Admixture index [%]",
+           title = input$barplot_title,
+           colour = "Collection site",
+           shape = "Collection site") +
+      theme(
+        axis.title = element_text(size = input$axis_title_size*2),
+        axis.text.y = element_text(size = input$y_label_size),
+        axis.text.x = element_text(size = input$x_label_size,
+                                   angle = input$x_label_angle,
+                                   hjust = 1),
+        axis.ticks = element_line(size = 0.3),
+        plot.title = element_text(size = input$axis_title_size*2,
+                                  hjust = 0.5),
+        legend.title = element_text(size = input$axis_title_size*2)
+      )
+
+  }
+
+})
+
+observeEvent(input$show_r_code_barplot, {
+
+  withBusyIndicatorServer(buttonId = "show_r_code_barplot", {
+
+    showModal(modalDialog(
+      title = "R Code - Barplot",
+      tags$pre(
+        id = "r_code_barplot",
+        expandChain(
+          library_code,
+          str_plot()
+        ) %>% formatCode() %>% paste(collapse = "\n")
+      ),
+      footer = tagList(
+
+        fluidRow(
+          column(width = 8),
+          column(width = 2,
+                 align = "right",
+                 withBusyIndicatorUI(
+                   actionButton(inputId = "copyRCode_barplot",
+                                label = h6("Copy to clipboard"))
+                 )
+          ),
+          column(width = 2,
+                 modalButton(h6("Dismiss"))
+          )
+        )
+
+      ),
+      size = "l",
+      easyClose = TRUE
+    ))
+
+  })
+
+})
+
+observeEvent(input$copyRCode_barplot, {
+
+  withBusyIndicatorServer(buttonId = "copyRCode_barplot", {
+
+    clipr::write_clip(content =
+                        as.character(expandChain(
+                          library_code,
+                          str_plot()
+                        ) %>% formatCode() %>% paste(collapse = "\n")
+                        ))
+
+  })
+
+})
+
+###= Triangleplot =#####
+Triangleplot <- metaReactive({
+
+  a <- rowSums(Data_DA_Str()[, grepl(pattern = "K",
+                                     x = names(Data_DA_Str()))]) -
+    (Data_DA_Str()[, input$bottom_left] + Data_DA_Str()[, input$bottom_right])
+
+  b <- Data_DA_Str()[, input$bottom_left]
+
+  c <- Data_DA_Str()[, input$bottom_right]
+
+  # Function to define the axis
+  axis <- function(title) {
+    list(
+      title = title,
+      titlefont = list(
+        size = 16
+      ),
+      tickfont = list(
+        size = 12
+      ),
+      tickcolor = 'rgba(0,0,0,0)',
+      ticklen = 5
+    )
+  }
+
+  # Defined list for the margins
+  margin <- list(
+    l = 40,
+    r = 40,
+    b = 40,
+    t = 70,
+    pad = 4
+  )
+
+  # Triangleplot
+  Triangleplot <- plot_ly(data = Data_DA_Str(),
+                          width = input$triangleplot_width,
+                          height = input$triangleplot_height)
+
+
+  if (all(c("Sample_ID", "Pop_ID", "Loc_ID") %in% colnames(Data_DA_Str()))) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        text = ~Sample_ID,
+        name = ~Pop_ID,
+        colors = ~Pop_ID,
+        symbol = ~Loc_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if (all(c("Sample_ID", "Pop_ID") %in% colnames(Data_DA_Str())) &&
+             !"Loc_ID" %in% colnames(Data_DA_Str())) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        text = ~Sample_ID,
+        name = ~Pop_ID,
+        colors = ~Pop_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if (all(c("Sample_ID", "Loc_ID") %in% colnames(Data_DA_Str())) &&
+             !"Pop_ID" %in% colnames(Data_DA_Str())) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        text = ~Sample_ID,
+        name = ~Loc_ID,
+        colors = ~Loc_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if (all(c("Pop_ID", "Loc_ID") %in% colnames(Data_DA_Str())) &&
+             !"Sample_ID" %in% colnames(Data_DA_Str())) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        name = ~Pop_ID,
+        colors = ~Pop_ID,
+        symbol = ~Loc_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if ("Sample_ID" %in% colnames(Data_DA_Str()) &&
+             !all(c("Pop_ID", "Loc_ID") %in% colnames(Data_DA_Str()))) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        text = ~Sample_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if ("Pop_ID" %in% colnames(Data_DA_Str()) &&
+             !all(c("Sample_ID", "Loc_ID") %in% colnames(Data_DA_Str()))) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        name = Pop_ID,
+        colors = ~Pop_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else if ("Loc_ID" %in% colnames(Data_DA_Str()) &&
+             !all(c("Sample_ID", "Pop_ID") %in% colnames(Data_DA_Str()))) {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        name = ~Loc_ID,
+        colors = ~Loc_ID,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  } else {
+
+    Triangleplot <- Triangleplot %>%
+      add_trace(
+        type = "scatterternary",
+        mode = "markers",
+        a = ~a,
+        b = ~b,
+        c = ~c,
+        marker = list(
+          size = input$triangleplot_symbol_size
+        )
+      )
+
+  }
+
+  Triangleplot %>% layout(
+    title = input$triangleplot_title,
+    margin = margin,
+    showlegend = TRUE,
+    ternary = list(
+      sum = 1,
+      aaxis = axis("All others"),
+      baxis = axis(input$bottom_left),
+      caxis = axis(input$bottom_right)
+    )
+  )
+
+})
+
+observeEvent(input$show_r_code_triangleplot, {
+
+  withBusyIndicatorServer(buttonId = "show_r_code_triangleplot", {
+
+    showModal(modalDialog(
+      title = "R Code - Triangle plot",
+      tags$pre(
+        id = "r_code_triangleplot",
+        expandChain(
+          library_code,
+          Triangleplot()
+        ) %>% formatCode() %>% paste(collapse = "\n")
+      ),
+      footer = tagList(
+
+        fluidRow(
+          column(width = 8),
+          column(width = 2,
+                 align = "right",
+                 withBusyIndicatorUI(
+                   actionButton(inputId = "copyRCode_triangleplot",
+                                label = h6("Copy to clipboard"))
+                 )
+          ),
+          column(width = 2,
+                 modalButton(h6("Dismiss"))
+          )
+        )
+
+      ),
+      size = "l",
+      easyClose = TRUE
+    ))
+
+  })
+
+})
+
+observeEvent(input$copyRCode_triangleplot, {
+
+  withBusyIndicatorServer(buttonId = "copyRCode_triangleplot", {
+
+    clipr::write_clip(content =
+                        as.character(expandChain(
+                          library_code,
+                          Triangleplot()
+                        ) %>% formatCode() %>% paste(collapse = "\n")
+                        ))
+
+  })
+
+})
+
+###= Comparison plot =#####
+observeEvent(input$show_r_code_comparison_plot, {
+
+  withBusyIndicatorServer(buttonId = "show_r_code_comparison_plot", {
+
+    showModal(modalDialog(
+      title = "R Code - Comparison plot",
+      tags$pre(
+        id = "r_code_comparison_plot",
+        expandChain(
+          library_code,
+          Tableplot()
+        ) %>% formatCode() %>% paste(collapse = "\n")
+      ),
+      footer = tagList(
+
+        fluidRow(
+          column(width = 8),
+          column(width = 2,
+                 align = "right",
+                 withBusyIndicatorUI(
+                   actionButton(inputId = "copyRCode_comparison_plot",
+                                label = h6("Copy to clipboard"))
+                 )
+          ),
+          column(width = 2,
+                 modalButton(h6("Dismiss"))
+          )
+        )
+
+      ),
+      size = "l",
+      easyClose = TRUE
+    ))
+
+  })
+
+})
+
+observeEvent(input$copyRCode_comparison_plot, {
+
+  withBusyIndicatorServer(buttonId = "copyRCode_comparison_plot", {
+
+    clipr::write_clip(content =
+                        as.character(expandChain(
+                          library_code,
+                          Tableplot()
+                        ) %>% formatCode() %>% paste(collapse = "\n")
+                        ))
+
+  })
+
+})
 
 } # Closes SERVER

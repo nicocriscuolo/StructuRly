@@ -1,14 +1,14 @@
 Package: StructuRly
 Type: Package
 Date: 2018-11-10
-Title: Elegant, detailed and interactive plots for population analysis
+Title: A novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis
 Version: 0.1.0
 Authors@R: c(
-    person("Nicola", "Criscuolo", role = c("aut", "cre"), 
+    person("Nicola", "G.", "Criscuolo", role = c("aut", "cre"), 
             email = "nico.criscuolo981@gmail.com"),
     person("Claudia", "Angelini", role = "aut", 
     email = "c.angelini@na.iac.cnr.it"))
-Maintainer: Nicola Criscuolo <nico.criscuolo981@gmail.com>
+Maintainer: Nicola G. Criscuolo <nico.criscuolo981@gmail.com>
 Description: Population genetics is essential for the analysis of allele 
   variants and frequencies within a group of individuals. Nowadays, these studies 
   are usually carried out using Bayesian clustering algorithms implemented, for 
