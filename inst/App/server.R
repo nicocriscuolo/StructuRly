@@ -3630,7 +3630,8 @@ observeEvent(input$copyRCode_dendrogram, {
                           library_code,
                           Dendrogram_plot()
                         ) %>% formatCode() %>% paste(collapse = "\n")
-                        ))
+                        ),
+                      allow_non_interactive = TRUE)
 
   })
 
@@ -3684,7 +3685,8 @@ observeEvent(input$copyRCode_pcoa, {
       library_code,
       pcoa_plot()
     ) %>% formatCode() %>% paste(collapse = "\n")
-  ))
+  ),
+  allow_non_interactive = TRUE)
 
   })
 
@@ -4218,7 +4220,8 @@ observeEvent(input$copyRCode_barplot, {
                           library_code,
                           str_plot()
                         ) %>% formatCode() %>% paste(collapse = "\n")
-                        ))
+                        ),
+                      allow_non_interactive = TRUE)
 
   })
 
@@ -4464,7 +4467,8 @@ observeEvent(input$copyRCode_triangleplot, {
                           library_code,
                           Triangleplot()
                         ) %>% formatCode() %>% paste(collapse = "\n")
-                        ))
+                        ),
+                      allow_non_interactive = TRUE)
 
   })
 
@@ -4518,7 +4522,8 @@ observeEvent(input$copyRCode_comparison_plot, {
                           library_code,
                           Tableplot()
                         ) %>% formatCode() %>% paste(collapse = "\n")
-                        ))
+                        ),
+                      allow_non_interactive = TRUE)
 
   })
 
