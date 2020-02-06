@@ -384,6 +384,13 @@ software.
     accurate. Moreover, in this case, you could see a slight overlap
     between the axis title and the axis text of the barplot;
 
+  - when using the online version of StructuRly, in order to download
+    the code to produce a plot click on “Download R Code” and then
+    select the code in the dashboard, then copy it (Cmd + C on macOS,
+    CTRL + C on Windows and Ubuntu). Then button to directly copy some
+    content to the user clipboard in an interactive session is still in
+    development.
+
 The slight bugs related to some characteristics of the graphs are shown
 only inside the interactive plots, but the downloaded file won’t present
 any problem.
@@ -409,7 +416,8 @@ package for your research please cite:
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis},
+    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and
+    #> interactive plots for population genetic analysis},
     #>     author = {Nicola Criscuolo G. and Claudia Angelini},
     #>     year = {2018},
     #>     note = {R package version 0.1.0},

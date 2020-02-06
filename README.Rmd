@@ -190,6 +190,8 @@ Here's a link to the [YouTube video of StructuRly](https://youtu.be/0FUFM6GNaYI)
 
 - when using a large number of populations (> 60) or collection sites defined a priori by the user, the graphics output produced when the observations of the barplot are divided into sections according to the different populations or collection sites (or both) may not be accurate. Moreover, in this case, you could see a slight overlap between the axis title and the axis text of the barplot;
 
+- when using the online version of StructuRly, in order to download the code to produce a plot click on "Download R Code" and then select the code in the dashboard, then copy it (Cmd + C on macOS, CTRL + C on Windows and Ubuntu). Then button to directly copy some content to the user clipboard in an interactive session is still in development.
+
 The slight bugs related to some characteristics of the graphs are shown only inside the interactive plots, but the downloaded file won't present any problem.
 
 
