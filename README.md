@@ -404,25 +404,10 @@ a novel shiny app to produce comprehensive, detailed and interactive
 plots for population genetic analysis* (submitted). If you use this
 package for your research please cite:
 
-    #> It is recommended to use 'given' instead of 'middle'.
-    #> 
-    #> To cite package 'StructuRly' in publications use:
-    #> 
-    #>   Nicola Criscuolo G. and Claudia Angelini (2018). StructuRly: A
-    #>   novel shiny app to produce comprehensive, detailed and
-    #>   interactive plots for population genetic analysis. R package
-    #>   version 0.1.0. https://github.com/nicocriscuolo/StructuRly
-    #> 
-    #> A BibTeX entry for LaTeX users is
-    #> 
-    #>   @Manual{,
-    #>     title = {StructuRly: A novel shiny app to produce comprehensive, detailed and
-    #> interactive plots for population genetic analysis},
-    #>     author = {Nicola Criscuolo G. and Claudia Angelini},
-    #>     year = {2018},
-    #>     note = {R package version 0.1.0},
-    #>     url = {https://github.com/nicocriscuolo/StructuRly},
-    #>   }
+  - Criscuolo, N. G. & Angelini, C. StructuRly: A novel shiny app to
+    produce comprehensive , detailed and interactive plots for
+    population genetic analysis. PLoS One 15, e0229330 (2020).
+    <https://doi.org/10.1371/journal.pone.0229330>.
 
 ### Contact
 
