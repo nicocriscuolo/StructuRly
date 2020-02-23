@@ -405,8 +405,8 @@ plots for population genetic analysis* (submitted). If you use this
 package for your research please cite:
 
   - Criscuolo, N. G. & Angelini, C. StructuRly: A novel shiny app to
-    produce comprehensive , detailed and interactive plots for
-    population genetic analysis. PLoS One 15, e0229330 (2020).
+    produce comprehensive, detailed and interactive plots for population
+    genetic analysis. PLoS One 15, e0229330 (2020).
     <https://doi.org/10.1371/journal.pone.0229330>.
 
 ### Contact
