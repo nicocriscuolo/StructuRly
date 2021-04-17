@@ -27,6 +27,8 @@ library_code <- quote({
 
 eval(library_code)
 
+options(shiny.maxRequestSize = 50*1024^2)
+
 source("helpers.R")
 
 # fam <- system.file("extdata/sample.fam", package="snpStats")

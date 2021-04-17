@@ -3600,13 +3600,13 @@ observeEvent(input$show_r_code_dendrogram, {
 
         fluidRow(
           column(width = 8),
-          column(width = 2,
-                 align = "right",
-                 withBusyIndicatorUI(
-                   actionButton(inputId = "copyRCode_dendrogram",
-                                label = h6("Copy to clipboard"))
-                 )
-          ),
+          # column(width = 2,
+          #        align = "right",
+          #        withBusyIndicatorUI(
+          #          actionButton(inputId = "copyRCode_dendrogram",
+          #                       label = h6("Copy to clipboard"))
+          #        )
+          # ),
           column(width = 2,
                  modalButton(h6("Dismiss"))
           )
@@ -3655,13 +3655,13 @@ observeEvent(input$show_r_code_pcoa, {
 
       fluidRow(
         column(width = 8),
-        column(width = 2,
-               align = "right",
-               withBusyIndicatorUI(
-               actionButton(inputId = "copyRCode_pcoa",
-                            label = h6("Copy to clipboard"))
-               )
-        ),
+        # column(width = 2,
+        #        align = "right",
+        #        withBusyIndicatorUI(
+        #        actionButton(inputId = "copyRCode_pcoa",
+        #                     label = h6("Copy to clipboard"))
+        #        )
+        # ),
         column(width = 2,
                modalButton(h6("Dismiss"))
         )
@@ -4190,13 +4190,13 @@ observeEvent(input$show_r_code_barplot, {
 
         fluidRow(
           column(width = 8),
-          column(width = 2,
-                 align = "right",
-                 withBusyIndicatorUI(
-                   actionButton(inputId = "copyRCode_barplot",
-                                label = h6("Copy to clipboard"))
-                 )
-          ),
+          # column(width = 2,
+          #        align = "right",
+          #        withBusyIndicatorUI(
+          #          actionButton(inputId = "copyRCode_barplot",
+          #                       label = h6("Copy to clipboard"))
+          #        )
+          # ),
           column(width = 2,
                  modalButton(h6("Dismiss"))
           )
@@ -4437,13 +4437,13 @@ observeEvent(input$show_r_code_triangleplot, {
 
         fluidRow(
           column(width = 8),
-          column(width = 2,
-                 align = "right",
-                 withBusyIndicatorUI(
-                   actionButton(inputId = "copyRCode_triangleplot",
-                                label = h6("Copy to clipboard"))
-                 )
-          ),
+          # column(width = 2,
+          #        align = "right",
+          #        withBusyIndicatorUI(
+          #          actionButton(inputId = "copyRCode_triangleplot",
+          #                       label = h6("Copy to clipboard"))
+          #        )
+          # ),
           column(width = 2,
                  modalButton(h6("Dismiss"))
           )
@@ -4492,13 +4492,13 @@ observeEvent(input$show_r_code_comparison_plot, {
 
         fluidRow(
           column(width = 8),
-          column(width = 2,
-                 align = "right",
-                 withBusyIndicatorUI(
-                   actionButton(inputId = "copyRCode_comparison_plot",
-                                label = h6("Copy to clipboard"))
-                 )
-          ),
+          # column(width = 2,
+          #        align = "right",
+          #        withBusyIndicatorUI(
+          #          actionButton(inputId = "copyRCode_comparison_plot",
+          #                       label = h6("Copy to clipboard"))
+          #        )
+          # ),
           column(width = 2,
                  modalButton(h6("Dismiss"))
           )

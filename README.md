@@ -103,8 +103,7 @@ current version, it can also work locally and then offline. If you need
 any information about the usage of *STRUCTURE* or *ADMIXTURE* software
 (e. g. instructions to launch the software, preparation of input files
 and how to exports the outputs), please visit their websites at the
-following
-    links:
+following links:
 
   - [STRUCTURE](https://web.stanford.edu/group/pritchardlab/structure.html)
 
@@ -231,8 +230,7 @@ alleles, in particular:
     starting from 1 (e.g .: “Locus\_1.1,” “Locus\_1.2”, “UDO.1”,
     “UDO.2”, etc.). Below there is an image that represents data
     stored in a spreadsheet that, once converted in **.txt** or **.csv**
-    format, can be appropriately read by
-**StructuRly**:
+    format, can be appropriately read by **StructuRly**:
 
 ![image\_1](https://user-images.githubusercontent.com/35098432/49116039-aa40e600-f29c-11e8-82dd-05958633d416.png)
 
@@ -353,8 +351,7 @@ Here’s a link to the [YouTube video of
 StructuRly](https://youtu.be/0FUFM6GNaYI) showing an example of using of
 the software. Moreover, the flowchart below, accessible from the
 **Instructions** panel of the application, schematize a tutorial to use
-the
-software.
+the software.
 
 ![image\_4](https://user-images.githubusercontent.com/35098432/73140059-05bf5d00-4075-11ea-867f-e59cd4a9724f.png)
 
@@ -366,6 +363,8 @@ software.
     different formats available. This bug is related to the functions of
     a third-party package and has been reported to the GitHub community
     at this [link](https://github.com/ropensci/plotly/issues/1328);
+
+  - there is a limit of 50 Mb for data uploading;
 
   - for more than 40 predefined populations present in the dataset to
     produce the barplot, the colors used to distinguish such populations

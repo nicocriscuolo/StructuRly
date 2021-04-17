@@ -1,8 +1,10 @@
 
 ################################### UI ########################################
 ui <- fluidPage(
+
   useShinyjs(), # Recall every function of Shinyjs in the UI
-    fluidRow(
+
+      fluidRow(
         column(width = 12,
                p(h3(strong(em("StructuRly")),
                     strong("0.1.0"), "-",

@@ -184,6 +184,8 @@ Here's a link to the [YouTube video of StructuRly](https://youtu.be/0FUFM6GNaYI)
 
 - in the interactive barplot, the X-axis labels are not colored according to the different populations entered by the user in the input file. To view colored labels, download the image in one of the different formats available. This bug is related to the functions of a third-party package and has been reported to the GitHub community at this [link](https://github.com/ropensci/plotly/issues/1328);
 
+- there is a limit of 50 Mb for data uploading;
+
 - for more than 40 predefined populations present in the dataset to produce the barplot, the colors used to distinguish such populations within the labels of the X-axis of the barplot could start to repeat;
 
 - in the comparison plot, the separation lines of the heatmap cells are not visible when using the interactive graph for a bug present in the package used to produce this output. Again, download the output to view the complete chart;
@@ -200,7 +202,7 @@ The slight bugs related to some characteristics of the graphs are shown only ins
 
 ### Citation
 
-**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples in November 2018 and its implementation has been described inside the paper *StructuRly: a novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis* (submitted). If you use this package for your research please cite:
+**StructuRly** was firstly presented during the [International BBCC meetings](https://www.bbcc-meetings.it) held in Naples (Italy) in November 2018 and its implementation has been described inside the paper *StructuRly: a novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis* (submitted). If you use this package for your research please cite:
 
 - Criscuolo, N. G. & Angelini, C. StructuRly: A novel shiny app to produce comprehensive, detailed and interactive plots for population genetic analysis. PLoS One 15, e0229330 (2020). [https://doi.org/10.1371/journal.pone.0229330](https://doi.org/10.1371/journal.pone.0229330).
 
