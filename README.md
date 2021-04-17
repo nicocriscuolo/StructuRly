@@ -397,11 +397,11 @@ any problem.
 ### Citation
 
 **StructuRly** was firstly presented during the [International BBCC
-meetings](https://www.bbcc-meetings.it) held in Naples in November 2018
-and its implementation has been described inside the paper *StructuRly:
-a novel shiny app to produce comprehensive, detailed and interactive
-plots for population genetic analysis* (submitted). If you use this
-package for your research please cite:
+meetings](https://www.bbcc-meetings.it) held in Naples (Italy) in
+November 2018 and its implementation has been described inside the paper
+*StructuRly: a novel shiny app to produce comprehensive, detailed and
+interactive plots for population genetic analysis* (submitted). If you
+use this package for your research please cite:
 
   - Criscuolo, N. G. & Angelini, C. StructuRly: A novel shiny app to
     produce comprehensive, detailed and interactive plots for population
