@@ -364,12 +364,12 @@ the software.
     a third-party package and has been reported to the GitHub community
     at this [link](https://github.com/ropensci/plotly/issues/1328);
 
-  - there is a limit of 50 Mb for data uploading;
-
   - for more than 40 predefined populations present in the dataset to
     produce the barplot, the colors used to distinguish such populations
     within the labels of the X-axis of the barplot could start to
     repeat;
+
+  - there is a limit of 50 Mb for data uploading;
 
   - in the comparison plot, the separation lines of the heatmap cells
     are not visible when using the interactive graph for a bug present
