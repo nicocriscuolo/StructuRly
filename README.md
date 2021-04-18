@@ -411,4 +411,4 @@ use this package for your research please cite:
 ### Contact
 
 For additional information regarding **StructuRly**, please consult the
-documentation or [email us](mailto:nico.criscuolo981@gmail.com).
+documentation or [email us](mailto:nico.criscuolo1618@gmail.com).
