@@ -82,7 +82,7 @@ Moreover, the user can launch the Terminal (to start an *ADMIXTURE* population a
 
 ### Online version
 
-If you are not familiar with *R* or *RStudio* you can access to **StructuRly** directly from the web by using the following link: [https://nicocriscuolo.shinyapps.io/StructuRly/](https://nicocriscuolo.shinyapps.io/StructuRly/).
+If you are not familiar with *R* or *RStudio* you can access to **StructuRly** directly from the web by using the following link: [https://nicocriscuolo1618.shinyapps.io/StructuRly/](https://nicocriscuolo1618.shinyapps.io/StructuRly/).
 
 
 

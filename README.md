@@ -125,7 +125,7 @@ inside the **R** console when you load the dependency packages.
 
 If you are not familiar with *R* or *RStudio* you can access to
 **StructuRly** directly from the web by using the following link:
-<https://nicocriscuolo.shinyapps.io/StructuRly/>.
+<https://nicocriscuolo1618.shinyapps.io/StructuRly/>.
 
 ### Data input
 
@@ -410,5 +410,5 @@ use this package for your research please cite:
 
 ### Contact
 
-For additional information regarding **StructuRly**, please consult the
+For additional information about **StructuRly**, please consult the
 documentation or [email us](mailto:nico.criscuolo1618@gmail.com).
